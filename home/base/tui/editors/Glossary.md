@@ -1,4 +1,4 @@
-# Editors Glossary
+# Глоссарий редакторов
 
 ### LSP - Language Server Protocol
 
@@ -6,22 +6,22 @@
 
 > https://langserver.org/
 
-The Language Server Protocol (LSP) is an open, JSON-RPC-based protocol for use between source code
-editors or integrated development environments (IDEs) and servers that provide programming
-language-specific features like:
+Language Server Protocol (LSP) — это открытый протокол на базе JSON-RPC для взаимодействия между
+редактором исходного кода (или IDE) и сервером, который предоставляет language-specific возможности,
+например:
 
-- motions such as go-to-definition, find-references, hover.
+- перемещения (go-to-definition, find-references, hover)
 - **code completion**
-- **marking of warnings and errors**
+- **подсветка warnings и errors**
 - **refactoring routines**
-- syntax highlighting (use Tree-sitter instead)
-- code formatting (use a dedicated formatter instead)
+- syntax highlighting (лучше через Tree-sitter)
+- code formatting (лучше отдельным formatter)
 
-The goal of the protocol is to allow programming language support to be implemented and distributed
-independently of any given editor or IDE.
+Цель протокола — позволить реализовывать и распространять поддержку языков программирования
+независимо от конкретного редактора или IDE.
 
-LSP was originally developed for Microsoft Visual Studio Code and is now an open standard. In the
-early 2020s LSP quickly became a "norm" for language intelligence tools providers.
+Изначально LSP разработали для Microsoft Visual Studio Code, а затем он стал открытым стандартом. В
+начале 2020-х LSP быстро стал «нормой» для инструментов language intelligence.
 
 ### Tree-sitter
 
@@ -29,28 +29,26 @@ early 2020s LSP quickly became a "norm" for language intelligence tools provider
 
 > https://www.reddit.com/r/neovim/comments/1109wgr/treesitter_vs_lsp_differences_ans_overlap/
 
-Tree-sitter is a parser generator tool and an **incremental parsing** library. It can build a
-concrete syntax tree for a source file and efficiently update the syntax tree as the source file is
-edited.
+Tree-sitter — это parser generator и библиотека **incremental parsing**. Он строит concrete syntax
+tree для исходного файла и эффективно обновляет её по мере редактирования.
 
-It is used by many editors and IDEs to provide:
+Используется многими редакторами и IDE для:
 
 - **syntax highlighting**
 - **indentation**
-- **creating foldable code regions**
-- **Incremental selection**
-- **simple refactoring in a single file**
-  - such as join/split lines, structural editing, cursor motion, etc.
+- **создания foldable code regions**
+- **incremental selection**
+- **простого рефакторинга в пределах одного файла**
+  - например join/split lines, structural editing, cursor motion и т.д.
 
-**Treesitter process each file independently**, and it is not aware of the semantics of your code.
-For example, it does not know does a function/variable really exist, or what is the type/return-type
-of a variable. This is where LSP comes in.
+**Tree-sitter обрабатывает каждый файл независимо** и не знает семантики вашего кода. Например, он не
+понимает, существует ли реально функция/переменная, и какой у неё type/return-type. Тут и нужен LSP.
 
-The LSP server parses the code much more deeply and it **not only parses a single file but your
-whole project**. So, the LSP server will know whether a function/variable does exist with the same
-type/return-type. If it does not, it will mark it as an error.
+LSP server парсит код глубже и **анализирует не только один файл, а весь проект**. Поэтому он может
+понять, существует ли функция/переменная и совпадает ли её type/return-type. Если нет — отметит это
+как ошибку.
 
-**LSP does understand the code semantically, while Treesitter only cares about correct syntax**.
+**LSP понимает код семантически, а Tree-sitter заботится в основном о корректном синтаксисе**.
 
 #### LSP vs Tree-sitter
 
@@ -62,14 +60,14 @@ type/return-type. If it does not, it will mark it as an error.
 
 ### Formatter vs Linter
 
-Linting is distinct from Formatting because:
+Linting отличается от Formatting, потому что:
 
-1. **formatting** only restructures how code appears.
+1. **formatting** меняет только то, как выглядит код.
    1. `prettier` is a popular formatter.
-1. **linting** analyzes how the code runs and detects errors, it may also suggest improvements such
-   as replace `var` with `let` or `const`.
+1. **linting** анализирует код и ищет ошибки, а также может предлагать улучшения, например заменить
+   `var` на `let` или `const`.
 
-Formatters and Linters process each file independently, they do not need to know about other files
-in the project.
+Formatters и Linters обычно обрабатывают каждый файл независимо — им не обязательно знать о других
+файлах проекта.
 
 - [ ]

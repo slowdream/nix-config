@@ -1,20 +1,20 @@
 # RULES - Global Agent Baseline
 
-This file defines the cross-project baseline for AI coding agents. It focuses on safety, boundaries,
-and portable behavior.
+Этот файл задаёт кросс-проектный базовый набор правил для AI coding agents. Он фокусируется на
+безопасности, границах ответственности и переносимом поведении.
 
-## 1) Instruction Priority
+## 1) Приоритет инструкций
 
-Apply instructions in this order:
+Применяйте инструкции в таком порядке:
 
 1. Runtime system/developer instructions
 2. User task request
 3. Project-local policy (`AGENTS.md`, `CLAUDE.md`, repo docs)
 4. This global RULES
 
-If rules conflict, follow the higher-priority source and state the conflict briefly.
+Если правила конфликтуют — следуйте источнику с более высоким приоритетом и кратко укажите конфликт.
 
-## 2) Hard Safety Boundaries (MUST NOT)
+## 2) Жёсткие границы безопасности (MUST NOT)
 
 - MUST NOT read/write outside the approved workspace.
 - MUST NOT perform broad operations on the entire home directory.
@@ -26,27 +26,27 @@ If rules conflict, follow the higher-priority source and state the conflict brie
   - Examples: `--force`, `rm -rf`, `git reset --hard`, `gh repo delete`, `terraform destroy`
 - MUST NOT expose or commit secrets (tokens, keys, kubeconfig credentials, passwords).
 
-## 3) Security and Secrets Handling
+## 3) Безопасность и работа с секретами
 
 - Never write secret literals into tracked files.
 - Use environment variables, secret managers, or placeholders.
 - Redact sensitive output in logs and summaries.
 - For infra/IaC changes, prefer plan/eval/check before apply/switch.
 
-## 4) Scope Discipline
+## 4) Дисциплина по scope
 
 - Keep changes strictly within requested scope.
 - Do not refactor unrelated areas unless user asks.
 - Preserve backward compatibility unless a breaking change is explicitly requested.
 
-## 5) Change Hygiene
+## 5) Гигиена изменений
 
 - Keep diffs minimal and reviewable.
 - Group logically related edits together.
 - Do not revert user/unrelated changes unless explicitly asked.
 - Do not claim verification you did not run.
 
-## 6) Tooling Defaults
+## 6) Tooling defaults
 
 - Prefer structural search tools first for code find/replace (`ast-grep`/`jq`/`yq`), then text tools
   (`rg`, `fd`).
@@ -58,14 +58,14 @@ If rules conflict, follow the higher-priority source and state the conflict brie
   any other installation method.
 - Use `gh` CLI for GitHub operations, especially code/PR/issue search and inspection.
 
-## 7) Environment Defaults
+## 7) Дефолты окружения
 
 - Primary OS: NixOS.
 - Shell: default to `nushell`, `bash` also exists.
 
-## 8) Script Engineering Principles
+## 8) Принципы разработки скриптов
 
-Treat scripts as interruptible jobs that must be diagnosable and safe to rerun:
+Скрипты — это прерываемые задачи, которые должны быть диагностируемыми и безопасными для повторного запуска:
 
 - Split workflows into explicit stages; allow running a selected stage via flags/arguments.
 - Make reruns idempotent; persist progress after each stage and support resume.
@@ -73,13 +73,13 @@ Treat scripts as interruptible jobs that must be diagnosable and safe to rerun:
 - For HTTP flows, separate transport success from business success; support retry/backoff.
 - Provide independent verification commands/checks for key outputs (counts, samples, invariants).
 
-## 9) Communication Defaults
+## 9) Дефолты коммуникации
 
-- Respond in the language the user is currently using, prefer English & Chinese.
+- Отвечайте на языке, который сейчас использует пользователь (предпочтение: English и Chinese).
 - Code, commands, identifiers, and code comments: English.
 - Be concise, concrete, and action-oriented.
 
-## 10) Project Overlay
+## 10) Project overlay
 
-Project-local policy may add stricter constraints (build/test/deploy/style/ownership/environment).
-It must not weaken this baseline.
+Project-local policy может добавлять более строгие ограничения (build/test/deploy/style/ownership/environment).
+Она не должна ослаблять этот baseline.

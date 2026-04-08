@@ -1,17 +1,17 @@
-# AGENTS.md - Guidelines for AI Coding Agents
+# AGENTS.md — правила для AI Coding Agents
 
-This file defines the default operating guide for AI agents working in this Nix Flake repository.
-Keep changes minimal, verifiable, and safe for multi-host deployments.
+Этот файл задаёт базовые правила работы AI agents в этом репозитории Nix Flake.
+Изменения должны быть минимальными, проверяемыми и безопасными для multi-host деплоев.
 
-## Scope and Repository Model
+## Область применения и модель репозитория
 
-This repository manages:
+Этот репозиторий управляет:
 
 - NixOS hosts (desktop + servers)
 - Home Manager profiles
 - Remote deployments via colmena
 
-High-level layout:
+Общая структура:
 
 ```text
 .
@@ -30,42 +30,42 @@ High-level layout:
 └── secrets/                     # Agenix secret definitions
 ```
 
-## Ground Rules for Agents
+## Базовые правила
 
-- Prefer `just` tasks over ad-hoc commands when an equivalent task exists.
-- Make the smallest reasonable change; avoid drive-by refactors.
-- Do not commit secrets, generated credentials, or private keys.
-- Preserve platform guards (`[linux]`, `[macos]`) and host naming conventions.
-- Run formatting and evaluation checks for touched areas before finishing.
+- Предпочитайте задачи `just` вместо ad-hoc команд, если есть эквивалентная задача.
+- Делайте минимально разумное изменение; избегайте drive-by refactors.
+- Не коммитьте секреты, сгенерированные учётные данные или private keys.
+- Сохраняйте platform guards (`[linux]`, `[macos]`) и соглашения по именованию хостов.
+- Перед завершением прогоняйте форматирование и evaluation checks для затронутых частей.
 
-## Quick Start Workflow (Recommended)
+## Быстрый старт (рекомендуемый workflow)
 
-1. Inspect context:
+1. Посмотреть контекст:
 
 ```bash
 just --list
 rg -n "<symbol-or-option>" modules home hosts outputs
 ```
 
-2. Implement the change.
-3. Format:
+2. Внести изменения.
+3. Отформатировать:
 
 ```bash
 just fmt
 ```
 
-4. Validate:
+4. Провалидировать:
 
 ```bash
 just test
 ```
 
-5. If deployment behavior changed, provide the exact `just` command the user should run (do not run
-   remote deploys unless explicitly requested).
+5. Если поведение деплоя изменилось, укажите точную команду `just`, которую должен запустить
+   пользователь (не запускайте remote deploy без явного запроса).
 
-## Canonical Commands
+## Канонические команды
 
-### Core quality loop
+### Основной цикл качества
 
 ```bash
 just fmt                    # format Nix files
@@ -73,7 +73,7 @@ just test                   # run eval tests: nix eval .#evalTests ...
 nix flake check             # run flake checks + pre-commit style checks
 ```
 
-### Dependency/input updates
+### Обновление inputs/зависимостей
 
 ```bash
 just up                     # update all inputs and commit lock file
@@ -81,7 +81,7 @@ just upp <input>            # update one input and commit lock file
 just up-nix                 # update nixpkgs-related inputs
 ```
 
-### Local deploy commands
+### Локальный деплой
 
 ```bash
 just local                  # deploy config for current hostname
@@ -90,7 +90,7 @@ just niri                   # deploy "<hostname>-niri" on Linux
 just niri debug             # debug mode
 ```
 
-### Remote deploy commands (colmena)
+### Remote deploy (colmena)
 
 ```bash
 just col <tag>              # deploy nodes matching tag
@@ -99,7 +99,7 @@ just k3s-prod               # deploy k3s production nodes
 just k3s-test               # deploy k3s test nodes
 ```
 
-### Useful direct commands
+### Полезные прямые команды
 
 ```bash
 nix eval .#evalTests --show-trace --print-build-logs --verbose
@@ -107,41 +107,41 @@ nix build .#nixosConfigurations.<host>.config.system.build.toplevel
 nixos-rebuild switch --flake .#<hostname>
 ```
 
-## Test Structure and Expectations
+## Тесты: структура и ожидания
 
-Eval tests live under:
+Eval tests находятся тут:
 
 - `outputs/x86_64-linux/tests/`
 - `outputs/aarch64-linux/tests/`
 
-Typical test pair:
+Обычно тест состоит из пары:
 
 - `expr.nix`
 - `expected.nix`
 
-Agent expectations:
+Ожидания от агента:
 
-- If logic changes affect shared modules, run `just test`.
-- If only docs/comments changed, tests may be skipped, but say so explicitly.
-- If tests cannot run, report why and include the exact failing command.
+- Если изменения логики затронули shared modules — запускайте `just test`.
+- Если менялись только docs/comments — тесты можно пропустить, но скажите об этом явно.
+- Если тесты нельзя запустить — объясните почему и приведите точную команду, которая падает.
 
-## Formatting and Style
+## Форматирование и стиль
 
-### Formatting tools
+### Инструменты форматирования
 
 - Nix: `nixfmt` (RFC style, width 100)
-- Non-Nix: `prettier` (see `.prettierrc.yaml`)
-- Spelling: `typos` (see `.typos.toml`)
+- Non-Nix: `prettier` (см. `.prettierrc.yaml`)
+- Spelling: `typos` (см. `.typos.toml`)
 
 ### Nix style conventions
 
-- Files use `kebab-case.nix`.
-- Prefer `inherit (...)` for attribute imports.
-- Prefer `lib.mkIf`, `lib.optional`, `lib.optionals` for conditional config.
-- Use `lib.mkDefault` for defaults and `lib.mkForce` only when necessary.
-- Keep module options documented with `description`.
+- Файлы используют `kebab-case.nix`.
+- Для импортов атрибутов предпочитайте `inherit (...)`.
+- Для условной конфигурации предпочитайте `lib.mkIf`, `lib.optional`, `lib.optionals`.
+- Для значений по умолчанию используйте `lib.mkDefault`, а `lib.mkForce` — только при необходимости.
+- Держите options модулей документированными через `description`.
 
-Module pattern:
+Шаблон модуля:
 
 ```nix
 { lib, config, ... }:
@@ -156,37 +156,36 @@ Module pattern:
 }
 ```
 
-## Platform Notes
+## Заметки по платформам
 
-- `Justfile` uses `nu` (`set shell := ["nu", "-c"]`).
-- Some tasks exist only on Linux via `[linux]` guards.
+- `Justfile` использует `nu` (`set shell := ["nu", "-c"]`).
+- Некоторые задачи существуют только на Linux и помечены `[linux]` guards.
 
-## Secrets and Safety
+## Secrets и безопасность
 
-- Secrets are managed with agenix and an external private secrets repo.
-- Never inline secret values in Nix files, tests, or docs.
-- Do not run broad remote deploy commands unless requested.
-- Prefer build/eval validation first, deploy second.
+- Secrets управляются через agenix и внешний приватный репозиторий секретов.
+- Никогда не вставляйте значения секретов напрямую в Nix files, tests или docs.
+- Не запускайте «широкие» remote deploy команды без запроса.
+- Предпочитайте сначала build/eval validation, а уже потом deploy.
 
-## Change Review Checklist (for agents)
+## Чеклист перед завершением (для агентов)
 
-Before finishing, verify:
+Перед завершением проверьте:
 
-1. Change is scoped to requested behavior.
-2. `just fmt` applied (or not needed, stated explicitly).
-3. `just test` run for config changes (or limitation explained).
-4. No secrets or machine-specific artifacts added.
-5. User-facing summary includes what changed and what was validated.
+1. Изменения соответствуют запрошенному поведению.
+2. Применён `just fmt` (или он не нужен — и это явно сказано).
+3. Запущен `just test` для изменений конфигурации (или объяснено ограничение).
+4. Не добавлены secrets или machine-specific артефакты.
+5. В summary для пользователя указано, что изменилось и что было проверено.
 
-## Common Pitfalls
+## Частые ошибки
 
-- Editing host-specific files when the change belongs in shared module layers (`modules/` or
-  `home/`).
-- Forgetting to update platform-specific paths when touching shared abstractions.
-- Running deployment commands to validate syntax when `nix eval`/`nix build` would be safer.
-- Introducing hardcoded usernames/paths instead of using `myvars` and existing abstractions.
+- Править host-specific файлы, когда изменение должно быть в shared слоях (`modules/` или `home/`).
+- Забывать обновлять platform-specific пути при изменениях в shared abstractions.
+- Запускать deployment-команды для проверки синтаксиса, когда безопаснее `nix eval`/`nix build`.
+- Вносить захардкоженные usernames/paths вместо использования `myvars` и существующих абстракций.
 
-## References
+## Ссылки
 
 - [README.md](./README.md)
 - [agents/README.md](./agents/README.md)

@@ -1,11 +1,11 @@
 # Overlays
 
-Overlays for both NixOS and Nix-Darwin.
+Overlays для NixOS и Nix-Darwin.
 
-If you don't know much about overlays, it is recommended to learn the function and usage of overlays
-through [Overlays - NixOS & Flakes Book](https://nixos-and-flakes.thiscute.world/nixpkgs/overlays).
+Если вы мало знакомы с overlays, рекомендую сначала разобраться в том, что это и как их использовать,
+через [Overlays - NixOS & Flakes Book](https://nixos-and-flakes.thiscute.world/nixpkgs/overlays).
 
-## Current Structure
+## Текущая структура
 
 ```
 overlays/
@@ -32,18 +32,19 @@ overlays/
                 └── squirrel.yaml
 ```
 
-## Components
+## Состав
 
 ### 1. `default.nix`
 
-The entrypoint of overlays, it execute and import all overlay files in the current directory with
-the given args.
+Точка входа overlays: выполняет и импортирует все overlay-файлы в текущей директории с заданными
+аргументами.
 
 ### 2. `fcitx5`
 
-fcitx5's overlay, add my customized Chinese input method - [小鹤音形输入法](https://flypy.com/)
+Overlay для fcitx5: добавляет мою кастомизацию китайского метода ввода —
+[小鹤音形输入法](https://flypy.com/).
 
-This overlay provides:
+Этот overlay включает:
 
 - Custom rime data for 小鹤音形输入法 (Flypy input method)
 - Cross-platform support for both Linux (fcitx5-rime) and macOS (squirrel)

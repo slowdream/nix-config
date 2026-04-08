@@ -1,44 +1,41 @@
 # Editors
 
-My editors:
+Мои редакторы:
 
 1. Neovim
 2. Helix
 
-And `Zellij` for a smooth and stable terminal experience.
+И `Zellij` — чтобы терминал был «гладким» и стабильным.
 
 ## Tips
 
-1. Many useful keys are already provided by vim, check vim/neovim's docs before you install a new
-   plugin / reinvent the wheel.
-1. After using Emacs/Neovim more skillfully, I strongly recommend that you read the official
-   documentation of Neovim/vim:
+1. Многие полезные команды уже есть в vim — прежде чем ставить новый plugin (или reinvent the wheel),
+   проверьте документацию vim/neovim.
+1. Когда освоитесь с Emacs/Neovim, очень рекомендую прочитать официальную документацию Neovim/vim:
    1. <https://vimhelp.org/>: The official vim documentation.
    1. <https://neovim.io/doc/user/>: Neovim's official user documentation.
-1. Use Zellij for terminal related operations, and use Neovim/Helix for editing.
-1. As for Emacs, Use its GUI version & terminal emulator `vterm` for terminal related operations.
-1. Two powerful file search & jump tools:
-1. Tree-view plugins are beginner-friendly and intuitive, but they're not very efficient.
-1. **Search by the file path**: Useful when you're familiar with the project structure, especially
-   on a large project.
-1. **Search by the content**: Useful when you're familiar with the code.
+1. Используйте Zellij для terminal операций, а Neovim/Helix — для редактирования.
+1. Если используете Emacs — удобнее GUI версия и terminal emulator `vterm` для terminal операций.
+1. Два мощных инструмента для поиска файлов и быстрого перехода:
+1. Tree-view plugins дружелюбны к новичкам и интуитивны, но обычно менее эффективны.
+1. **Search по file path**: полезно, когда вы хорошо знаете структуру проекта, особенно на больших
+   проектах.
+1. **Search по содержимому**: полезно, когда вы знакомы с кодом.
 
 ## Tutorial
 
-Type `:tutor`(`:Tutor` in Neovim) to learn the basics usage of vim/neovim.
+Введите `:tutor` (или `:Tutor` в Neovim), чтобы пройти базовое обучение vim/neovim.
 
-## VIM's Cheetsheet
+## Cheetsheet для vim
 
-> Here only record my commonly used keys, to see **a more comprehensive cheetsheet**:
+> Здесь записаны только мои часто используемые клавиши. Более полный cheetsheet:
 > <https://vimhelp.org/quickref.txt.html>
 
-Both Emacs-Evil & Neovim are compatible with vim, sothe key-bindings described here are common in
-both Emacs-Evil, Neovim & vim.
+Emacs-Evil и Neovim совместимы с vim, поэтому key-bindings ниже общие для Emacs-Evil, Neovim и vim.
 
 ### Terminal Related
 
-I mainly use Zellij for terminal related operations, here is its terminal shortcuts I use frequently
-now:
+Я в основном использую Zellij для terminal задач; вот shortcuts, которые чаще всего использую:
 
 | Action                    | Zellij's Shortcut |
 | ------------------------- | ----------------- |
@@ -166,9 +163,9 @@ Advance Techs:
 | Replace all the lines            | `:% s/old/new/g`                    |
 | Replace all the lines with regex | `:% s@\vhttp://(\w+)@https://\1@gc` |
 
-1. `\v` means means that in the regex pattern after it can be used without backslash
-   escaping(similar to python's raw string).
-2. `\1` means the first matched group in the pattern.
+1. `\v` означает, что в regex можно использовать «очевидный» синтаксис без лишних backslash-экранирований
+   (аналогично raw string в Python).
+2. `\1` — это первая захваченная группа в шаблоне.
 
 ### Replace in the specific lines
 
@@ -178,11 +175,11 @@ Advance Techs:
 | From the 10th line to the 20th line       | `:10,20 s/old/new/g`                   |
 | Remove the trailing spaces                | `:% s/\s\+$//g`                        |
 
-The postfix(flags) in the above commands:
+Postfix(flags) в командах выше:
 
-1. `g` means replace all the matched strings in the current line/file.
-2. `c` means ask for confirmation before replacing.
-3. `i` means ignore case.
+1. `g` — заменить все совпадения в текущей строке/файле.
+2. `c` — спрашивать подтверждение перед заменой.
+3. `i` — ignore case.
 
 ### Buffers, Windows and Tabs
 
@@ -190,9 +187,9 @@ The postfix(flags) in the above commands:
 
 > <https://vimhelp.org/windows.txt.html>
 
-- A buffer is the in-memory text of a file.
-- A window is a viewport on a buffer.
-- A tab page is a collection of windows.
+- buffer — текст файла в памяти.
+- window — «окно просмотра» для buffer.
+- tab page — набор windows.
 
 | Action                              | Command                             |
 | ----------------------------------- | ----------------------------------- |

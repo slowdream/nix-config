@@ -2,7 +2,7 @@
 
 Общие переменные и конфигурация, используемые в NixOS.
 
-## Current Structure
+## Текущая структура
 
 ```
 vars/
@@ -11,37 +11,37 @@ vars/
 └── networking.nix      # Network configuration and host definitions
 ```
 
-## Components
+## Состав
 
 ### 1. `default.nix`
 
-Contains user information, SSH keys, and password configuration:
+Содержит информацию о пользователе, SSH-ключи и настройки пароля:
 
-- User credentials (username, full name, email)
-- Initial hashed password for new installations
-- SSH authorized keys (main and backup sets)
-- Public key references for system access
+- Данные пользователя (username, full name, email)
+- Начальный hashed password для новых установок
+- SSH authorized keys (основной и резервный наборы)
+- Ссылки на public keys для доступа к системе
 
 ### 2. `networking.nix`
 
-Comprehensive network configuration including:
+Полная network-конфигурация, включающая:
 
-- **Gateway settings**: Main router and proxy gateway configurations
-- **DNS servers**: IPv4 and IPv6 name servers
-- **Host inventory**: Complete mapping of all hosts with their network interfaces and IP addresses
-- **SSH configuration**: Remote builder aliases and known hosts configuration
-- **Network topology**: Physical machines, VMs, Kubernetes clusters, and SBCs
+- **Gateway settings**: конфигурация main router и proxy gateway
+- **DNS servers**: IPv4 и IPv6 name servers
+- **Host inventory**: полная карта всех hosts с их network interfaces и IP addresses
+- **SSH configuration**: remote builder aliases и known hosts конфигурация
+- **Network topology**: physical machines, VMs, Kubernetes clusters и SBCs
 
-## Host Categories
+## Категории хостов
 
-The networking configuration covers:
+Network-конфигурация покрывает:
 
 - **Physical machines**: Desktop PCs, SBCs
 - **Virtual machines**: KubeVirt guests, K3s nodes
-- **Kubernetes clusters**: Production and testing environments
-- **Network infrastructure**: Routers, gateways, and DNS configuration
+- **Kubernetes clusters**: production и testing environments
+- **Network infrastructure**: routers, gateways и DNS конфигурация
 
-## Usage
+## Использование
 
-These variables are imported and used throughout the configuration to ensure consistency across all
-hosts and maintain centralized network and security settings.
+Эти переменные импортируются и используются по всей конфигурации, чтобы обеспечить единообразие для
+всех хостов и держать network/security настройки централизованными.

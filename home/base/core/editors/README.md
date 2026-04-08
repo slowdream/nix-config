@@ -1,10 +1,10 @@
 # Editors
 
-This directory contains editor configurations that are shared across different environments.
+Эта директория содержит конфигурации редакторов, которые разделяются между разными окружениями.
 
-## Available Editors
+## Доступные редакторы
 
 - **neovim/**: Neovim configuration with AstroNvim
 - **helix/**: Helix editor configuration
 
-These configurations are designed to work across both terminal and GUI environments.
+Эти конфигурации рассчитаны на работу и в terminal, и в GUI окружениях.

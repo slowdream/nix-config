@@ -1,20 +1,18 @@
-## How to create & managage KubeVirt's Virtual Machine from this flake?
+## Как создать и управлять Virtual Machine в KubeVirt из этого flake?
 
-Use `aquamarine` as an example, first build and upload the virtual machine's qcow2 image to the file
+Возьмём `aquamarine` как пример. Сначала соберите и загрузите qcow2-образ виртуальной машины на file
 server:
 
 ```shell
 just upload-vm aquamarine
 ```
 
-Then create the virtual machine by creating a yaml file at
-[ryan4yin/k8s-gitops](https://github.com/ryan4yin/k8s-gitops/tree/main/vms), set the
-`spec.dataVolumeTemplates[0].source.http.url` to the uploaded file's URL, and fluxcd will
-automatically apply the changes, then a virtual machine named `aquamarine` will be created in the
-KubeVirt cluster.
+Затем создайте виртуальную машину: добавьте yaml-файл в
+[ryan4yin/k8s-gitops](https://github.com/ryan4yin/k8s-gitops/tree/main/vms), укажите
+`spec.dataVolumeTemplates[0].source.http.url` на URL загруженного файла — и fluxcd автоматически
+применит изменения. После этого в кластере KubeVirt появится virtual machine с именем `aquamarine`.
 
-Once the virtual machine `aquamarine` is created, we can deploy updates to it with the following
-commands:
+Когда virtual machine `aquamarine` создана, обновления можно деплоить так:
 
 ```shell
 just col aquamarine
@@ -22,5 +20,5 @@ just col kubevirt-shoryu
 just col k3s-test-1-master-1
 ```
 
-If you're not familiar with remote deployment, please read this tutorial first:
+Если вы не знакомы с remote deployment, сначала прочитайте:
 [Remote Deployment - NixOS & Flakes Book](https://nixos-and-flakes.thiscute.world/best-practices/remote-deployment)

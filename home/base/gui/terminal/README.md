@@ -1,12 +1,11 @@
 # Terminal Emulators
 
-I used to spend a lot of time on terminal emulators, to make them match my taste, but now I found
-that it's not worth it, **Zellij can provide a user-friendly and unified user experience for all
-terminal emulators! without any pain**!
+Раньше я тратил много времени на настройку terminal emulators «под себя», но со временем понял, что
+это не так уж и выгодно: **Zellij может дать дружелюбный и единый user experience для любых terminal
+emulators — без боли**.
 
-Currently, I only use the most basic features of terminal emulators, such as true color, graphics
-protocol, etc. Other features such as tabs, scrollback buffer, select/search/copy, etc, are all
-provided by zellij!
+Сейчас я использую только базовые возможности terminal emulators (true color, graphics protocol и
+т.д.). Все остальные функции вроде tabs, scrollback buffer, select/search/copy и т.п. даёт Zellij.
 
 My current terminal emulators are:
 
@@ -25,20 +24,18 @@ My current terminal emulators are:
 
 > https://wezfurlong.org/wezterm/config/lua/config/term.html
 
-kitty set `TERM` to `xterm-kitty` by default, and TUI apps like `viu`, `yazi`, `curses` will try to
-search in the host's [terminfo(terminal capability data base)](https://linux.die.net/man/5/terminfo)
-for value of `TERM` to determine the capabilities of the terminal.
+kitty по умолчанию выставляет `TERM` в `xterm-kitty`, и TUI приложения (например `viu`, `yazi`,
+`curses`) будут искать в [terminfo(terminal capability data base)](https://linux.die.net/man/5/terminfo)
+запись для значения `TERM`, чтобы определить возможности терминала.
 
-But when you `ssh` into a remote host, the remote host is very likely to not have `xterm-kitty` in
-its terminfo, so you will get this error:
+Но когда вы делаете `ssh` на remote host, там часто нет `xterm-kitty` в terminfo — и вы увидите:
 
 ```
 'xterm-kitty': unknown terminal type
 ```
 
-Or when you `sudo xxx`, `sudo` won't preserve the `TERM` variable, it will be reset to root's
-default `TERM` value, which is `xterm` or `xterm-256color` in most linux distributions, so you will
-get this error:
+Либо при `sudo xxx` переменная `TERM` не сохраняется: `sudo` сбрасывает её в root-значение (обычно
+`xterm` или `xterm-256color` в большинстве linux distributions) — и вы получите:
 
 ```
 'xterm-256color': unknown terminal type
@@ -50,28 +47,27 @@ or
 Error opening terminal: xterm-kitty.
 ```
 
-NixOS preserve the `TERMINFO` and `TERMINFO_DIRS` environment variables, for `root` and the `wheel`
-group:
+NixOS сохраняет environment variables `TERMINFO` и `TERMINFO_DIRS` для `root` и группы `wheel`:
 [nixpkgs/nixos/modules/config/terminfo.nix](https://github.com/NixOS/nixpkgs/blob/nixos-25.11/nixos/modules/config/terminfo.nix#L18)
 
 ### Solutions
 
-Simplest solution, it will automatically copy over the terminfo files and also magically enable
-shell integration on the remote machine:
+Самый простой вариант: он автоматически скопирует terminfo и «магически» включит shell integration на
+remote машине:
 
 ```
 kitten ssh user@host
 ```
 
-Or if you do not care about kitty's features(such as true color & graphics protocol), you can simply
-set `TERM` to `xterm-256color`, which is built-in in most linux distributions:
+Если функции kitty (true color, graphics protocol и т.д.) не важны — можно просто выставить `TERM` в
+`xterm-256color`, который встроен в большинство linux distributions:
 
 ```
 export TERM=xterm-256color
 ```
 
-If you need kitty's features, but do not like the magic of `kitten`, you can manually install
-kitty's terminfo on the remote host:
+Если вам нужны фичи kitty, но не нравится «магия» `kitten`, можно вручную поставить terminfo kitty на
+remote host:
 
 ```bash
 # install on ubuntu / debian

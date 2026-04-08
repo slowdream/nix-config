@@ -1,45 +1,45 @@
 # Secrets Management
 
-> For Website/App's passwords, see
-> [/home/base/desktop/password-store](/home/base/desktop/password-store/README.md) for more details.
+> Пароли от сайтов/приложений см. в
+> [/home/base/desktop/password-store](/home/base/desktop/password-store/README.md).
 
-All my secrets are safely encrypted via agenix, and stored in a separate private GitHub repository
-and referenced as a flake input in this flake.
+Все мои секреты шифруются через agenix, хранятся в отдельном приватном GitHub-репозитории и
+подключаются в этот flake как input.
 
-The encryption is done using the public keys of all my hosts (`/etc/ssh/ssh_host_ed25519_key`), so
-that they can only be decrypted on any of my configured hosts. The host keys are generated locally
-on each host by OpenSSH without a passphrase and are only readable by `root`. The host keys will
-never leave the host.
+Шифрование выполняется публичными ключами всех моих хостов
+(`/etc/ssh/ssh_host_ed25519_key`), поэтому расшифровать секреты можно только на моих настроенных
+хостах. Host keys генерируются локально на каждом хосте через OpenSSH, без passphrase, доступны
+только `root` и никогда не покидают хост.
 
-In this way, all secrets are still encrypted when transmitted over the network and written to
-`/nix/store`. They are decrypted only when they are finally used.
+Так секреты остаются зашифрованными и при передаче по сети, и при записи в `/nix/store`. Они
+расшифровываются только в момент непосредственного использования.
 
-In addition, we further improve the security of secret files by storing them in a separate private
-repository.
+Дополнительно безопасность повышается тем, что файлы секретов лежат в отдельном приватном
+репозитории.
 
-This directory contains this `README.md`, and a `nixos.nix` file that is used to decrypt all my
-secrets via `agenix`. Then, I can use them in this flake.
+Эта директория содержит `README.md` и файл `nixos.nix`, который подключает `agenix` и расшифровывает
+мои секреты, чтобы ими можно было пользоваться в этом flake.
 
 ## Adding or Updating Secrets
 
-> All the operations in this section should be performed in my private repository: `nix-secrets`.
+> Все действия в этом разделе выполняются в приватном репозитории: `nix-secrets`.
 
-This task is accomplished using the [agenix](https://github.com/ryantm/agenix) CLI tool with the
-`./secrets.nix` file, so you need to have it installed first:
+Это делается через CLI [agenix](https://github.com/ryantm/agenix) и файл `./secrets.nix`, поэтому
+сначала нужно иметь agenix под рукой.
 
-To use agenix temporarily, run:
+Чтобы временно воспользоваться agenix:
 
 ```bash
 nix shell github:ryantm/agenix#agenix
 ```
 
-or agenix provided by ragenix, run:
+или вариант agenix через ragenix:
 
 ```bash
 nix shell github:ryan4yin/ragenix#ragenix
 ```
 
-Suppose you want to add a new secret file `xxx.age`. Follow these steps:
+Допустим, вы хотите добавить новый файл секрета `xxx.age`. Тогда:
 
 1. Navigate to your private `nix-secrets` repository.
 2. Edit `secrets.nix` and add a new entry for `xxx.age`, defining the encryption keys and the secret
@@ -71,27 +71,27 @@ let
 }
 ```
 
-3. Create and edit the secret file `xxx.age` interactively using the following command:
+3. Создайте и отредактируйте `xxx.age` интерактивно:
 
 ```shell
 sudo agenix -e ./xxx.age -i /etc/ssh/ssh_host_ed25519_key
 ```
 
-Alternatively, you can encrypt an existing file to `xxx.age` using the following command:
+Либо можно зашифровать уже существующий файл в `xxx.age`:
 
 ```shell
 cat xxx | sudo agenix  -e ./xxx.age -i /etc/ssh/ssh_host_ed25519_key
 ```
 
-`agenix` will encrypt the file with all the public keys we defined in `secrets.nix`, so all the
-users and systems defined in `secrets.nix` can decrypt it with their private keys.
+`agenix` зашифрует файл всеми публичными ключами, указанными в `secrets.nix`, поэтому все users и
+systems из `secrets.nix` смогут расшифровать его своими приватными ключами.
 
 ## Deploying Secrets
 
-> All the operations in this section should be performed in this repository.
+> Все действия в этом разделе выполняются в этом репозитории.
 
-First, add your own private `nix-secrets` repository and `agenix` as a flake input, and pass them to
-sub modules via `specialArgs`:
+Сначала добавьте свой приватный `nix-secrets` репозиторий и `agenix` как flake input и прокиньте их
+в sub-modules через `specialArgs`:
 
 ```nix
 {
@@ -125,7 +125,7 @@ sub modules via `specialArgs`:
 }
 ```
 
-Then, create `./secrets/default.nix` with the following content:
+Затем создайте `./secrets/default.nix` со следующим содержимым:
 
 ```nix
 # import & decrypt secrets in `mysecrets` in this module
@@ -157,9 +157,9 @@ Then, create `./secrets/default.nix` with the following content:
 }
 ```
 
-From now on, every time you run `nixos-rebuild switch`, it will decrypt the secrets using the
-private keys defined in `age.identityPaths`. It will then symlink the secrets to the path defined by
-the `age.secrets.<name>.path` argument, which defaults to `/etc/secrets`.
+После этого каждый раз при запуске `nixos-rebuild switch` секреты будут расшифровываться приватными
+ключами из `age.identityPaths`, а затем будут symlink’иться в путь, заданный
+`age.secrets.<name>.path` (по умолчанию это `/etc/secrets`).
 
 ## Adding a new host
 

@@ -1,28 +1,27 @@
-# Zellij - A workspace lives in your terminal
+# Zellij - workspace в вашем терминале
 
-Zellij is a terminal workspace with batteries included. At its core, it is a terminal multiplexer
-(similar to tmux and screen), but this is merely its infrastructure layer.
+Zellij — это terminal workspace «с батарейками из коробки». В основе это terminal multiplexer
+(похоже на tmux и screen), но это лишь его инфраструктурный слой.
 
-Zellij is very user-friendly and easy to use, with a step-by-step hint system that will help you get
-to know the keybindings, which is very like the Neovim or helix.
+Zellij довольно дружелюбный и простой: есть пошаговая hint-система, которая помогает запомнить
+keybindings — это похоже на опыт в Neovim или Helix.
 
 > By contrast, tmux's key design is counterintuitive, there is no prompt system, and the plug-in
 > performance is rubbish. It's really a pain to use. tmux's initial release was in 2007, it's too
 > old, I would recommend any users that do not have a experience with multiplexer to use zellij
 > instead of tmux.
 
-## Why use zellij as the default terminal environment?
+## Почему использовать Zellij как default terminal environment?
 
-By auto start zellij on shell login, and exit the shell session on zellij exit, we can use zellij as
-the default terminal environment.
+Если auto start Zellij при входе в shell и завершать shell-сессию при выходе из Zellij, то Zellij
+становится default terminal environment.
 
-By this way, We will only use the most basic features of the terminal
-emulator(kitty/alacritty/wezterm/...), while most of the functions of terminal are provided by
-zellij. Thus we can easily switch to any terminal emulator without losing any key functions, and do
-not need to take care of the differences between different terminal emulators.
+В таком подходе мы используем только базовые возможности terminal emulator (kitty/alacritty/wezterm/…),
+а большую часть «терминальных функций» даёт Zellij. Благодаря этому можно легко переключаться между
+terminal emulators без потери ключевых функций и не думать о различиях между ними.
 
-And Zellij can be used not only locally, but also on any remote server, which is very convenient.
-Learn once and use everywhere!
+И Zellij можно использовать не только локально, но и на любом remote server — удобно. Learn once and
+use everywhere.
 
 > Yeah, you didn't misread it, zellij is very suitable for not only remotely, but also locally!
 
@@ -33,7 +32,7 @@ some Editor such as Neovim, its integrated terminal is really useful, but zellij
 and useful than it, and more stable! Zellij overcomes these problems, and provides a unified user
 experience for all terminal emulators!
 
-Terminal emulators should only be responsible for displaying characters.
+Terminal emulators в идеале должны отвечать только за отображение символов.
 
 ## Passthrough mode(Lock Mode)
 

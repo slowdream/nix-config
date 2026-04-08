@@ -1,23 +1,23 @@
 # Host - AI
 
-Desktop (NixOS + preservation, LUKS + btrfs on nvme). Disk layout is declarative via
+Desktop (NixOS + preservation, LUKS + btrfs на nvme). Disk layout задаётся декларативно через
 [disko](./disko-fs.nix) (target device: **nvme1n1**).
 
 Related:
 
-- [nixos-installer README](/nixos-installer/README.md) – install from ISO using disko
-- [disko-fs.nix](./disko-fs.nix) – main disk layout (ESP + LUKS + btrfs). From
+- [nixos-installer README](/nixos-installer/README.md) – установка из ISO через disko
+- [disko-fs.nix](./disko-fs.nix) – основной disk layout (ESP + LUKS + btrfs). Из
   `nix-config/nixos-installer`:  
   `nix run github:nix-community/disko -- --mode destroy,format,mount ../hosts/idols-ai/disko-fs.nix`
 - [disko-fs-media.nix](./disko-fs-media.nix) – media disk layout (LUKS + btrfs at /persistent/media)
 
 ## TODOs
 
-1. Install DCGM-Exporter on `ai` to monitor the GPU status.
+1. Поставить DCGM-Exporter на `ai`, чтобы мониторить состояние GPU.
 
 ## Info
 
-Current disk status and mountpoints (example; after migration layout is on nvme1n1):
+Текущее состояние диска и mountpoints (пример; после migration layout на nvme1n1):
 
 ```bash
 › df -Th

@@ -1,7 +1,7 @@
-# Agent Skills Commands
+# Команды для Agent Skills
 
-Reference commands for listing, installing, and updating skills via `npx skills`. Run only the
-commands you need.
+Справочные команды для просмотра, установки и обновления skills через `npx skills`. Запускайте только
+то, что вам нужно.
 
 ## Inspect and update installed skills
 

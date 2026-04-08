@@ -1,9 +1,9 @@
 # Infrastructure as Code
 
-This directory contains Infrastructure as Code (IaC) configurations using Terraform, primarily for
-managing storage and backend services.
+Эта директория содержит конфигурации Infrastructure as Code (IaC) на Terraform — в основном для
+управления storage и backend-сервисами.
 
-## Current Structure
+## Текущая структура
 
 ```
 infra/
@@ -21,45 +21,45 @@ infra/
         └── tf-s3-backend.tf # Backend bucket configuration
 ```
 
-## Services Overview
+## Обзор сервисов
 
 ### MinIO Storage
 
-- **Loki Buckets**: Dedicated storage for Grafana Loki log aggregation
-- **Terraform Backend**: Centralized state management for all Terraform configurations
+- **Loki Buckets**: отдельное хранилище для Grafana Loki (log aggregation)
+- **Terraform Backend**: централизованное хранение state для всех Terraform configurations
 
-### External Resources
+### Внешние ресурсы
 
-- **Kubernetes YAML**: Managed in separate repository
+- **Kubernetes YAML**: управляется в отдельном репозитории
   [ryan4yin/k8s-gitops](https://github.com/ryan4yin/k8s-gitops)
-- **Secrets Management**: Handled via agenix in [../secrets](../secrets/)
+- **Secrets Management**: через agenix в [../secrets](../secrets/)
 
-## Usage
+## Использование
 
-Each subdirectory contains its own Terraform configuration:
+Каждая поддиректория содержит свою Terraform-конфигурацию:
 
-1. **Navigate to specific service**:
+1. **Перейти к нужному сервису**:
 
    ```bash
    cd infra/minio/loki
    ```
 
-2. **Deploy configuration**:
+2. **Задеплоить конфигурацию**:
 
    ```bash
    ./run.sh
    ```
 
-3. **Manual deployment**:
+3. **Ручной деплой**:
    ```bash
    terraform init
    terraform plan
    terraform apply
    ```
 
-## Security Considerations
+## Безопасность
 
-- All storage buckets are configured with appropriate access policies
-- State files are encrypted at rest
-- Access credentials are managed through environment variables
-- Network access is restricted to necessary hosts only
+- Все storage buckets настроены с корректными access policies
+- State files шифруются at rest
+- Access credentials берутся из environment variables
+- Network access ограничен только необходимыми hosts

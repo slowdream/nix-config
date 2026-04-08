@@ -1,32 +1,32 @@
-# Home Manager's Linux Submodules
+# Подмодули Home Manager для Linux
 
-This directory contains Linux-specific Home Manager configurations organized for different use
+Эта директория содержит Linux-specific конфигурации Home Manager, организованные под разные use
 cases.
 
-## Configuration Modules
+## Конфигурационные модули
 
 ### Core Configurations
 
-- **core.nix**: Essential Linux-specific configurations and settings
-- **base/**: Base Linux configurations including shell, tools, and utilities
-  - `shell.nix`: Shell configurations and aliases
-  - `tools.nix`: Essential command-line tools and utilities
+- **core.nix**: базовые Linux-specific настройки и конфигурации
+- **base/**: базовые Linux-конфигурации (shell, tools, utilities)
+  - `shell.nix`: конфигурации shell и aliases
+  - `tools.nix`: базовые command-line tools и utilities
 
 ### Desktop Configurations
 
-- **gui/**: Desktop environment configurations
-  - **niri/**: Niri compositor configuration
-  - **base/**: Common desktop applications and services
-  - **editors/**: Text editor configurations for desktop environments
+- **gui/**: конфигурации desktop environment
+  - **niri/**: конфигурация Niri compositor
+  - **base/**: общие desktop приложения и сервисы
+  - **editors/**: конфигурации text editor для desktop environment
 
-### Available Entry Points
+### Доступные entry points
 
-- **core.nix**: Core Linux configuration, suitable for basic setups
-- **tui.nix**: Terminal-based interface configuration for lightweight environments
-- **gui.nix**: Graphical user interface configuration entry point, imports desktop environments
+- **core.nix**: core Linux конфигурация, подходит для базовых setup
+- **tui.nix**: terminal/TUI конфигурация для лёгких окружений
+- **gui.nix**: entry point для GUI, импортирует desktop environments
 
-## Usage
+## Использование
 
-- **Lightweight/Terminal**: Use `core.nix` or `tui.nix` for terminal-focused setups
-- **Desktops**: Use `gui.nix` for full desktop environments with Noctalia Shell and Niri compositor
-- **Custom**: Mix and match configurations as needed for your specific use case
+- **Lightweight/Terminal**: используйте `core.nix` или `tui.nix` для terminal-focused setups
+- **Desktops**: используйте `gui.nix` для полного desktop environment с Noctalia Shell и Niri compositor
+- **Custom**: комбинируйте конфигурации под свой use case

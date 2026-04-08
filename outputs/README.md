@@ -1,24 +1,22 @@
 # Flake Outputs
 
-## Is such a complex and fine-grained structure necessary?
+## Нужна ли такая сложная и детализированная структура?
 
-There is no need to do this when you have a small number of machines.
+Если у вас немного машин, в этом обычно нет необходимости.
 
-But when you have a large number of machines, it is necessary to manage them in a fine-grained way,
-otherwise, it will be difficult to manage and maintain them.
+Но когда машин становится много, приходится управлять ими более детально — иначе конфигурацию сложно
+сопровождать и поддерживать.
 
-The number of my machines has grown to more than 20, and the increase in scale has shown signs of
-getting out of control of complexity, so it is a natural and reasonable choice to use this
-fine-grained architecture to manage.
+У меня машин стало больше 20, и с ростом масштаба сложность начала выходить из-под контроля, поэтому
+такая архитектура выглядит естественным и разумным выбором.
 
 ## Tests
 
-Testing is not necessary when your configuration is not complex, but with the increase in the number
-and configuration of your machines, testing becomes more and more important.
+Когда конфигурация простая, тесты не обязательны. Но с ростом количества машин и их настроек тесты
+становятся всё важнее.
 
-We have two types of tests: eval tests and nixos tests, both of which can help us detect many
-obscure errors early, so as to avoid testing directly in the real world, and to avoid failures in
-personal computers and even corporate online environments.
+Здесь есть два типа тестов: eval tests и nixos tests. Оба помогают заранее ловить неочевидные ошибки,
+чтобы меньше тестировать «вживую» и не ломать окружения — от личных машин до production.
 
 Related projects & docs:
 
@@ -30,11 +28,11 @@ Related projects & docs:
 
 > TODO: More Tests!
 
-Eval Tests evaluate the expressions and compare the results with the expected results. It runs fast,
-but it doesn't build a real machine. We use eval tests to ensure that some attributes are correctly
-set for each NixOS host(not Darwin).
+Eval tests вычисляют выражения и сравнивают результат с expected. Они работают быстро, но не строят
+«настоящую» машину. Мы используем eval tests, чтобы проверять корректность некоторых атрибутов для
+каждого NixOS host (не Darwin).
 
-How to run all the eval tests:
+Как запустить все eval tests:
 
 ```bash
 nix eval .#evalTests --show-trace --print-build-logs --verbose
@@ -44,9 +42,9 @@ nix eval .#evalTests --show-trace --print-build-logs --verbose
 
 > WIP: not working yet
 
-NixOS Tests builds and starts virtual machines using our NixOS configuration and run tests on them.
-Comparing to eval tests, it runs slow, but it builds a real machine, and we can test the whole
-system actually works as expected.
+NixOS tests собирают и запускают виртуальные машины на базе нашей NixOS-конфигурации и выполняют
+проверки внутри. По сравнению с eval tests это медленно, но зато поднимается реальная система и
+можно тестировать, что всё действительно работает как ожидается.
 
 Problems:
 
@@ -56,7 +54,7 @@ Problems:
       agenix secrets.
   - [ ] Maybe it's better to test every service separately, not the whole host?
 
-How to run NixOS tests for every host:
+Как запускать NixOS tests для каждого host:
 
 ```bash
 # Format: nix build .#<name>-nixos-tests
@@ -66,7 +64,7 @@ nix build .#ruby-nixos-tests
 
 ## Overview
 
-All the outputs of this flake are defined here.
+Все outputs этого flake определены здесь.
 
 ```bash
 › tree

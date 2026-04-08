@@ -1,6 +1,6 @@
-# Agent CLI Commands
+# Команды для Agent CLI
 
-Reference commands for installing and updating agent CLIs. Run only the commands you need.
+Справочные команды для установки и обновления agent CLIs. Запускайте только то, что вам нужно.
 
 ## Install CLIs
 

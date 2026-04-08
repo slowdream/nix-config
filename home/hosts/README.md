@@ -1,15 +1,15 @@
 # Host Home Modules
 
-This directory contains host-specific Home Manager entry modules.
+Эта директория содержит host-specific entry modules для Home Manager.
 
 ## Layout
 
 - `home/hosts/linux/*.nix`: Linux host home modules
 
-## Conventions
+## Соглашения
 
-1. Each host output should reference only one file under `home/hosts/...`.
-2. Shared home module imports should be handled in the host file itself.
-   - Linux hosts usually import `../../linux/core.nix` or `../../linux/gui.nix`.
-3. Host-specific overrides (SSH keys, desktop toggles, host-local config links) live in the same
-   host file.
+1. Каждый host output должен ссылаться только на один файл внутри `home/hosts/...`.
+2. Импорт shared home modules должен делаться внутри host-файла.
+   - Linux hosts обычно импортируют `../../linux/core.nix` или `../../linux/gui.nix`.
+3. Host-specific overrides (SSH keys, desktop toggles, host-local config links) живут в этом же
+   host-файле.

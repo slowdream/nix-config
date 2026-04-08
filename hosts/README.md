@@ -1,14 +1,14 @@
 # Hosts
 
-This directory contains all host-specific configurations for my NixOS systems.
+Эта директория содержит все host-specific конфигурации моих систем NixOS.
 
-## Current Host Inventory
+## Текущий список хостов
 
-### Physical Machines
+### Физические машины
 
-#### `idols` - Main Workstations
+#### `idols` - основные рабочие станции
 
-Named after characters from "Oshi no Ko":
+Названы в честь персонажей из "Oshi no Ko":
 
 | Host         | Platform    | Hardware              | Purpose               | Status      |
 | ------------ | ----------- | --------------------- | --------------------- | ----------- |
@@ -17,9 +17,9 @@ Named after characters from "Oshi no Ko":
 | `kana`       | NixOS       | Virtual               | Reserved              | ⚪ Not Used |
 | `ruby`       | NixOS       | Virtual               | Reserved              | ⚪ Not Used |
 
-#### `12kingdoms` - Homelab Servers
+#### `12kingdoms` - homelab серверы
 
-Named after "Twelve Kingdoms":
+Названы в честь "Twelve Kingdoms":
 
 | Host      | Platform | Hardware                               | Purpose                    | Status    |
 | --------- | -------- | -------------------------------------- | -------------------------- | --------- |
@@ -27,84 +27,83 @@ Named after "Twelve Kingdoms":
 | `shushou` | NixOS    | MinisForum UM560 (AMD Ryzen 5 5625U)   | KubeVirt Host & K3s Master | ✅ Active |
 | `youko`   | NixOS    | MinisForum HX99G (AMD Ryzen 9 6900HX)  | KubeVirt Host & K3s Master | ✅ Active |
 
-### Virtual Machines & Clusters
+### Virtual Machines и clusters
 
-#### `k8s` - Kubernetes Infrastructure
+#### `k8s` - Kubernetes инфраструктура
 
 - **KubeVirt Cluster**: 3 physical mini PCs (shoryu, shushou, youko) running all VMs
 - **K3s Production**: 3 masters + 3 workers for production workloads
 - **K3s Testing**: 3 masters for testing and development
 
-### External Systems
+### Внешние системы
 
 - **SBCs**: aarch64/riscv64 single-board computers managed in
   [ryan4yin/nixos-config-sbc](https://github.com/ryan4yin/nixos-config-sbc)
 
-All my riscv64 hosts:
+Все мои riscv64 hosts:
 
 ![](/_img/nixos-riscv-cluster.webp)
 
 ## Naming Conventions
 
-- **idols**: Characters from "Oshi no Ko" anime/manga
-- **12kingdoms**: Characters from "Twelve Kingdoms" anime/novel series
-- **k8s**: Kubernetes-related systems follow standard naming patterns
+- **idols**: персонажи из anime/manga "Oshi no Ko"
+- **12kingdoms**: персонажи из anime/novel series "Twelve Kingdoms"
+- **k8s**: Kubernetes-системы следуют стандартным naming patterns
 
-## How to Add a New Host
+## Как добавить новый host
 
-The easiest way to add a new host is to copy and adapt an existing similar configuration. All host
-configurations follow similar patterns but are customized for specific hardware and use cases.
+Проще всего добавить новый host — скопировать и адаптировать уже существующую похожую конфигурацию.
+Все host-конфигурации построены по похожим шаблонам, но отличаются под конкретное железо и use case.
 
-### General Process
+### Общий процесс
 
-1. **Identify a similar existing host** from the directory structure above
-2. **Copy the entire directory** and rename it for your new host
-3. **Adapt the configuration files** for your specific hardware and requirements
-4. **Update references** in the flake outputs and networking configuration
+1. **Найдите похожий существующий host** по структуре директорий выше
+2. **Скопируйте директорию целиком** и переименуйте под новый host
+3. **Адаптируйте конфигурационные файлы** под своё железо и требования
+4. **Обновите ссылки** в flake outputs и в network-конфигурации
 
-### Essential Steps
+### Обязательные шаги
 
-1. Under `hosts/`
-   1. Create a new folder under `hosts/` with the name of the new host.
-   2. Create & add the new host's `hardware-configuration.nix` to the new folder, and add the new
-      host's `configuration.nix` to `hosts/<name>/default.nix`.
-   3. If the new host need to use home-manager, add its custom config into
+1. В `hosts/`
+   1. Создайте новую папку в `hosts/` с именем нового host.
+   2. Добавьте `hardware-configuration.nix` нового host в эту папку, а `configuration.nix` подключите
+      в `hosts/<name>/default.nix`.
+   3. Если новому host нужен home-manager — добавьте его кастомную конфигурацию в
       `home/hosts/linux/<name>.nix`.
-1. Under `outputs/`
-   1. Add a new nix file named `outputs/<system-architecture>/src/<name>.nix`.
-   2. Copy the content from one of the existing similar host, and modify it to fit the new host.
-      1. Usually, you only need to modify the `name` and `tags` fields.
-   3. [Optional] Add a new unit test file under `outputs/<system-architecture>/tests/<name>.nix` to
-      test the new host's nix file.
-   4. [Optional] Add a new integration test file under
-      `outputs/<system-architecture>/integration-tests/<name>.nix` to test whether the new host's
-      nix config can be built and deployed correctly.
-1. Under `vars/networking.nix`
-   1. Add the new host's static IP address.
-   1. Skip this step if the new host is not in the local network or is a mobile device.
+1. В `outputs/`
+   1. Добавьте новый nix-файл `outputs/<system-architecture>/src/<name>.nix`.
+   2. Скопируйте содержимое из похожего существующего host и адаптируйте под новый.
+      1. Обычно достаточно изменить поля `name` и `tags`.
+   3. [Optional] Добавьте unit test файл в `outputs/<system-architecture>/tests/<name>.nix`, чтобы
+      тестировать nix-файл нового host.
+   4. [Optional] Добавьте integration test файл в
+      `outputs/<system-architecture>/integration-tests/<name>.nix`, чтобы проверить, что nix config
+      для host собирается и деплоится корректно.
+1. В `vars/networking.nix`
+   1. Добавьте static IP address нового host.
+   1. Пропустите шаг, если host не в локальной сети или это мобильное устройство.
 
-### File Templates
+### Шаблоны файлов
 
-Use existing hosts as templates. The key files typically include:
+Используйте существующие hosts как шаблоны. Ключевые файлы обычно такие:
 
-- `default.nix` - Main host configuration
-- `hardware-configuration.nix` - Auto-generated hardware settings
-- Platform-specific files (e.g., `nvidia.nix`, etc.)
+- `default.nix` - основной host-конфиг
+- `hardware-configuration.nix` - авто-сгенерированные hardware настройки
+- platform-specific файлы (например, `nvidia.nix` и т.д.)
 
-### Examples to Reference
+### Примеры для ориентира
 
-- **Desktop systems**: See `idols-ai/` for gaming/workstation setup
-- **Server systems**: See `kubevirt-shoryu/` for K8s/KubeVirt hosts
+- **Desktop systems**: см. `idols-ai/` — gaming/workstation setup
+- **Server systems**: см. `kubevirt-shoryu/` — K8s/KubeVirt hosts
 
 ## Distributed Building
 
-I usually run the build command on `Ai` and nix will distribute the build to other NixOS machines,
-which is convenient and fast.
+Обычно я запускаю build на `Ai`, а Nix распределяет сборку по другим NixOS машинам — это удобно и
+быстро.
 
-When building some packages for riscv64 or aarch64, I often have no cache available because of
-various changes under the hood, so I need to build much more packages than usual, which is one of
-the reasons why the cluster was originally built, and another reason is distributed building is
-cool!
+При сборке некоторых пакетов для riscv64 или aarch64 у меня часто нет доступного cache из-за разных
+изменений «под капотом», поэтому приходится собирать больше пакетов, чем обычно. Это одна из причин,
+почему изначально появился кластер, и ещё одна причина — distributed building просто классная штука.
 
 ![](/_img/nix-distributed-building.webp)
 

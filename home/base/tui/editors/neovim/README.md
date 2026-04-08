@@ -1,39 +1,39 @@
 # Neovim Editor
 
-My Neovim config based on [AstroNvim](https://github.com/AstroNvim/AstroNvim). For more details,
-visit the [AstroNvim website](https://astronvim.com/).
+Моя конфигурация Neovim основана на [AstroNvim](https://github.com/AstroNvim/AstroNvim). Подробнее
+см. на сайте [AstroNvim](https://astronvim.com/).
 
-This document outlines neovim's configuration structure and various shortcuts/commands for efficient
-usage.
+В этом документе описана структура конфигурации Neovim и собраны shortcuts/commands для эффективной
+работы.
 
-## Screenshots
+## Скриншоты
 
 ![](/_img/astronvim_2023-07-13_00-39.webp) ![](/_img/hyprland_2023-07-29_2.webp)
 
-## Configuration Structure
+## Структура конфигурации
 
-| Description                                       | Standard Location                           | My Location                                                               |
+| Описание                                         | Стандартное расположение                    | Моё расположение                                                          |
 | ------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------- |
 | Neovim's config                                   | `~/.config/nvim`                            | AstroNvim's github repository, referenced as a flake input in this flake. |
 | AstroNvim's user configuration                    | `$XDG_CONFIG_HOME/astronvim/lua/user`       | [./astronvim_user/](./astronvim_user/)                                    |
 | Plugins installation directory (lazy.nvim)        | `~/.local/share/nvim/`                      | The same as standard location, generated and managed by lazy.nvim.        |
 | LSP servers, DAP servers, linters, and formatters | `~/.local/share/nvim/mason/`(by mason.nvim) | [./default.nix](./default.nix), installed by nix.                         |
 
-## Update/Clean Plugins
+## Обновление/очистка plugins
 
-Note that lazy.nvim will not automatically update plugins, so you need to update them manually.
+Важно: lazy.nvim не обновляет plugins автоматически, поэтому обновление нужно запускать вручную.
 
 ```bash
 :Lazy update
 ```
 
-Remove all unused plugins:
+Удалить неиспользуемые plugins:
 
 ```bash
 :Lazy clean
 ```
 
-## Testing
+## Тестирование
 
 > via `Justfile` located at the root of this repo.
 
@@ -45,14 +45,14 @@ just nvim-test
 just nvim-clear
 ```
 
-## Cheetsheet
+## Cheatsheet
 
-Here is the cheetsheet related to my Neovim configs. Please read vim's common cheetsheet at
-[../README.md](../README.md) before reading the following.
+Это cheetsheet по моим конфигам Neovim. Перед этим рекомендую прочитать общий cheetsheet по vim в
+[../README.md](../README.md).
 
 ### Incremental Selection
 
-Provided by nvim-treesitter.
+Функциональность даёт nvim-treesitter.
 
 | Action            | Shortcut       |
 | ----------------- | -------------- |
@@ -61,12 +61,12 @@ Provided by nvim-treesitter.
 | scope incremental | `<Alt-Space>`  |
 | node decremental  | `Backspace`    |
 
-### Search and Jump
+### Поиск и прыжки (Search and Jump)
 
-Provided by [flash.nvim](https://github.com/folke/flash.nvim), it's a intelligent search and jump
-plugin.
+Функциональность даёт [flash.nvim](https://github.com/folke/flash.nvim) — plugin для умного поиска и
+прыжков по тексту.
 
-1. It enhances the default search and jump behavior of neovim.(search with prefix `/`)
+1. Он улучшает стандартный поиск/переходы в neovim (поиск с префиксом `/`).
 
 | Action            | Shortcut                                                                                                     |
 | ----------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -74,27 +74,27 @@ plugin.
 | Treesitter Search | `yR`,`dR`, `cR`, `vR`, `ctrl+v+R`(around your matches, all the surrounding Treesitter nodes will be labeled) |
 | Remote Flash      | `yr`, `dr`, `cr`, (around your matches, all the surrounding Treesitter nodes will be labeled)                |
 
-### Commands & Shortcuts
+### Команды и shortcuts (Commands & Shortcuts)
 
 | Action                        | Shortcut       |
 | ----------------------------- | -------------- |
-| Open file explorer            | `<Space> + e`  |
-| Focus Neotree to current file | `<Space> + o`  |
-| Toggle line wrap              | `<Space> + uw` |
-| Show line diagnostics         | `gl`           |
-| Show function/variable info   | `K`            |
+| Открыть file explorer         | `<Space> + e`  |
+| Фокус на Neotree для текущего файла | `<Space> + o`  |
+| Переключить перенос строк     | `<Space> + uw` |
+| Показать line diagnostics     | `gl`           |
+| Показать info по function/variable | `K`            |
 | References of a symbol        | `gr`           |
-| Next tab                      | `]b`           |
-| Previous tab                  | `[b`           |
+| Следующая tab                 | `]b`           |
+| Предыдущая tab                | `[b`           |
 
-### Window Navigation
+### Навигация по окнам (Window Navigation)
 
-- Switch between windows: `<Ctrl> + h/j/k/l`
-- Resize windows: `<Ctrl> + Up/Down/Left/Right` (`<Ctrl-w> + -/+/</>`)
-  - Note: On macOS, conflicts with system shortcuts
-  - Disable in System Preferences -> Keyboard -> Shortcuts -> Mission Control
+- Переключение между окнами: `<Ctrl> + h/j/k/l`
+- Изменение размера окон: `<Ctrl> + Up/Down/Left/Right` (`<Ctrl-w> + -/+/</>`)
+  - Примечание: на macOS конфликтует с system shortcuts
+  - Отключение: System Preferences -> Keyboard -> Shortcuts -> Mission Control
 
-### Splitting and Buffers
+### Сплиты и buffers (Splitting and Buffers)
 
 | Action           | Shortcut      |
 | ---------------- | ------------- |
@@ -102,11 +102,11 @@ plugin.
 | Vertical Split   | `\|`          |
 | Close Buffer     | `<Space> + c` |
 
-### Editing and Formatting
+### Редактирование и форматирование (Editing and Formatting)
 
 | Action                                                | Shortcut       |
 | ----------------------------------------------------- | -------------- |
-| Toggle buffer auto formatting                         | `<Space> + uf` |
+| Переключить auto formatting для buffer               | `<Space> + uf` |
 | Format Document                                       | `<Space> + lf` |
 | Code Actions                                          | `<Space> + la` |
 | Rename                                                | `<Space> + lr` |
@@ -127,64 +127,64 @@ plugin.
 | Git Branches               | `:<Space> + gb` |
 | Git Status                 | `:<Space> + gt` |
 
-### Sessions
+### Сессии (Sessions)
 
 | Action                         | Shortcut       |
 | ------------------------------ | -------------- |
-| Save Session                   | `<Space> + Ss` |
-| Last Session                   | `<Space> + Sl` |
-| Delete Session                 | `<Space> + Sd` |
-| Search Session                 | `<Space> + Sf` |
-| Load Current Directory Session | `<Space> + S.` |
+| Сохранить session              | `<Space> + Ss` |
+| Последняя session              | `<Space> + Sl` |
+| Удалить session                | `<Space> + Sd` |
+| Поиск session                  | `<Space> + Sf` |
+| Загрузить session текущей директории | `<Space> + S.` |
 
-### Debugging
+### Отладка (Debugging)
 
-Press `<Space> + D` to view available bindings and options.
+Нажмите `<Space> + D`, чтобы посмотреть доступные bindings и options.
 
-### Search and Replace Globally
+### Глобальный поиск и замена
 
-| Description                                | Shortcut       |
+| Описание                                  | Shortcut       |
 | ------------------------------------------ | -------------- |
-| Open spectre.nvim search and replace panel | `<Space> + ss` |
+| Открыть panel поиска/замены spectre.nvim   | `<Space> + ss` |
 
-Search and replace via cli(fd + sad + delta):
+Поиск и замена через cli (fd + sad + delta):
 
 ```bash
 fd "\\.nix$" . | sad '<pattern>' '<replacement>' | delta
 ```
 
-### Surrounding Characters
+### Surrounding characters (Surrounding Characters)
 
-Provided by mini.surround plugin.
+Функциональность даёт plugin mini.surround.
 
 - Prefix `gz`
 
-| Action                         | Shortcut | Description                                     |
+| Action                         | Shortcut | Описание                                       |
 | ------------------------------ | -------- | ----------------------------------------------- |
-| Add surrounding characters     | `gzaiw'` | Add `'` around the word under cursor            |
-| Delete surrounding characters  | `gzd'`   | Delete `'` around the word under cursor         |
-| Replace surrounding characters | `gzr'"`  | Replace `'` by `"` around the word under cursor |
-| Highlight surrounding          | `gzh'`   | Highlight `'` around the word under cursor      |
+| Add surrounding characters     | `gzaiw'` | Добавить `'` вокруг слова под курсором          |
+| Delete surrounding characters  | `gzd'`   | Удалить `'` вокруг слова под курсором           |
+| Replace surrounding characters | `gzr'"`  | Заменить `'` на `"` вокруг слова под курсором   |
+| Highlight surrounding          | `gzh'`   | Подсветить `'` вокруг слова под курсором        |
 
-### Text Manipulation
+### Работа с текстом (Text Manipulation)
 
 | Action                                 |               |
 | -------------------------------------- | ------------- |
 | Join with LSP intelligence(treesj)     | `<Space> + j` |
 | Split Line into Multiple Lines(treesj) | `<Space> + s` |
 
-### Miscellaneous
+### Разное (Miscellaneous)
 
 | Action                            |                 |
 | --------------------------------- | --------------- |
-| Show all Yank History             | `:<Space> + yh` |
-| Show undo history                 | `:<Space> + uh` |
-| Show the path of the current file | `:!echo $%`     |
+| Показать Yank History             | `:<Space> + yh` |
+| Показать undo history             | `:<Space> + uh` |
+| Показать путь текущего файла      | `:!echo $%`     |
 
-## Additional Resources
+## Дополнительные материалы
 
-For more detailed information and advanced usage, refer to:
+Для более подробной информации и продвинутого использования см.:
 
 1. [AstroNvim walkthrough](https://astronvim.com/Basic%20Usage/walkthrough)
 2. [./astronvim_user/mapping.lua](./astronvim_user/mappings.lua)
-3. All the plugins' documentations
+3. Документацию всех используемых plugins

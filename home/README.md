@@ -1,8 +1,8 @@
-# Home Manager's Submodules
+# Подмодули Home Manager
 
-This directory contains all Home Manager configurations organized by platform and functionality.
+Эта директория содержит конфигурации Home Manager, организованные по платформам и назначению.
 
-## Current Structure
+## Текущая структура
 
 ```
 home/
@@ -30,18 +30,18 @@ home/
     └── linux/         # Linux host home modules (ai, k3s-*, etc.)
 ```
 
-## Module Overview
+## Обзор модулей
 
-1. **base**: The base module suitable for Linux
-   - Cross-platform applications and settings
-   - Shared configurations for editors, shells, and essential tools
+1. **base**: базовый модуль, подходящий для Linux
+   - Cross-platform приложения и настройки
+   - Общие конфигурации для editors, shells и необходимых инструментов
 
-2. **linux**: Linux-specific configuration
+2. **linux**: Linux-specific конфигурация
    - Desktop environments (Noctalia Shell, Niri compositor)
-   - Linux-specific GUI applications
-   - System integration tools
+   - Linux-specific GUI приложения
+   - инструменты system integration
 
-4. **hosts**: Host entry modules for Home Manager
-   - Each output should reference only one host home module file
-   - Host modules are responsible for importing shared stacks (`home/linux/*`) and
-     applying host overrides
+4. **hosts**: host entry modules для Home Manager
+   - Каждый output должен ссылаться только на один host home module file
+   - Host modules отвечают за импорт общих стеков (`home/linux/*`) и
+     применение host overrides

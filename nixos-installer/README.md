@@ -1,30 +1,30 @@
-# Nix Environment Setup for Host: Idols - Ai
+# Подготовка Nix-окружения для host: Idols - Ai
 
-> :red_circle: **IMPORTANT**: **Do not deploy this flake directly on your machine.** Write your own
-> configuration from scratch and use this only as reference.\*\*
+> :red_circle: **ВАЖНО**: **не деплойте этот flake напрямую на свою машину.** Пишите свою
+> конфигурацию с нуля, а этот репозиторий используйте как reference.\*\*
 
-This flake prepares a Nix environment for setting up the desktop host
-[hosts/idols-ai](../hosts/idols-ai/) (from the main flake) on a new machine.
+Этот flake готовит Nix-окружение, чтобы развернуть desktop host
+[hosts/idols-ai](../hosts/idols-ai/) (из основного flake) на новой машине.
 
-## Why this flake exists
+## Зачем нужен этот flake
 
-The main flake is heavy and slow to deploy. This minimal flake helps to:
+Основной flake довольно тяжёлый и медленно деплоится. Этот минимальный flake помогает:
 
-1. Adjust and verify `hardware-configuration.nix` and disk layout before deploying the main flake.
-2. Test preservation, Secure Boot, TPM2, encryption, etc. on a VM or fresh install.
+1. Подправить и проверить `hardware-configuration.nix` и disk layout до деплоя основного flake.
+2. Протестировать preservation, Secure Boot, TPM2, шифрование и т.д. на VM или на «чистой» установке.
 
-Disk layout is **declarative** via [disko](https://github.com/nix-community/disko); manual
-partitioning is no longer needed.
+Disk layout задаётся **декларативно** через [disko](https://github.com/nix-community/disko); ручная
+разметка диска больше не нужна.
 
-## Steps to deploy
+## Шаги деплоя
 
-1. Create a USB install medium from the official NixOS ISO and boot from it.
+1. Сделайте USB-носитель с официальным NixOS ISO и загрузитесь с него.
 
-### 1. Partition and mount with disko (recommended)
+### 1. Разметка и монтирование через disko (рекомендуется)
 
-Layout is defined in [../hosts/idols-ai/disko-fs.nix](../hosts/idols-ai/disko-fs.nix): **nvme1n1**,
-ESP (450M) + LUKS + btrfs (subvolumes: @nix, @guix, @persistent, @snapshots, @tmp, @swap). Root is
-tmpfs; [preservation](https://github.com/nix-community/preservation) uses `/persistent`.
+Layout описан в [../hosts/idols-ai/disko-fs.nix](../hosts/idols-ai/disko-fs.nix): **nvme1n1**,
+ESP (450M) + LUKS + btrfs (subvolumes: @nix, @guix, @persistent, @snapshots, @tmp, @swap). Root —
+tmpfs; [preservation](https://github.com/nix-community/preservation) использует `/persistent`.
 
 ```bash
 git clone https://github.com/ryan4yin/nix-config.git
@@ -43,7 +43,7 @@ nix run github:nix-community/disko -- --mode destroy,format,mount ../hosts/idols
 systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0+7 /dev/<encrypted-disk-part-path>
 ```
 
-### 2. Install NixOS
+### 2. Установка NixOS
 
 ```bash
 sudo su
@@ -52,10 +52,10 @@ sudo su
 nixos-install --root /mnt --flake .#ai --no-root-password
 ```
 
-### 3. Copy data into /persistent and reboot
+### 3. Перенесите данные в /persistent и перезагрузитесь
 
-Preservation expects state under `/persistent`; copy or migrate data there (e.g. from an old disk),
-then leave the chroot and reboot.
+Preservation ожидает состояние в `/persistent`; скопируйте/перенесите данные туда (например, со
+старого диска), затем выйдите из chroot и перезагрузитесь.
 
 ```bash
 nixos-enter
@@ -71,31 +71,31 @@ umount -R /mnt
 reboot
 ```
 
-After reboot, set the boot order in firmware so the system boots from nvme1n1. The old disk (e.g.
-nvme0n1) can be reused for something else.
+После перезагрузки выставьте порядок загрузки в firmware так, чтобы система грузилась с nvme1n1.
+Старый диск (например, nvme0n1) можно переиспользовать под другие задачи.
 
-### Optional: use a cache mirror
+### Опционально: использовать cache mirror
 
 ```bash
 nixos-install --root /mnt --flake .#ai --no-root-password \
   --option substituters "https://mirrors.ustc.edu.cn/nix-channels/store https://cache.nixos.org/"
 ```
 
-## Deploying the main flake after install
+## Деплой основного flake после установки
 
-After the first boot:
+После первой загрузки:
 
-1. **SSH key** (for pulling the private secrets repo):
+1. **SSH key** (чтобы подтянуть приватный репозиторий секретов):
 
    ```bash
    ssh-keygen -t ed25519 -a 256 -C "ryan@idols-ai" -f ~/.ssh/idols_ai
    ssh-add ~/.ssh/idols_ai
    ```
 
-2. Rekey secrets for the new host: follow [../secrets/README.md](../secrets/README.md) so agenix can
-   decrypt using this host’s SSH key.
+2. Rekey secrets для нового host: см. [../secrets/README.md](../secrets/README.md), чтобы agenix мог
+   расшифровывать секреты SSH-ключом этого хоста.
 
-3. Deploy the main config:
+3. Задеплойте основную конфигурацию:
 
    ```bash
    sudo mv /etc/nixos ~/nix-config
@@ -104,11 +104,11 @@ After the first boot:
    just hypr
    ```
 
-4. **Secure Boot**: follow
+4. **Secure Boot**: следуйте
    [lanzaboote Quick Start](https://github.com/nix-community/lanzaboote/blob/master/docs/QUICK_START.md)
    and [hosts/idols-ai/secureboot.nix](../hosts/idols-ai/secureboot.nix).
 
-## Changing LUKS2 passphrase
+## Смена passphrase для LUKS2
 
 ```bash
 # Test current passphrase
@@ -121,13 +121,13 @@ sudo cryptsetup luksChangeKey /path/to/device
 sudo cryptsetup --verbose open --test-passphrase /path/to/device
 ```
 
-## Reference: layout and manual partitioning
+## Справка: layout и ручная разметка
 
-The layout (ESP + LUKS + btrfs, ephemeral root, preservation on `/persistent`) is described in
-[../hosts/idols-ai/disko-fs.nix](../hosts/idols-ai/disko-fs.nix). Prefer using disko; manual
-partitioning is no longer documented here.
+Layout (ESP + LUKS + btrfs, ephemeral root, preservation на `/persistent`) описан в
+[../hosts/idols-ai/disko-fs.nix](../hosts/idols-ai/disko-fs.nix). Предпочитайте disko; ручная
+разметка больше здесь не описывается.
 
-Background:
+Дополнительно:
 
 - [NixOS manual installation](https://nixos.org/manual/nixos/stable/#sec-installation-manual-partitioning)
 - [dm-crypt / Encrypting an entire system (Arch)](https://wiki.archlinux.org/title/Dm-crypt/Encrypting_an_entire_system)

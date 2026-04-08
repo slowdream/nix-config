@@ -1,42 +1,42 @@
 # Library
 
-This directory contains helper functions used by `flake.nix` to reduce code duplication and make it
-easier to add new machines.
+Эта директория содержит вспомогательные функции, которые используются в `flake.nix`, чтобы уменьшить
+дублирование кода и упростить добавление новых машин.
 
-## Current Functions
+## Текущие функции
 
-### Core System Generators
+### Генераторы базовых систем
 
-1. **`attrs.nix`** - Attribute set manipulation utilities
-2. **`macosSystem.nix`** - macOS configuration generator for
+1. **`attrs.nix`** - утилиты для работы с attribute set
+2. **`macosSystem.nix`** - генератор конфигурации macOS для
    [nix-darwin](https://github.com/LnL7/nix-darwin)
-3. **`nixosSystem.nix`** - NixOS configuration generator
-4. **`colmenaSystem.nix`** - Remote deployment configuration for
+3. **`nixosSystem.nix`** - генератор конфигурации NixOS
+4. **`colmenaSystem.nix`** - конфигурация remote deployment для
    [colmena](https://github.com/zhaofengli/colmena)
 
-### Specialized Module Generators
+### Специализированные генераторы модулей
 
-5. **`genK3sAgentModule.nix`** - K3s agent node configuration generator
-6. **`genK3sServerModule.nix`** - K3s server node configuration generator
-7. **`genKubeVirtGuestModule.nix`** - KubeVirt guest VM configuration generator
-8. **`genKubeVirtHostModule.nix`** - KubeVirt host configuration generator
+5. **`genK3sAgentModule.nix`** - генератор конфигурации для K3s agent node
+6. **`genK3sServerModule.nix`** - генератор конфигурации для K3s server node
+7. **`genKubeVirtGuestModule.nix`** - генератор конфигурации KubeVirt guest VM
+8. **`genKubeVirtHostModule.nix`** - генератор конфигурации KubeVirt host
 
-### Entry Point
+### Точка входа
 
-9. **`default.nix`** - Main entry point that imports all functions and exports them as a single
+9. **`default.nix`** - основная точка входа: импортирует все функции и экспортирует их как единый
    attribute set
 
-## Usage
+## Назначение
 
-These functions are designed to:
+Эти функции нужны, чтобы:
 
-- Generate consistent configurations across different architectures
-- Provide type-safe configuration for complex systems
-- Enable easy scaling of the infrastructure
-- Support both local development and production deployments
+- Генерировать единообразные конфигурации для разных архитектур
+- Давать type-safe конфигурацию для сложных систем
+- Упрощать масштабирование инфраструктуры
+- Поддерживать и локальную разработку, и production deployments
 
-## Architecture Support
+## Поддерживаемые архитектуры
 
-- **x86_64-linux**: Primary desktop systems
+- **x86_64-linux**: основные desktop systems
 - **aarch64-linux**: ARM64 Linux systems (Apple Silicon, SBCs)
 - **aarch64-darwin**: Apple Silicon macOS systems

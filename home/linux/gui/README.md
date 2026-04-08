@@ -1,46 +1,47 @@
-# Desktop Environment Configurations
+# Конфигурации desktop environment
 
-This directory contains desktop environment and window manager configurations managed by Home
+Эта директория содержит конфигурации desktop environment и window manager, которыми управляет Home
 Manager.
 
-## Available Configurations
+## Доступные конфигурации
 
 ### Window Managers
 
-- **niri**: Niri compositor configuration with custom settings, keybindings, spawn-at-startup rules,
-  and window rules
+- **niri**: конфигурация Niri compositor с кастомными настройками, keybindings, правилами
+  spawn-at-startup и window rules
 
-### Base Desktop Environment
+### Базовое desktop environment
 
-- **base**: Common desktop configurations shared across all environments, including:
-  - **Noctalia Shell**: All-in-one Wayland desktop shell (replaces gammastep, swaylock, anyrun,
-    mako, waybar, wallpaper-switcher, wlogout, and other desktop tools)
-  - Creative tools and media applications
-  - Development tools
+- **base**: общие desktop конфигурации, разделяемые между всеми окружениями, включая:
+  - **Noctalia Shell**: all-in-one Wayland desktop shell (заменяет gammastep, swaylock, anyrun, mako,
+    waybar, wallpaper-switcher, wlogout и другие desktop tools)
+  - creative tools и media applications
+  - development tools
   - Fcitx5 input method framework
-  - Games and gaming utilities
+  - games и gaming utilities
   - GTK theme configurations
-  - Immutable file handling
-  - Note-taking applications
+  - immutable file handling
+  - note-taking applications
   - Wayland applications
   - XDG desktop configurations
 
 ### Editor Configurations
 
-- **editors**: Text editor configurations and integrations
+- **editors**: конфигурации text editor и интеграции
 
-## Why install Desktop Environments in Home Manager instead of NixOS Module?
+## Почему Desktop Environments лучше ставить через Home Manager, а не через NixOS Module?
 
-1. **Configuration Location**: Desktop environment configuration files are located in `~/.config`,
-   which can be easily managed by Home Manager.
+1. **Configuration Location**: конфигурационные файлы desktop environment находятся в `~/.config`,
+   поэтому ими удобно управлять через Home Manager.
 
-2. **User-specific Services**: User-specific systemd services (noctalia-shell, fcitx5, hypridle,
-   etc.) can be easily managed by Home Manager. If desktop environments were configured via NixOS
-   Module, these user-level services might fail to start automatically. With Home Manager modules,
-   we can control systemd service dependency order more effectively.
+2. **User-specific Services**: user-specific systemd services (noctalia-shell, fcitx5, hypridle и
+   т.д.) легко управляются через Home Manager. Если бы desktop environments настраивались через NixOS
+   Module, эти user-level services могли бы не стартовать автоматически. С Home Manager modules
+   проще контролировать порядок зависимостей systemd services.
 
 3. **System Benefits**: By minimizing package installation through NixOS Module:
-   - Makes the NixOS system more secure and stable
-   - Increases portability to non-NixOS systems, as Home Manager can be installed on any Linux
+3. **System Benefits**: при уменьшении установки пакетов через NixOS Module:
+   - Делает NixOS систему более безопасной и стабильной
+   - Повышает переносимость на не-NixOS системы, т.к. Home Manager можно поставить на любой Linux
      system
-   - Allows for easier switching between different window managers without system-level changes
+   - Упрощает переключение между разными window managers без system-level изменений

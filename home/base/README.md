@@ -1,66 +1,65 @@
-# Home Manager's Base Submodules
+# Базовые подмодули Home Manager
 
-This directory contains cross-platform base configurations that are shared between Linux and Darwin
-systems.
+Эта директория содержит cross-platform базовые конфигурации, которые разделяются между системами
+Linux и Darwin.
 
-## Configuration Structure
+## Структура конфигурации
 
 ### Core System
 
-- **core/**: Essential cross-platform configurations
-  - **core.nix**: Minimal home-manager configuration
-  - **shells/**: Shell configurations (bash, zsh, fish, nu)
-  - **editors/**: Text editor configurations
-    - **neovim/**: Neovim with custom plugins and settings
-    - **helix/**: Helix editor configuration
-  - **btop.nix**: System monitoring tools
-  - **git.nix**: Git configuration and aliases
-  - **npm.nix**: Node.js package management
-  - **pip.nix**: Python package management
-  - **starship.nix**: Cross-shell prompt configuration
-  - **theme.nix**: Color schemes and theming
-  - **yazi.nix**: Terminal file manager configuration
-  - **zellij/**: Terminal multiplexer with custom layouts
+- **core/**: базовые cross-platform конфигурации
+  - **core.nix**: минимальная конфигурация home-manager
+  - **shells/**: конфигурации shell (bash, zsh, fish, nu)
+  - **editors/**: конфигурации текстовых редакторов
+    - **neovim/**: Neovim с кастомными plugins и настройками
+    - **helix/**: конфигурация Helix
+  - **btop.nix**: инструменты мониторинга системы
+  - **git.nix**: конфигурация Git и aliases
+  - **npm.nix**: управление Node.js пакетами
+  - **pip.nix**: управление Python пакетами
+  - **starship.nix**: cross-shell prompt конфигурация
+  - **theme.nix**: color schemes и theming
+  - **yazi.nix**: конфигурация terminal file manager
+  - **zellij/**: terminal multiplexer с кастомными layouts
 
 ### Desktop Environment
 
-- **gui/**: Cross-platform GUI applications and configurations
-  - **dev-tools.nix**: Development tools and IDEs
-  - **media.nix**: Media players and utilities
-  - **terminal/**: Terminal emulator configurations
-    - **alacritty/**: Alacritty terminal
-    - **kitty/**: Kitty terminal
-    - **foot/**: Foot terminal (Linux)
-    - **ghostty/**: Ghostty terminal
+- **gui/**: cross-platform GUI приложения и конфигурации
+  - **dev-tools.nix**: dev tools и IDE
+  - **media.nix**: media players и utilities
+  - **terminal/**: конфигурации terminal emulators
+    - **alacritty/**: Alacritty
+    - **kitty/**: Kitty
+    - **foot/**: Foot (Linux)
+    - **ghostty/**: Ghostty
 
-### Terminal Interface
+### Terminal / TUI
 
-- **tui/**: Terminal-based interface configurations
-  - **cloud/**: Cloud development tools (Terraform, etc.)
-  - **container.nix**: Container tools (Docker, Podman)
-  - **dev-tools.nix**: Terminal-based development tools
-  - **editors/**: Terminal editor configurations
-  - **encryption/**: Encryption and security tools
-  - **gpg/**: GPG key management
-  - **password-store/**: Password management with pass
-  - **shell.nix**: Shell environment configurations
-  - **ssh/**: SSH configuration and management
-  - **zellij/**: Terminal workspace management
+- **tui/**: terminal/TUI конфигурации
+  - **cloud/**: cloud development tools (Terraform и т.д.)
+  - **container.nix**: container tools (Docker, Podman)
+  - **dev-tools.nix**: terminal-based dev tools
+  - **editors/**: конфигурации редакторов в терминале
+  - **encryption/**: encryption и security tools
+  - **gpg/**: управление GPG keys
+  - **password-store/**: управление паролями через pass
+  - **shell.nix**: конфигурация shell окружения
+  - **ssh/**: SSH конфигурация и управление
+  - **zellij/**: terminal workspace управление
 
 ### System Management
 
 - **home.nix**: Main home manager configuration file
 
-## Platform Compatibility
+## Совместимость платформ
 
-All configurations in this directory are designed to work across:
+Все конфигурации в этой директории рассчитаны на работу в:
 
 - **Linux**: All distributions with Nix and Home Manager
 - **macOS**: Darwin systems with Home Manager
 - **WSL**: Windows Subsystem for Linux
 
-## Usage
+## Использование
 
-These base configurations provide the foundation for both Linux and Darwin systems, ensuring
-consistent environments across different platforms while allowing for platform-specific
-customizations.
+Эти базовые конфигурации — фундамент для Linux и Darwin систем: они дают единообразное окружение на
+разных платформах и при этом позволяют делать platform-specific кастомизации.

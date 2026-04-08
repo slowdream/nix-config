@@ -14,38 +14,37 @@
   </a>
 </p>
 
-> My configuration is becoming more and more complex, and **it will be difficult for beginners to
-> read**. If you are new to NixOS and want to know how I use NixOS, I would recommend you to take a
-> look at the [ryan4yin/nix-config/releases](https://github.com/ryan4yin/nix-config/releases) first,
-> **check out to some simpler older versions, such as
-> [i3-kickstarter](https://github.com/ryan4yin/nix-config/tree/i3-kickstarter), which will be much
-> easier to understand**.
+> Моя конфигурация становится всё сложнее, и **новичкам будет трудно её читать**. Если вы только
+> начинаете с NixOS и хотите понять, как я его использую, рекомендую сначала посмотреть
+> [ryan4yin/nix-config/releases](https://github.com/ryan4yin/nix-config/releases) и **переключиться на
+> более простые старые версии — например,
+> [i3-kickstarter](https://github.com/ryan4yin/nix-config/tree/i3-kickstarter). Их будет гораздо
+> легче понять**.
 
-Этот репозиторий содержит nix-код для сборки моих систем:
+Этот репозиторий содержит Nix-код для сборки моих систем:
 
 1. NixOS Desktops: NixOS с home-manager, niri, agenix и т.д.
 2. NixOS Servers: виртуальные машины (Proxmox/KubeVirt) и сервисы (kubernetes, homepage, prometheus, grafana и т.д.).
 
-See [./hosts](./hosts) for details of each host.
+Подробности по каждому хосту см. в [./hosts](./hosts).
 
-See [./Virtual-Machine.md](./Virtual-Machine.md) for details of how to create & manage KubeVirt's
-Virtual Machine from this flake.
+Как создавать и управлять Virtual Machine в KubeVirt из этого flake — см. [./Virtual-Machine.md](./Virtual-Machine.md).
 
-## Why NixOS & Flakes?
+## Зачем NixOS и Flakes?
 
-Nix allows for easy-to-manage, collaborative, reproducible deployments. This means that once
-something is setup and configured once, it works (almost) forever. If someone else shares their
-configuration, anyone else can just use it (if you really understand what you're copying/referring
-now).
+Nix позволяет делать управляемые, совместные и воспроизводимые деплои. Это значит, что один раз
+настроив систему, вы получаете конфигурацию, которая работает (почти) всегда. Если кто-то делится
+своей конфигурацией, другой человек может просто использовать её (если действительно понимает, что
+копирует/на что ссылается).
 
-As for Flakes, refer to
+Про Flakes см.
 [Introduction to Flakes - NixOS & Nix Flakes Book](https://nixos-and-flakes.thiscute.world/nixos-with-flakes/introduction-to-flakes)
 
-**Want to know NixOS & Flakes in detail? Looking for a beginner-friendly tutorial or best practices?
-You don't have to go through the pain I've experienced again! Check out my
+**Хотите разобраться в NixOS и Flakes глубже? Нужен дружелюбный для новичков туториал и best
+practices? Вам не обязательно повторять мой путь с болью — загляните в
 [NixOS & Nix Flakes Book - 🛠️ ❤️ An unofficial & opinionated :book: for beginners](https://github.com/ryan4yin/nixos-and-flakes-book)!**
 
-## Components
+## Компоненты
 
 |                                                                | NixOS(Wayland)                                                                                                      |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
@@ -68,9 +67,9 @@ You don't have to go through the pain I've experienced again! Check out my
 | **Filesystem & Encryption**                                    | tmpfs as `/`, [Btrfs][Btrfs] subvolumes on a [LUKS][LUKS] encrypted partition for persistent, unlock via passphrase |
 | **Secure Boot**                                                | [lanzaboote][lanzaboote]                                                                                            |
 
-Wallpapers: https://github.com/ryan4yin/wallpapers
+Wallpapers: `https://github.com/ryan4yin/wallpapers`
 
-## Screenshots
+## Скриншоты
 
 ![desktop](./_img/2026-01-05_niri-noctalia_desktop.webp)
 
@@ -80,28 +79,27 @@ Wallpapers: https://github.com/ryan4yin/wallpapers
 
 ## Neovim
 
-See [./home/base/tui/editors/neovim/](./home/base/tui/editors/neovim/) for details.
+Подробности см. в [./home/base/tui/editors/neovim/](./home/base/tui/editors/neovim/).
 
-## Secrets Management
+## Управление секретами
 
-See [./secrets](./secrets) for details.
+Подробности см. в [./secrets](./secrets).
 
 ## Agents
 
-See [./agents](./agents) for my reusable cross-project agent files and installer script.
+См. [./agents](./agents) — переиспользуемые agent-файлы и скрипт установки.
 
-## How to Deploy this Flake?
+## Как деплоить этот flake?
 
 <!-- prettier-ignore -->
-> :red_circle: **IMPORTANT**: **You should NOT deploy this flake directly on your machine :exclamation:
-> It will not succeed.** This flake contains my hardware configuration(such as
+> :red_circle: **ВАЖНО**: **не деплойте этот flake напрямую на свою машину :exclamation: — это не
+> получится.** Здесь есть мои hardware-конфигурации (например,
 > [hardware-configuration.nix](hosts/idols-ai/hardware-configuration.nix),
-> [Nvidia Support](https://github.com/ryan4yin/nix-config/blob/v0.1.1/hosts/idols-ai/default.nix#L77-L91),
-> etc.) which is not suitable for your hardware, and requires my private secrets repository
-> [ryan4yin/nix-secrets](https://github.com/ryan4yin/nix-config/tree/main/secrets) to deploy. You
-> may use this repo as a reference to build your own configuration.
+> [Nvidia Support](https://github.com/ryan4yin/nix-config/blob/v0.1.1/hosts/idols-ai/default.nix#L77-L91)
+> и т.д.), которые не подходят вашему железу, а также для деплоя требуется мой приватный репозиторий
+> секретов. Используйте этот репозиторий как референс для своей конфигурации.
 
-For NixOS:
+Для NixOS:
 
 > To deploy this flake from NixOS's official ISO image (purest installation method), please refer to
 > [./nixos-installer/](./nixos-installer/)
@@ -120,9 +118,9 @@ just niri debug
 > [What y'all will need when Nix drives you to drink.](https://www.youtube.com/watch?v=Eni9PPPPBpg)
 > (copy from hlissner's dotfiles, it really matches my feelings when I first started using NixOS...)
 
-## References
+## Ссылки
 
-Other dotfiles that inspired me:
+Другие dotfiles, которые меня вдохновили:
 
 - Nix Flakes
   - [NixOS-CN/NixOS-CN-telegram](https://github.com/NixOS-CN/NixOS-CN-telegram)

@@ -1,58 +1,59 @@
 # agents
 
-Reusable, symlink-first agent resources shared across projects.
+Переиспользуемые ресурсы для agents (с упором на symlink-first), которые шарятся между проектами.
 
-This directory is the canonical source for baseline agent rules and supporting command references.
-The primary workflow is to symlink files from here into each agent runtime/config location.
+Эта директория — канонический источник baseline правил для agents и вспомогательных справочников по
+командам. Основной workflow — делать symlink файлов отсюда в runtime/config локации конкретных agents.
 
-## What this directory contains
+## Что содержит эта директория
 
-- `AGENTS.md`: global baseline rules for coding agents.
-- `install-rules.py`: installs the baseline by creating symlinks in supported agent config dirs.
-- `install-cli.md`: curated CLI install/update command snippets.
-- `install-skills.md`: curated `npx skills` command snippets.
+- `AGENTS.md`: global baseline rules для coding agents.
+- `install-rules.py`: устанавливает baseline, создавая symlinks в поддерживаемых agent config dirs.
+- `install-cli.md`: curated сниппеты команд для установки/обновления CLI.
+- `install-skills.md`: curated сниппеты команд `npx skills`.
 
-## Core workflow
+## Основной workflow
 
-1. Maintain shared rules in `agents/AGENTS.md`.
-2. Run `install-rules.py` to refresh symlinks in local agent homes.
-3. Use `install-cli.md` and `install-skills.md` as reference snippets when needed.
+1. Поддерживайте общие правила в `agents/AGENTS.md`.
+2. Запускайте `install-rules.py`, чтобы обновить symlinks в локальных agent homes.
+3. Используйте `install-cli.md` и `install-skills.md` как справочные сниппеты при необходимости.
 
-## Install baseline rules (symlink-based)
+## Установка baseline правил (через symlink)
 
-Run:
+Запуск:
 
 ```bash
 python3 agents/install-rules.py
 ```
 
-Current targets:
+Текущие targets:
 
 - Codex: `AGENTS.md` -> `${CODEX_HOME:-~/.codex}/AGENTS.md`
 - OpenCode: `AGENTS.md` -> `${XDG_CONFIG_HOME:-~/.config}/opencode/AGENTS.md`
 - Claude Code: `AGENTS.md` -> `~/.claude/CLAUDE.md`
 - Gemini: `AGENTS.md` -> `~/.gemini/GEMINI.md`
 
-Behavior:
+Поведение:
 
-- Each target is handled independently.
-- Missing destination directories are skipped.
-- Existing destination file/symlink is replaced with a symlink to this repo source file.
+- Каждый target обрабатывается независимо.
+- Если destination directory отсутствует — он пропускается.
+- Если destination file/symlink уже существует — он заменяется symlink на source file в этом репозитории.
 
-## About `install-cli.md` and `install-skills.md`
+## Про `install-cli.md` и `install-skills.md`
 
-Use them as snippet libraries:
+Используйте их как библиотеки сниппетов:
 
-- review the commands
-- select what you need
-- run selected commands manually
+- просмотрите команды
+- выберите нужное
+- запускайте выбранные команды вручную
 
-## Conventions
+## Соглашения
 
-- Keep files portable and reviewable.
-- Keep secrets and machine-specific credentials out of this directory.
-- Keep guidance generic enough to reuse across multiple agent environments.
+- Держите файлы portable и reviewable.
+- Не храните в этой директории secrets и machine-specific credentials.
+- Держите инструкции достаточно общими, чтобы переиспользовать их в разных agent environments.
 
-## Goal
+## Цель
 
-Maintain one reusable source of truth for agent setup that stays simple to sync and easy to evolve.
+Поддерживать один переиспользуемый source of truth по настройке agents, который легко синхронизировать
+и развивать.

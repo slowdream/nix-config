@@ -1,8 +1,8 @@
 # NixOS Modules
 
-This directory contains modular NixOS configurations organized by platform and functionality.
+Эта директория содержит модульную конфигурацию NixOS, организованную по платформам и назначению.
 
-## Current Structure
+## Текущая структура
 
 ```
 modules/
@@ -52,11 +52,11 @@ modules/
         └── server.nix
 ```
 
-## Module Categories
+## Категории модулей
 
 ### 1. **Base Modules** (`base/`)
 
-Common configuration shared between all NixOS hosts:
+Общая конфигурация, разделяемая между всеми NixOS hosts:
 
 - System fonts and localization
 - Essential packages and tools
@@ -66,20 +66,20 @@ Common configuration shared between all NixOS hosts:
 
 ### 2. **NixOS Modules** (`nixos/`)
 
-Platform-specific NixOS configuration:
+Платформо-специфичная конфигурация NixOS:
 
 - **Base**: Core system settings and services
 - **Desktop**: Desktop environment and GUI applications
 - **Server**: Server-specific optimizations and services
 
-## Usage
+## Использование
 
-Modules are imported based on platform detection:
+Модули импортируются в зависимости от платформы:
 
 - **NixOS Systems**: Import `nixos/` modules
 - **All Systems**: Import `base/` modules for shared configuration
 
-## Architecture Support
+## Поддерживаемые архитектуры
 
 - **x86_64-linux**: Desktop and server configurations
 - **aarch64-linux**: ARM64 Linux systems
