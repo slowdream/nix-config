@@ -8,8 +8,7 @@ Keep changes minimal, verifiable, and safe for multi-host deployments.
 This repository manages:
 
 - NixOS hosts (desktop + servers)
-- macOS hosts via nix-darwin
-- Home Manager profiles shared across platforms
+- Home Manager profiles
 - Remote deployments via colmena
 
 High-level layout:
@@ -22,8 +21,7 @@ High-level layout:
 │   ├── default.nix
 │   ├── x86_64-linux/
 │   ├── aarch64-linux/
-│   └── aarch64-darwin/
-├── modules/                     # NixOS + darwin modules
+├── modules/                     # NixOS modules
 ├── home/                        # Home Manager modules
 ├── hosts/                       # Host-specific config
 ├── vars/                        # Shared variables
@@ -115,7 +113,6 @@ Eval tests live under:
 
 - `outputs/x86_64-linux/tests/`
 - `outputs/aarch64-linux/tests/`
-- `outputs/aarch64-darwin/tests/`
 
 Typical test pair:
 
@@ -162,10 +159,7 @@ Module pattern:
 ## Platform Notes
 
 - `Justfile` uses `nu` (`set shell := ["nu", "-c"]`).
-- Some tasks exist only on Linux or macOS via `[linux]` / `[macos]` guards.
-- `just local` has different implementations per platform:
-  - Linux: `nixos-switch`
-  - macOS: `darwin-build` + `darwin-switch`
+- Some tasks exist only on Linux via `[linux]` guards.
 
 ## Secrets and Safety
 
@@ -188,7 +182,7 @@ Before finishing, verify:
 
 - Editing host-specific files when the change belongs in shared module layers (`modules/` or
   `home/`).
-- Forgetting to update both Linux and darwin paths when touching shared abstractions.
+- Forgetting to update platform-specific paths when touching shared abstractions.
 - Running deployment commands to validate syntax when `nix eval`/`nix build` would be safer.
 - Introducing hardcoded usernames/paths instead of using `myvars` and existing abstractions.
 

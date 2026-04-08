@@ -17,8 +17,8 @@ In this way, all secrets are still encrypted when transmitted over the network a
 In addition, we further improve the security of secret files by storing them in a separate private
 repository.
 
-This directory contains this `README.md`, and a `nixos.nix`/`darwin.nix` file that is used to
-decrypt all my secrets via `agenix`. Then, I can use them in this flake.
+This directory contains this `README.md`, and a `nixos.nix` file that is used to decrypt all my
+secrets via `agenix`. Then, I can use them in this flake.
 
 ## Adding or Updating Secrets
 
@@ -175,16 +175,7 @@ the `age.secrets.<name>.path` argument, which defaults to `/etc/secrets`.
 
 ## Troubleshooting
 
-### 1. Nix-Darwin Module
-
-Check logs:
-
-```bash
-tail -n 100 /Library/Logs/org.nixos.activate-agenix.stderr.log
-tail -n 100 /Library/Logs/org.nixos.activate-agenix.stdout.log
-```
-
-### 2. NixOS Module
+### 1. NixOS Module
 
 Check logs:
 

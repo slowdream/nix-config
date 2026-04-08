@@ -1,5 +1,5 @@
 {
-  description = "Ryan Yin's nix configuration for both NixOS & macOS";
+  description = "Конфигурация NixOS (flake)";
 
   ##################################################################################################################
   #
@@ -47,14 +47,6 @@
     nixpkgs-patched.url = "github:ryan4yin/nixpkgs/nixos-unstable-patched";
     # get some latest packages from the master branch
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
-
-    # for macos
-    # nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
-    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nix-darwin = {
-      url = "github:lnl7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
-    };
 
     # home-manager, used for managing user configuration
     home-manager = {
@@ -131,12 +123,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixos-apple-silicon = {
-      # asahi-6.18.9
-      url = "github:nix-community/nixos-apple-silicon";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     helix = {
       # Helix with steel as plugin system
       # https://github.com/helix-editor/helix/pull/8675
@@ -171,11 +157,6 @@
     # use ssh protocol to authenticate via ssh-agent/ssh-key, and shallow clone to save time
     mysecrets = {
       url = "git+ssh://git@github.com/ryan4yin/nix-secrets.git?shallow=1";
-      flake = false;
-    };
-
-    my-asahi-firmware = {
-      url = "git+ssh://git@github.com/ryan4yin/asahi-firmware.git?shallow=1";
       flake = false;
     };
 

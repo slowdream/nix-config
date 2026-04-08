@@ -73,15 +73,10 @@ All the outputs of this flake are defined here.
 .
 ├── default.nix       # The entry point, all the outputs are composed here.
 ├── README.md
-├── aarch64-darwin    # All outputs for macOS Apple Silicon
-│   ├── default.nix
-│   └── src           # every host has its own file in this directory
-│       ├── frieren.nix
-│       └── fern.nix
 ├── aarch64-linux     # All outputs for Linux ARM64
 │   ├── default.nix
 │   ├── src           # every host has its own file in this directory
-│   │   ├── 12kingdoms-shoukei.nix
+│   │   ├── idols-akane.nix
 │   └── tests         # eval tests
 └── x86_64-linux      # All outputs for Linux x86_64
     ├── default.nix

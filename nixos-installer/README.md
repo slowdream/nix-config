@@ -6,10 +6,6 @@
 This flake prepares a Nix environment for setting up the desktop host
 [hosts/idols-ai](../hosts/idols-ai/) (from the main flake) on a new machine.
 
-Other docs:
-
-- [README for 12kingdoms-shoukei](./README.shoukei.md)
-
 ## Why this flake exists
 
 The main flake is heavy and slow to deploy. This minimal flake helps to:
@@ -51,10 +47,6 @@ systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0+7 /dev/<encrypted-disk-part
 
 ```bash
 sudo su
-
-# add ssh key to ssh-agent, it's required to pull my asahi=firmware
-$(ssh-agent)
-ssh-add /path/to/ssh-key
 
 # From nix-config/nixos-installer
 nixos-install --root /mnt --flake .#ai --no-root-password

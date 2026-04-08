@@ -11,11 +11,7 @@
 {
   programs.ghostty = {
     enable = true;
-    package =
-      if pkgs.stdenv.isDarwin then
-        pkgs.hello # pkgs.ghostty is currently broken on darwin
-      else
-        pkgs.ghostty; # the stable version
+    package = pkgs.ghostty; # the stable version
     # package = ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default; # the latest version
     enableBashIntegration = false;
     installBatSyntax = false;
@@ -25,8 +21,6 @@
       font-size = 13;
 
       background-opacity = 0.93;
-      # only supported on macOS;
-      background-blur-radius = 10;
       scrollback-limit = 20000;
 
       # https://ghostty.org/docs/config/reference#command

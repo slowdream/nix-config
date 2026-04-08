@@ -3,9 +3,6 @@
   outputs,
 }:
 let
-  specialExpected = {
-    "shoukei-niri" = "shoukei";
-  };
   specialHostNames = builtins.attrNames specialExpected;
 
   otherHosts = builtins.removeAttrs outputs.nixosConfigurations specialHostNames;

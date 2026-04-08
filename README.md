@@ -21,13 +21,10 @@
 > [i3-kickstarter](https://github.com/ryan4yin/nix-config/tree/i3-kickstarter), which will be much
 > easier to understand**.
 
-This repository is home to the nix code that builds my systems:
+Этот репозиторий содержит nix-код для сборки моих систем:
 
-1. NixOS Desktops: NixOS with home-manager, niri, agenix, etc.
-2. macOS Desktops: nix-darwin with home-manager, share the same home-manager configuration with
-   NixOS Desktops.
-3. NixOS Servers: virtual machines running on Proxmox/KubeVirt, with various services, such as
-   kubernetes, homepage, prometheus, grafana, etc.
+1. NixOS Desktops: NixOS с home-manager, niri, agenix и т.д.
+2. NixOS Servers: виртуальные машины (Proxmox/KubeVirt) и сервисы (kubernetes, homepage, prometheus, grafana и т.д.).
 
 See [./hosts](./hosts) for details of each host.
 
@@ -47,10 +44,6 @@ As for Flakes, refer to
 **Want to know NixOS & Flakes in detail? Looking for a beginner-friendly tutorial or best practices?
 You don't have to go through the pain I've experienced again! Check out my
 [NixOS & Nix Flakes Book - 🛠️ ❤️ An unofficial & opinionated :book: for beginners](https://github.com/ryan4yin/nixos-and-flakes-book)!**
-
-> If you're using macOS, check out
-> [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter) for a quick
-> start.
 
 ## Components
 
@@ -122,23 +115,6 @@ just niri
 
 # or we can deploy with details
 just niri debug
-```
-
-For macOS:
-
-```bash
-# If you are deploying for the first time,
-# 1. install nix & homebrew manually.
-# 2. prepare the deployment environment with essential packages available
-nix-shell -p just nushell
-# 3. comment home-manager's code in lib/macosSystem.nix to speed up the first deployment.
-# 4. comment out the proxy settings in scripts/darwin_set_proxy.py if the proxy is not ready yet.
-
-# Deploy the darwinConfiguration by hostname match
-just local
-
-# deploy with details
-just local debug
 ```
 
 > [What y'all will need when Nix drives you to drink.](https://www.youtube.com/watch?v=Eni9PPPPBpg)

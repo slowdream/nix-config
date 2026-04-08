@@ -1,6 +1,6 @@
 # Variables
 
-Common variables and configuration used across my NixOS and nix-darwin configurations.
+Общие переменные и конфигурация, используемые в NixOS.
 
 ## Current Structure
 
@@ -36,7 +36,7 @@ Comprehensive network configuration including:
 
 The networking configuration covers:
 
-- **Physical machines**: Desktop PCs, Apple Silicon systems, SBCs
+- **Physical machines**: Desktop PCs, SBCs
 - **Virtual machines**: KubeVirt guests, K3s nodes
 - **Kubernetes clusters**: Production and testing environments
 - **Network infrastructure**: Routers, gateways, and DNS configuration

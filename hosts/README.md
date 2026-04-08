@@ -1,6 +1,6 @@
 # Hosts
 
-This directory contains all host-specific configurations for my NixOS and macOS systems.
+This directory contains all host-specific configurations for my NixOS systems.
 
 ## Current Host Inventory
 
@@ -17,22 +17,12 @@ Named after characters from "Oshi no Ko":
 | `kana`       | NixOS       | Virtual               | Reserved              | ⚪ Not Used |
 | `ruby`       | NixOS       | Virtual               | Reserved              | ⚪ Not Used |
 
-#### `darwin` - macOS Systems
-
-Named after characters from "Frieren: Beyond Journey's End":
-
-| Host      | Platform | Hardware                   | Purpose      | Status    |
-| --------- | -------- | -------------------------- | ------------ | --------- |
-| `fern`    | macOS    | MacBook Pro M2 13" 16GB    | Personal Use | ✅ Active |
-| `frieren` | macOS    | MacBook Pro M4Pro 14" 48GB | Work Use     | ✅ Active |
-
-#### `12kingdoms` - Homelab Servers & Apple Silicon Linux
+#### `12kingdoms` - Homelab Servers
 
 Named after "Twelve Kingdoms":
 
 | Host      | Platform | Hardware                               | Purpose                    | Status    |
 | --------- | -------- | -------------------------------------- | -------------------------- | --------- |
-| `shoukei` | NixOS    | MacBook Pro M2                         | NixOS on Apple Silicon     | ✅ Active |
 | `shoryu`  | NixOS    | MoreFine S500Plus (AMD Ryzen 9 5900HX) | KubeVirt Host & K3s Master | ✅ Active |
 | `shushou` | NixOS    | MinisForum UM560 (AMD Ryzen 5 5625U)   | KubeVirt Host & K3s Master | ✅ Active |
 | `youko`   | NixOS    | MinisForum HX99G (AMD Ryzen 9 6900HX)  | KubeVirt Host & K3s Master | ✅ Active |
@@ -58,7 +48,6 @@ All my riscv64 hosts:
 
 - **idols**: Characters from "Oshi no Ko" anime/manga
 - **12kingdoms**: Characters from "Twelve Kingdoms" anime/novel series
-- **darwin**: Characters from "Frieren: Beyond Journey's End" anime/manga
 - **k8s**: Kubernetes-related systems follow standard naming patterns
 
 ## How to Add a New Host
@@ -80,7 +69,7 @@ configurations follow similar patterns but are customized for specific hardware 
    2. Create & add the new host's `hardware-configuration.nix` to the new folder, and add the new
       host's `configuration.nix` to `hosts/<name>/default.nix`.
    3. If the new host need to use home-manager, add its custom config into
-      `home/hosts/linux/<name>.nix` or `home/hosts/darwin/<name>.nix`.
+      `home/hosts/linux/<name>.nix`.
 1. Under `outputs/`
    1. Add a new nix file named `outputs/<system-architecture>/src/<name>.nix`.
    2. Copy the content from one of the existing similar host, and modify it to fit the new host.
@@ -100,14 +89,12 @@ Use existing hosts as templates. The key files typically include:
 
 - `default.nix` - Main host configuration
 - `hardware-configuration.nix` - Auto-generated hardware settings
-- Platform-specific files (e.g., `nvidia.nix`, `apple-silicon.nix`, etc.)
+- Platform-specific files (e.g., `nvidia.nix`, etc.)
 
 ### Examples to Reference
 
 - **Desktop systems**: See `idols-ai/` for gaming/workstation setup
 - **Server systems**: See `kubevirt-shoryu/` for K8s/KubeVirt hosts
-- **macOS systems**: See `darwin-fern/` for macOS configurations
-- **Apple Silicon**: See `12kingdoms-shoukei/` for ARM Linux setup
 
 ## Distributed Building
 

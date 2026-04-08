@@ -20,7 +20,6 @@
       systems = [
         "x86_64-linux"
         "aarch64-linux"
-        "aarch64-darwin"
       ];
       # Helper function to generate a set of attributes for each system
       forAllSystems = func: (nixpkgs.lib.genAttrs systems func);
@@ -70,10 +69,7 @@
                 libxkbcommon
                 wayland # To use the wayland feature
               ])
-              ++ (pkgs.lib.optionals pkgs.stdenv.isDarwin [
-                # https://discourse.nixos.org/t/the-darwin-sdks-have-been-updated/55295/1
-                apple-sdk_15
-              ]);
+              ;
             LD_LIBRARY_PATH = lib.makeLibraryPath buildInputs;
           };
         }

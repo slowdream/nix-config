@@ -45,7 +45,6 @@ repl:
   nix repl -f flake:nixpkgs
 
 # remove all old generations
-# on darwin, you may need to switch to root user to run this command
 [group('nix')]
 clean:
   # Wipe out NixOS's history
@@ -100,7 +99,7 @@ repair-store *paths:
 # Update all Nixpkgs inputs
 [group('nix')]
 up-nix:
-  nix flake update --commit-lock-file nixpkgs-stable nixpkgs-master nixpkgs-darwin nixpkgs-patched
+  nix flake update --commit-lock-file nixpkgs-stable nixpkgs-master nixpkgs-patched
 
 # override nixpkgs's commit hash
 [group('nix')]
@@ -128,42 +127,6 @@ niri mode="default":
   #!/usr/bin/env nu
   use {{utils_nu}} *;
   nixos-switch $"(hostname)-niri" {{mode}}
-
-############################################################################
-#
-#  Darwin related commands
-#
-############################################################################
-
-[macos]
-[group('desktop')]
-darwin-set-proxy:
-  sudo python3 scripts/darwin_set_proxy.py
-  sleep 1sec
-
-[macos]
-[group('desktop')]
-darwin-rollback:
-  #!/usr/bin/env nu
-  use {{utils_nu}} *;
-  darwin-rollback
-
-# Deploy the darwinConfiguration by hostname match
-[macos]
-[group('desktop')]
-local mode="default": 
-  #!/usr/bin/env nu
-  use {{utils_nu}} *;
-  darwin-build (hostname) {{mode}};
-  darwin-switch (hostname) {{mode}}
-
-
-# Reset launchpad to force it to reindex Applications
-[macos]
-[group('desktop')]
-reset-launchpad:
-  defaults write com.apple.dock ResetLaunchPad -bool true
-  killall Dock
 
 ############################################################################
 #
@@ -340,12 +303,12 @@ gh-login:
 # Run nixpkgs-review for PR
 [group('nixpkgs')]
 pkg-review pr:
-  gh workflow run review.yml --repo ryan4yin/nixpkgs-review-gha -f x86_64-darwin=no -f post-result=true -f pr={{pr}}
+  gh workflow run review.yml --repo ryan4yin/nixpkgs-review-gha -f post-result=true -f pr={{pr}}
 
 # Run package tests for PR
 [group('nixpkgs')]
 pkg-test pr pname:
-  gh workflow run review.yml --repo ryan4yin/nixpkgs-review-gha -f x86_64-darwin=no -f post-result=true -f pr={{pr}} -f extra-args="-p {{pname}}.passthru.tests"
+  gh workflow run review.yml --repo ryan4yin/nixpkgs-review-gha -f post-result=true -f pr={{pr}} -f extra-args="-p {{pname}}.passthru.tests"
 
 # View the summary of a workflow
 [group('nixpkgs')]
