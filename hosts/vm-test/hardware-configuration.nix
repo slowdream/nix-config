@@ -21,7 +21,6 @@
   # при другой разметке — /boot или /boot/efi
   boot.loader.efi.efiSysMountPoint = "/boot";
   boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.installAsRemovable = true;
 
   # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/top-level/linux-kernels.nix
   boot.kernelPackages = pkgs.linuxPackages_6_18; # 6.19 плохо с драйвером NVIDIA
