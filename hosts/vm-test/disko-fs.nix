@@ -29,6 +29,12 @@
       content = {
         type = "gpt";
         partitions = {
+          # BIOS Boot Partition для GRUB (нужно при GPT разметке без EFI)
+          boot = {
+            size = "1M";
+            type = "EF02"; # для grub MBR
+            priority = 1;
+          };
           # ESP без шифрования — UEFI грузит bootloader
           ESP = {
             priority = 1;
