@@ -30,6 +30,8 @@
     "ahci"
     "virtio_pci"
     "virtio_blk"
+    "virtio_gpu"
+    "virtio_console"
     "sr_mod"
     "usbhid"
     "usb_storage"
