@@ -51,72 +51,50 @@
           root = {
             size = "100%";
             content = {
-              type = "luks";
-              name = "nixos-luks"; # имя mapper = boot.initrd.luks
-              settings = {
-                allowDiscards = true; # TRIM SSD
-              };
-              # пароль в initrd
-              initrdUnlock = true;
-              # cryptsetup luksFormat
-              extraFormatArgs = [
-                "--type luks2"
-                "--cipher aes-xts-plain64"
-                "--hash sha512"
-                "--iter-time 5000"
-                "--key-size 256"
-                "--pbkdf argon2id"
-                "--use-random" # ждать энтропию /dev/random
-              ];
-              extraOpenArgs = [
-                "--timeout 10"
-              ];
-              content = {
-                type = "btrfs";
-                extraArgs = [ "-f" ]; # перезаписать существующую ФС
-                subvolumes = {
-                  # корень btrfs (id 5) — снимки / send-receive
-                  "/" = {
-                    mountpoint = "/btr_pool";
-                    mountOptions = [ "subvolid=5" ];
-                  };
-                  "@nix" = {
-                    mountpoint = "/nix";
-                    mountOptions = [
-                      "compress-force=zstd:1" # сжатие на SSD
-                      "noatime"
-                    ];
-                  };
-                  "@guix" = {
-                    mountpoint = "/gnu";
-                    mountOptions = [
-                      "compress-force=zstd:1"
-                      "noatime"
-                    ];
-                  };
-                  "@persistent" = {
-                    mountpoint = "/persistent";
-                    mountOptions = [
-                      "compress-force=zstd:1"
-                    ];
-                  };
-                  "@snapshots" = {
-                    mountpoint = "/snapshots";
-                    mountOptions = [
-                      "compress-force=zstd:1"
-                    ];
-                  };
-                  "@tmp" = {
-                    mountpoint = "/tmp";
-                    mountOptions = [
-                      "compress-force=zstd:1"
-                    ];
-                  };
-                  # swapfile в subvol; disko добавит swapDevices
-                  "@swap" = {
-                    mountpoint = "/swap";
-                    swap.swapfile.size = "20G";
-                  };
+              type = "btrfs";
+              extraArgs = [ "-f" ]; # перезаписать существующую ФС
+              subvolumes = {
+                # корень btrfs (id 5) — снимки / send-receive
+                "/" = {
+                  mountpoint = "/btr_pool";
+                  mountOptions = [ "subvolid=5" ];
+                };
+                "@nix" = {
+                  mountpoint = "/nix";
+                  mountOptions = [
+                    "compress-force=zstd:1" # сжатие на SSD
+                    "noatime"
+                  ];
+                };
+                "@guix" = {
+                  mountpoint = "/gnu";
+                  mountOptions = [
+                    "compress-force=zstd:1"
+                    "noatime"
+                  ];
+                };
+                "@persistent" = {
+                  mountpoint = "/persistent";
+                  mountOptions = [
+                    "compress-force=zstd:1"
+                  ];
+                };
+                "@snapshots" = {
+                  mountpoint = "/snapshots";
+                  mountOptions = [
+                    "compress-force=zstd:1"
+                  ];
+                };
+                "@tmp" = {
+                  mountpoint = "/tmp";
+                  mountOptions = [
+                    "compress-force=zstd:1"
+                  ];
+                };
+                # swapfile в subvol; disko добавит swapDevices
+                "@swap" = {
+                  mountpoint = "/swap";
+                  swap.swapfile.size = "20G";
                 };
               };
             };
