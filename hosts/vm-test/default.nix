@@ -30,7 +30,6 @@ in
     ./vm-test
 
     ./preservation.nix
-    ./secureboot.nix
   ];
 
   # zram жрёт RAM под сжатие — при модели ~RAM возможен deadlock

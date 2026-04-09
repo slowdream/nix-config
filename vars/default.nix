@@ -9,7 +9,7 @@
   # Rotation policy: раз в год
   # Purpose: только пароль для входа в систему
   # https://man.archlinux.org/man/crypt.5.en
-  initialHashedPassword = "$y$jFT$RBapCH3F6bc0uSF.FaUGB.$rvhiVvcCKxkkumDFLONV5zFP1lsv1VyZ1ErH.r2rNk3";
+  initialHashedPassword = "$y$jFT$TaOZFqTbLCr.OOSVRRrpq0$4UMGJbeR/7KFnldb/KQ.zN7S4bNaZcssRxkdBIVjOC/";
   # Публичные ключи для входа на все мои ПК и серверы.
   #
   # Раз права такие широкие, усиливаем security:
@@ -24,11 +24,10 @@
   # 2. Либо hardware security keys вроде Yubikey/CanoKey.
   mainSshAuthorizedKeys = [
     # основные ssh-ключи на каждый день
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIKlN+Q/GxvwxDX/OAjJHaNFEznEN4Tw4E4TwqQu/eD6 ryan@idols-ai"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDc1PNTXzzvd93E+e9LXvnEzqgUI5gMTEF/IitvzgmL+ ryan@frieren"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOO49hCa+nHAVI6UuQvIAS1RtIcUKHo+QUPO2A+XKHCS slowdream@idols-ai"
   ];
   secondaryAuthorizedKeys = [
     # запасные ssh-ключи на случай disaster recovery
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMzYT0Fpcp681eHY5FJV2G8Mve53iX3hMOLGbVvfL+TF ryan@romantic"
+    #"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMzYT0Fpcp681eHY5FJV2G8Mve53iX3hMOLGbVvfL+TF ryan@romantic"
   ];
 }
