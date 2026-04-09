@@ -12,21 +12,12 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.kernelParams = [ ];
+  boot.kernelParams = [ "nomodeset" ];
 
-  # загрузчик EFI
-  # В VM часто нет стабильного EFI NVRAM, поэтому ставим fallback
-  # в /boot/EFI/BOOT/BOOTX64.EFI (removable) и не трогаем EFI variables.
-  boot.loader.efi.canTouchEfiVariables = false;
-  # при другой разметке — /boot или /boot/efi
-  boot.loader.efi.efiSysMountPoint = "/boot";
-  boot.loader.grub = {
-    enable = true;
-    efiSupport = true;
-    efiInstallAsRemovable = true;
-    device = "nodev";
-  };
-  boot.loader.systemd-boot.enable = false;
+  # загрузчик
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/vda";
+  boot.loader.grub.useOSProber = true;
 
   # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/top-level/linux-kernels.nix
   boot.kernelPackages = pkgs.linuxPackages_6_18; # 6.19 плохо с драйвером NVIDIA
