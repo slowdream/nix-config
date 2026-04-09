@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
-  # FHS environment, flatpak, appImage, etc.
+  # FHS environment, flatpak, appImage и т.д.
   environment.systemPackages = [
-    # create a fhs environment by command `fhs`, so we can run non-nixos packages in nixos!
+    # создать FHS environment командой `fhs`, чтобы запускать non-NixOS пакеты на NixOS
     (
       let
         base = pkgs.appimageTools.defaultFhsEnvArgs;
@@ -22,23 +22,22 @@
 
   # https://github.com/Mic92/nix-ld
   #
-  # nix-ld will install itself at `/lib64/ld-linux-x86-64.so.2` so that
-  # it can be used as the dynamic linker for non-NixOS binaries.
+  # nix-ld ставит себя в `/lib64/ld-linux-x86-64.so.2`, чтобы
+  # выступать dynamic linker для бинарников не из NixOS.
   #
-  # nix-ld works like a middleware between the actual link loader located at `/nix/store/.../ld-linux-x86-64.so.2`
-  # and the non-NixOS binaries. It will:
+  # nix-ld работает как middleware между реальным link loader в `/nix/store/.../ld-linux-x86-64.so.2`
+  # и бинарниками не из NixOS. Он:
   #
-  #   1. read the `NIX_LD` environment variable and use it to find the actual link loader.
-  #   2. read the `NIX_LD_LIBRARY_PATH` environment variable and use it to set the `LD_LIBRARY_PATH` environment variable
-  #      for the actual link loader.
+  #   1. читает переменную окружения `NIX_LD` и по ней находит реальный link loader.
+  #   2. читает `NIX_LD_LIBRARY_PATH` и задаёт `LD_LIBRARY_PATH` для реального link loader.
   #
-  # nix-ld's nixos module will set default values for `NIX_LD` and `NIX_LD_LIBRARY_PATH` environment variables, so
-  # it can work out of the box:
+  # модуль nix-ld в NixOS задаёт дефолты для `NIX_LD` и `NIX_LD_LIBRARY_PATH`, чтобы
+  # всё работало из коробки:
   #
   #  - https://github.com/NixOS/nixpkgs/blob/nixos-25.11/nixos/modules/programs/nix-ld.nix#L37-L40
   #
-  # You can overwrite `NIX_LD_LIBRARY_PATH` in the environment where you run the non-NixOS binaries to customize the
-  # search path for shared libraries.
+  # Можно переопределить `NIX_LD_LIBRARY_PATH` в окружении, где запускаются бинарники, чтобы настроить
+  # search path для shared libraries.
   programs.nix-ld = {
     enable = true;
     libraries = with pkgs; [

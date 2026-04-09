@@ -1,24 +1,24 @@
-# Disko layout for idols-ai on nvme1n1 (target disk after migration).
-# Same structure as current nvme0n1: ESP + LUKS + btrfs with ephemeral root (tmpfs).
+# Disko: idols-ai, целевой диск nvme1n1 (после миграции).
+# Как nvme0n1: ESP + LUKS + btrfs, эфемерный root (tmpfs).
 #
-# Destroy, format & mount (wipes disk; from nixos-installer: cd nix-config/nixos-installer):
+# destroy, format, mount (снос диска; из nixos-installer: cd nix-config/nixos-installer):
 #   nix run github:nix-community/disko -- --mode destroy,format,mount ../hosts/idols-ai/disko-fs.nix
-# Mount only (after first format):
+# только mount:
 #   nix run github:nix-community/disko -- --mode mount ../hosts/idols-ai/disko-fs.nix
 #
-# Override device when installing, e.g.:
+# Подмена device при установке:
 #   nixos-install --flake .#ai --option disko.devices.disk.nixos-ai.device /dev/nvme1n1
 {
-  # Ephemeral root; preservation mounts /persistent for state.
+  # эфемерный root; состояние в /persistent (preservation)
   fileSystems."/persistent".neededForBoot = true;
 
   disko.devices = {
-    # Ephemeral root; relatime and mode=755 so systemd does not set 777.
+    # tmpfs root: relatime + mode=755 (не 777 от systemd)
     nodev."/" = {
       fsType = "tmpfs";
       mountOptions = [
         "size=4G"
-        "relatime" # Update inode access times relative to modify/change time
+        "relatime" # atime относительно mtime/ctime
         "mode=755"
       ];
     };
@@ -29,36 +29,36 @@
       content = {
         type = "gpt";
         partitions = {
-          # EFI system partition; must stay unencrypted for UEFI to load the bootloader.
+          # ESP без шифрования — UEFI грузит bootloader
           ESP = {
             priority = 1;
             name = "ESP";
             start = "1M";
             end = "600M";
-            type = "EF00"; # EF00 = ESP in GPT
+            type = "EF00"; # ESP в GPT
             content = {
               type = "filesystem";
               format = "vfat";
               mountpoint = "/boot";
               mountOptions = [
-                "fmask=0177" # File mask: 777-177=600 (owner rw-, group/others ---)
-                "dmask=0077" # Directory mask: 777-077=700 (owner rwx, group/others ---)
-                "noexec,nosuid,nodev" # Security: no execution, ignore setuid, no device nodes
+                "fmask=0177" # файлы 600
+                "dmask=0077" # каталоги 700
+                "noexec,nosuid,nodev"
               ];
             };
           };
-          # Root partition: LUKS encrypted, then btrfs with subvolumes.
+          # root: LUKS + btrfs subvol
           root = {
             size = "100%";
             content = {
               type = "luks";
-              name = "nixos-luks"; # Mapper name; match boot.initrd.luks
+              name = "nixos-luks"; # имя mapper = boot.initrd.luks
               settings = {
-                allowDiscards = true; # TRIM for SSDs; slightly less secure, better performance
+                allowDiscards = true; # TRIM SSD
               };
-              # Add boot.initrd.luks.devices so initrd prompts for passphrase at boot
+              # пароль в initrd
               initrdUnlock = true;
-              # cryptsetup luksFormat options
+              # cryptsetup luksFormat
               extraFormatArgs = [
                 "--type luks2"
                 "--cipher aes-xts-plain64"
@@ -66,16 +66,16 @@
                 "--iter-time 5000"
                 "--key-size 256"
                 "--pbkdf argon2id"
-                "--use-random" # Block until enough entropy from /dev/random
+                "--use-random" # ждать энтропию /dev/random
               ];
               extraOpenArgs = [
                 "--timeout 10"
               ];
               content = {
                 type = "btrfs";
-                extraArgs = [ "-f" ]; # Force overwrite if filesystem already exists
+                extraArgs = [ "-f" ]; # перезаписать существующую ФС
                 subvolumes = {
-                  # Top-level subvolume (id 5); used for btrfs send/receive and snapshots
+                  # корень btrfs (id 5) — снимки / send-receive
                   "/" = {
                     mountpoint = "/btr_pool";
                     mountOptions = [ "subvolid=5" ];
@@ -83,7 +83,7 @@
                   "@nix" = {
                     mountpoint = "/nix";
                     mountOptions = [
-                      "compress-force=zstd:1" # Save space and reduce I/O on SSD
+                      "compress-force=zstd:1" # сжатие на SSD
                       "noatime"
                     ];
                   };
@@ -112,7 +112,7 @@
                       "compress-force=zstd:1"
                     ];
                   };
-                  # Swap subvolume read-only; disko creates swapfile and adds swapDevices
+                  # swapfile в subvol; disko добавит swapDevices
                   "@swap" = {
                     mountpoint = "/swap";
                     swap.swapfile.size = "20G";

@@ -11,7 +11,7 @@ in
     isSystemUser = true;
   };
 
-  # Create Directories
+  # Каталоги
   # https://www.freedesktop.org/software/systemd/man/latest/tmpfiles.d.html#Type
   systemd.tmpfiles.rules = [
     "d ${dataDir} 0755 ${user} ${user}"
@@ -19,7 +19,7 @@ in
 
   # https://github.com/NixOS/nixpkgs/blob/nixos-25.11/nixos/modules/virtualisation/oci-containers.nix
   virtualisation.oci-containers.containers = {
-    # check its logs via `journalctl -u podman-homepage`
+    # логи: `journalctl -u podman-uptime-kuma.service`
     uptime-kuma = {
       hostname = "uptime-kuma";
       image = "louislam/uptime-kuma:1";

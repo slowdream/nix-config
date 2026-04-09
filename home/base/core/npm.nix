@@ -1,9 +1,9 @@
 { config, ... }:
 {
-  # make `npm install -g <pkg>` happey
+  # чтобы `npm install -g <pkg>` работал без сюрпризов
   #
-  # mainly used to install npm packages that updates frequently
-  # such as opencode, codex, etc.
+  # в основном для npm-пакетов, которые часто обновляются,
+  # например opencode, codex и т.п.
   home.file.".npmrc".text = ''
     prefix=${config.home.homeDirectory}/.npm
   '';

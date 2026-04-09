@@ -10,13 +10,13 @@ in
     package = pkgs.zellij;
   };
   xdg.configFile."zellij/config.kdl".source = ./config.kdl;
-  # Disable catppuccin to avoid conflict with my non-nix config.
+  # catppuccin выключить — конфликт с не-nix конфигом
   catppuccin.zellij.enable = false;
 
-  # auto start zellij in nushell
+  # автозапуск zellij в nushell
   programs.nushell.extraConfig = ''
-    # auto start zellij
-    # except when in emacs or zellij itself
+    # автозапуск zellij
+    # кроме emacs и уже запущенного zellij
     if (not ("ZELLIJ" in $env)) and (not ("INSIDE_EMACS" in $env)) {
       if "ZELLIJ_AUTO_ATTACH" in $env and $env.ZELLIJ_AUTO_ATTACH == "true" {
         ^zellij attach -c
@@ -24,15 +24,15 @@ in
         ^zellij
       }
 
-      # Auto exit the shell session when zellij exit
-      $env.ZELLIJ_AUTO_EXIT = "false" # disable auto exit
+      # выход из shell при выходе из zellij
+      $env.ZELLIJ_AUTO_EXIT = "false" # авто-выход выключен
       if "ZELLIJ_AUTO_EXIT" in $env and $env.ZELLIJ_AUTO_EXIT == "true" {
         exit
       }
     }
   '';
 
-  # only works in bash/zsh, not nushell
+  # только bash/zsh, не nushell
   home.shellAliases = shellAliases;
   programs.nushell.shellAliases = shellAliases;
 }

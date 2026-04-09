@@ -3,7 +3,7 @@
     disk = {
       main = {
         type = "disk";
-        device = "/dev/vda"; # the virtual disk
+        device = "/dev/vda"; # виртуальный диск
         content = {
           type = "gpt";
           partitions = {
@@ -18,9 +18,9 @@
                 format = "vfat";
                 mountpoint = "/boot";
                 mountOptions = [
-                  "fmask=0177" # File mask: 777-177=600 (Owner: rw-, Group/Others: ---)
-                  "dmask=0077" # Directory mask: 777-077=700 (Owner: rwx, Group/Others: ---)
-                  "noexec,nosuid,nodev" # Security: Block execution, ignore setuid, and disable device nodes
+                  "fmask=0177" # файлы 600
+                  "dmask=0077" # каталоги 700
+                  "noexec,nosuid,nodev"
                 ];
               };
             };
@@ -28,7 +28,7 @@
               size = "100%";
               content = {
                 type = "btrfs";
-                extraArgs = [ "-f" ]; # Override existing partition
+                extraArgs = [ "-f" ]; # перезаписать раздел
                 subvolumes = {
                   "@root" = {
                     mountpoint = "/";

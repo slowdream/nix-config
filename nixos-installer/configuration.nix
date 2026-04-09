@@ -1,21 +1,20 @@
 { pkgs, ... }:
 {
-  # ssh-agent is used to pull my private secrets repo from github when deploying my nixos config.
+  # ssh-agent — pull приватного secrets repo с GitHub при деплое
   programs.ssh.startAgent = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # Пакеты в system profile. Поиск: nix search wget
   environment.systemPackages = with pkgs; [
-    neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    neovim # редактор для configuration.nix; nano тоже ставится по умолчанию
     git
     gnumake
     wget
-    just # a command runner(replacement of gnumake in some cases)
+    just # runner команд (иногда вместо gmake)
     curl
     nix-output-monitor
   ];
   networking = {
-    # configures the network interface(include wireless) via `nmcli` & `nmtui`
+    # сеть (в т.ч. Wi‑Fi) через `nmcli` и `nmtui`
     networkmanager.enable = true;
   };
   system.stateVersion = "25.11";

@@ -12,7 +12,7 @@ in
 {
   environment.systemPackages = [ package ];
 
-  # Kernel modules required by cilium
+  # Модули ядра, нужные для Cilium
   boot.kernelModules = [
     "ip6_tables"
     "ip6table_mangle"

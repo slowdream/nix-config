@@ -18,7 +18,7 @@ let
   wrapper = _pkgs: path: (_pkgs.callPackage path callArgs);
 in
 {
-  # Add nixpaked Apps into nixpkgs, and reference them in home-manager or other nixos modules
+  # Добавить nixpak-обёртки приложений в nixpkgs и ссылаться на них из home-manager или других модулей NixOS
   nixpkgs.overlays = [
     (_: super: {
       nixpaks = {

@@ -1,4 +1,4 @@
-# colmena - Remote Deployment via SSH
+# colmena — удалённый деплой по SSH
 {
   lib,
   inputs,
@@ -20,7 +20,7 @@ in
   deployment = {
     inherit tags;
     targetUser = ssh-user;
-    targetHost = name; # hostName or IP address
+    targetHost = name; # hostname или IP
   };
 
   imports =

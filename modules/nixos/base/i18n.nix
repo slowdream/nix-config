@@ -1,8 +1,8 @@
 {
-  # Set your time zone.
+  # Часовой пояс
   time.timeZone = "Asia/Shanghai";
 
-  # Select internationalisation properties.
+  # Локаль и i18n
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {

@@ -5,12 +5,12 @@
 }:
 ###########################################################
 #
-# Kitty Configuration
+# Конфигурация Kitty
 #
-# Useful Hot Keys for Linux(replace `ctrl + shift` with `cmd` on macOS)):
-#   1. Increase Font Size: `ctrl + shift + =` | `ctrl + shift + +`
-#   2. Decrease Font Size: `ctrl + shift + -` | `ctrl + shift + _`
-#   3. And Other common shortcuts such as Copy, Paste, Cursor Move, etc.
+# Горячие клавиши Linux (на macOS `ctrl + shift` → `cmd`):
+#   1. Крупнее шрифт: `ctrl + shift + =` | `ctrl + shift + +`
+#   2. Мельче шрифт: `ctrl + shift + -` | `ctrl + shift + _`
+#   3. Остальное как обычно: Copy, Paste, курсор и т.д.
 #
 ###########################################################
 {
@@ -18,33 +18,33 @@
     enable = true;
     font = {
       name = "Maple Mono NF CN";
-      # use different font size on macOS
+      # на macOS другой размер шрифта
       size = 13;
     };
 
-    # consistent with other terminal emulators
+    # как в других эмуляторах терминала
     keybindings = {
       "ctrl+shift+m" = "toggle_maximized";
-      "ctrl+shift+f" = "show_scrollback"; # search in the current window
+      "ctrl+shift+f" = "show_scrollback"; # поиск в текущем окне
     };
 
     settings = {
-      # do not show title bar & window title
+      # без title bar и заголовка окна
       hide_window_decorations = "titlebar-and-corners";
       macos_show_window_title_in = "none";
 
       background_opacity = "0.93";
-      macos_option_as_alt = true; # Option key acts as Alt on macOS
+      macos_option_as_alt = true; # Option = Alt на macOS
       enable_audio_bell = false;
-      tab_bar_edge = "top"; # tab bar on top
-      #  To resolve issues:
+      tab_bar_edge = "top"; # вкладки сверху
+      #  Обход проблем:
       #    1. https://github.com/ryan4yin/nix-config/issues/26
       #    2. https://github.com/ryan4yin/nix-config/issues/8
-      #  Spawn a nushell in login mode via `bash`
+      #  Запуск nushell в login mode через `bash`
       shell = "${pkgs.bash}/bin/bash --login -c 'nu --login --interactive'";
     };
 
-    # macOS specific settings
+    # только macOS
     darwinLaunchOptions = [ "--start-as=maximized" ];
   };
 }

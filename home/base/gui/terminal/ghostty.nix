@@ -5,14 +5,14 @@
 }:
 ###########################################################
 #
-# Ghostty Configuration
+# Конфигурация Ghostty
 #
 ###########################################################
 {
   programs.ghostty = {
     enable = true;
-    package = pkgs.ghostty; # the stable version
-    # package = ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default; # the latest version
+    package = pkgs.ghostty; # пакет из nixpkgs (stable)
+    # package = ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default; # последняя из flake input
     enableBashIntegration = false;
     installBatSyntax = false;
     # installVimSyntax = true;
@@ -24,10 +24,10 @@
       scrollback-limit = 20000;
 
       # https://ghostty.org/docs/config/reference#command
-      #  To resolve issues:
+      #  Обход проблем:
       #    1. https://github.com/ryan4yin/nix-config/issues/26
       #    2. https://github.com/ryan4yin/nix-config/issues/8
-      #  Spawn a nushell in login mode via `bash`
+      #  Запуск nushell в login mode через `bash`
       command = "${pkgs.bash}/bin/bash --login -c 'nu --login --interactive'";
     };
   };

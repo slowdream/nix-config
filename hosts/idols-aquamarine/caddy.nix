@@ -16,21 +16,21 @@ in
 {
   services.caddy = {
     enable = true;
-    # Reload Caddy instead of restarting it when configuration file changes.
+    # reload вместо restart при смене конфига
     enableReload = true;
-    user = "caddy"; # User account under which caddy runs.
+    user = "caddy"; # пользователь процесса caddy
     dataDir = "/data/apps/caddy";
     logDir = "/var/log/caddy";
 
-    # Additional lines of configuration appended to the global config section of the Caddyfile.
-    # Refer to https://caddyserver.com/docs/caddyfile/options#global-options for details on supported values.
+    # доп. строки в global Caddyfile
+    # https://caddyserver.com/docs/caddyfile/options#global-options
     globalConfig = ''
       http_port    80
       https_port   443
       auto_https   disable_certs
     '';
 
-    # Dashboard
+    # дашборд (homepage)
     virtualHosts."home.writefor.fun".extraConfig = ''
       ${hostCommonConfig}
       reverse_proxy http://localhost:54401
@@ -67,7 +67,7 @@ in
       reverse_proxy http://localhost:9091
     '';
 
-    # Monitoring
+    # мониторинг
     virtualHosts."uptime-kuma.writefor.fun".extraConfig = ''
       ${hostCommonConfig}
       encode zstd gzip
@@ -125,7 +125,7 @@ in
         }
       }
     '';
-    # Allow http access for specific api (do not redirect to https)
+    # HTTP без редиректа на HTTPS для отдельных API
     # virtualHosts."http://xxx.writefor.fun/a/b/c".extraConfig = ''
     #   encode zstd gzip
     #   reverse_proxy http://localhost:9090
@@ -136,16 +136,15 @@ in
     443
   ];
 
-  # Create Directories
+  # Каталоги
   # https://www.freedesktop.org/software/systemd/man/latest/tmpfiles.d.html#Type
   systemd.tmpfiles.rules = [
     "d /data/apps/caddy/fileserver/ 0755 caddy caddy"
-    # directory for virtual machine's images
+    # образы VM
     "d /data/apps/caddy/fileserver/vms 0755 caddy caddy"
   ];
 
-  # Add all my wallpapers into /data/apps/caddy/fileserver/wallpapers
-  # Install the homepage-dashboard configuration files
+  # обои → fileserver/wallpapers
   system.activationScripts.installCaddyWallpapers = ''
     mkdir -p /data/apps/caddy/fileserver/wallpapers
     ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F644 ${wallpapers}/ /data/apps/caddy/fileserver/wallpapers/

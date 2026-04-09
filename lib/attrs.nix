@@ -1,13 +1,13 @@
 # https://github.com/NixOS/nixpkgs/blob/master/lib/attrsets.nix
 { lib, ... }:
 {
-  # Generate an attribute set from a list.
+  # Собрать attrset из списка имён.
   #
   #   lib.genAttrs [ "foo" "bar" ] (name: "x_" + name)
   #     => { foo = "x_foo"; bar = "x_bar"; }
   listToAttrs = lib.genAttrs;
 
-  # Update only the values of the given attribute set.
+  # Обновить только значения в attrset.
   #
   #   mapAttrs
   #   (name: value: ("bar-" + value))
@@ -15,7 +15,7 @@
   #     => { x = "bar-a"; y = "bar-b"; }
   inherit (lib.attrsets) mapAttrs;
 
-  # Update both the names and values of the given attribute set.
+  # Обновить и ключи, и значения attrset.
   #
   #   mapAttrs'
   #   (name: value: nameValuePair ("foo_" + name) ("bar-" + value))
@@ -23,15 +23,15 @@
   #     => { foo_x = "bar-a"; foo_y = "bar-b"; }
   inherit (lib.attrsets) mapAttrs';
 
-  # Merge a list of attribute sets into one. smilar to the operator `a // b`, but for a list of attribute sets.
-  # NOTE: the later attribute set overrides the former one!
+  # Слить список attrset в один. Похоже на `a // b`, но для списка attrset.
+  # ВАЖНО: последний attrset перекрывает предыдущие!
   #
   #   mergeAttrsList
   #   [ { x = "a"; y = "b"; } { x = "c"; z = "d"; } { g = "e"; } ]
   #   => { x = "c"; y = "b"; z = "d"; g = "e"; }
   inherit (lib.attrsets) mergeAttrsList;
 
-  # Generate a string from an attribute set.
+  # Свернуть attrset в строку.
   #
   #   attrsets.foldlAttrs
   #   (acc: name: value: acc + "\nexport ${name}=${value}")

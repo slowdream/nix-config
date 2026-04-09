@@ -1,10 +1,10 @@
 {
-  # dae(running on aquamarine) do not provides http/socks5 proxy server; so we use v2ray here.
+  # dae на aquamarine не даёт HTTP/SOCKS — здесь v2ray
   # https://github.com/v2fly
   services.v2ray = {
     enable = true;
     config = {
-      # for monitoring
+      # для мониторинга
       "stats" = { };
       "api" = {
         "tag" = "api";
@@ -28,7 +28,7 @@
       };
 
       inbounds = [
-        # core inbound
+        # основной inbound
         {
           listen = "0.0.0.0";
           port = 7890;
@@ -44,7 +44,7 @@
           };
         }
 
-        # for monitoring
+        # для мониторинга
         {
           "tag" = "api";
           "listen" = "127.0.0.1";
@@ -56,14 +56,14 @@
         }
       ];
       outbounds = [
-        # forward traffic directly via system's default network(to dae proxy running on aquamarine)
+        # напрямую в сеть (к dae на aquamarine)
         {
           protocol = "freedom";
           tag = "freedom";
         }
       ];
 
-      # for monitoring
+      # для мониторинга
       "routing" = {
         "rules" = [
           {

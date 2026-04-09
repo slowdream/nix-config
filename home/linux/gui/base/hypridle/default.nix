@@ -4,6 +4,6 @@
 {
   xdg.configFile."hypr/hypridle.conf".source = ./hypridle.conf;
 
-  # Hyprland idle daemon
+  # idle daemon для Hyprland
   services.hypridle.enable = true;
 }

@@ -1,10 +1,10 @@
 { pkgs, ... }:
 {
-  # terminal file manager
+  # файловый менеджер в терминале
   programs.yazi = {
     enable = true;
     package = pkgs.yazi;
-    # Changing working directory when exiting Yazi
+    # Менять рабочую директорию при выходе из Yazi
     enableBashIntegration = true;
     enableNushellIntegration = true;
     shellWrapperName = "yy";

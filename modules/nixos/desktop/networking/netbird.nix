@@ -5,24 +5,23 @@
 }:
 # =============================================================
 #
-# NetBird - your own private network(VPN) that uses WireGuard, Coturn, etc.
+# NetBird — приватная сеть (VPN) на WireGuard, Coturn и др.
 #
-# It's similar to tailscale, but netbird's more opensouse and less mature.
+# Похож на tailscale, но более open source и менее зрелый.
 #
-# NetBird natively supports running multiple clients on the same host — something
-#   Tailscale can’t do easily.
-# Its NixOS module ships a dedicated CLI wrapper for every client, so managing them is effortless.
+# Нативно поддерживает несколько клиентов на одном хосте — у Tailscale это сложнее.
+# Модуль NixOS даёт отдельный CLI wrapper на клиент — управление проще.
 #
-# How to use:
-#  1. Create a NetBird account at https://app.netbird.io/
-#  3. Login & join into your homelab network via `netbird-homelab up`
+# Как пользоваться:
+#  1. Аккаунт: https://app.netbird.io/
+#  2. Вход и сеть homelab: `netbird-homelab up`
 #
-# Status Data:
-#   `journalctl -u netbird-homelab` shows netbird's logs
-#   netbird client store its data in /var/lib/netbird-homelab & /etc/netbird-homelab
-#   which is already persistent across reboots(via preservation)
+# Статус и данные:
+#   `journalctl -u netbird-homelab` — логи netbird
+#   данные в /var/lib/netbird-homelab и /etc/netbird-homelab
+#   (persistent между перезагрузками через preservation)
 #
-# References:
+# Ссылки:
 #  https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/services/networking/netbird.nix
 #
 # =============================================================

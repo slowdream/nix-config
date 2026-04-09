@@ -4,31 +4,31 @@
 }:
 {
   programs.nushell = {
-    # load the alias file for work
-    # the file must exist, otherwise nushell will complain about it!
+    # алиасы для work
+    # файл должен существовать, иначе nushell ругается
     #
-    # currently, nushell does not support conditional sourcing of files
+    # условного source в nushell пока нет
     # https://github.com/nushell/nushell/issues/8214
     extraConfig = ''
       source /etc/agenix/alias-for-work.nushell
 
       $env.CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1"
       $env.CLAUDE_CODE_ATTRIBUTION_HEADER = "0"
-      # using claude-code with kimi llm
+      # claude-code с kimi llm
       # https://platform.moonshot.cn/docs/guide/agent-support
       # $env.ANTHROPIC_BASE_URL = "https://api.moonshot.cn/anthropic/"
       # $env.ANTHROPIC_AUTH_TOKEN = $env.MOONSHOT_API_KEY
       # $env.ANTHROPIC_MODEL = "kimi-k2-thinking"
       # $env.ANTHROPIC_DEFAULT_HAIKU_MODEL = "kimi-k2-thinking-turbo"
 
-      # using claude-code with glm llm
+      # claude-code с glm llm
       # https://docs.bigmodel.cn/cn/coding-plan/tool/claude
       # $env.ANTHROPIC_BASE_URL = "https://open.bigmodel.cn/api/anthropic"
       # $env.ANTHROPIC_AUTH_TOKEN = $env.ZAI_API_KEY
       # $env.ANTHROPIC_MODEL = "glm-4.7"
       # $env.ANTHROPIC_DEFAULT_HAIKU_MODEL = "glm-4.5-air"
 
-      # using claude-code with minimax llm
+      # claude-code с minimax llm
       # https://platform.minimax.io/docs/token-plan/claude-code
       # $env.ANTHROPIC_BASE_URL = "https://api.minimax.io/anthropic"
       # $env.ANTHROPIC_AUTH_TOKEN = $env.MINIMAX_API_KEY
@@ -37,8 +37,7 @@
       # $env.ANTHROPIC_DEFAULT_HAIKU_MODEL = "MiniMax-M2.7"
 
 
-      # Directories in this constant are searched by the
-      # `use` and `source` commands.
+      # Каталоги из этой константы ищут команды `use` и `source`.
       const NU_LIB_DIRS = $NU_LIB_DIRS ++ ['${nu_scripts}']
 
       # -*- completion -*-
@@ -63,12 +62,12 @@
       use ${./aliases/gcloud.nu} *
 
       # -*- modules -*-
-      # argx & lg is required by the kubernetes module
+      # argx и lg нужны модулю kubernetes
       use modules/argx *
       use modules/lg *
-      # k8s/helm aliases, completions, 
+      # k8s/helm: алиасы, completions
       use modules/kubernetes *
-      # a wrapper around the jc cli tool, convert cli outputs to nushell tables
+      # обёртка вокруг jc: вывод CLI → таблицы nushell
       # use modules/jc
     '';
   };

@@ -14,10 +14,10 @@ in
 
   config = mkIf (cfg.enable && cfg.enable) {
     home.sessionVariables = {
-      # for hyprland with nvidia gpu" = " ref https://wiki.hyprland.org/Nvidia/
+      # Hyprland + NVIDIA GPU, см. https://wiki.hyprland.org/Nvidia/
       "LIBVA_DRIVER_NAME" = "nvidia";
       "__GLX_VENDOR_LIBRARY_NAME" = "nvidia";
-      # VA-API hardware video acceleration
+      # VA-API, аппаратное декодирование видео
       "NVD_BACKEND" = "direct";
 
       "GBM_BACKEND" = "nvidia-drm";

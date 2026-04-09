@@ -1,15 +1,15 @@
 { pkgs, ... }:
 {
-  # Linux Only Packages, not available on Darwin
+  # только Linux, на Darwin нет
   home.packages = with pkgs; [
-    # misc
+    # прочее
     libnotify
-    wireguard-tools # manage wireguard vpn manually, via wg-quick
+    wireguard-tools # WireGuard вручную, wg-quick
 
-    virt-viewer # vnc connect to VM, used by kubevirt
+    virt-viewer # VNC к VM (kubevirt)
   ];
 
-  # auto mount usb drives
+  # USB-диски
   services = {
     udiskie.enable = true;
     # syncthing.enable = true;

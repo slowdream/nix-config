@@ -1,5 +1,5 @@
 {
-  # required by preservation
+  # нужно для preservation
   fileSystems."/persistent".neededForBoot = true;
 
   disko.devices = {
@@ -8,20 +8,20 @@
       mountOptions = [
         "size=4G"
         "defaults"
-        # set mode to 755, otherwise systemd will set it to 777, which cause problems.
-        # relatime: Update inode access times relative to modify or change time.
+        # mode 755, иначе systemd даст 777
+        # relatime: atime относительно mtime/ctime
         "mode=755"
       ];
     };
 
     disk.main = {
       type = "disk";
-      # When using disko-install, we will overwrite this value from the commandline
-      device = "/dev/nvme0n1"; # The device to partition
+      # при disko-install подменяется с CLI
+      device = "/dev/nvme0n1"; # диск для разметки
       content = {
         type = "gpt";
         partitions = {
-          # The EFI & Boot partition
+          # EFI / boot
           ESP = {
             size = "630M";
             type = "EF00";
@@ -30,13 +30,13 @@
               format = "vfat";
               mountpoint = "/boot";
               mountOptions = [
-                "fmask=0177" # File mask: 777-177=600 (Owner: rw-, Group/Others: ---)
-                "dmask=0077" # Directory mask: 777-077=700 (Owner: rwx, Group/Others: ---)
-                "noexec,nosuid,nodev" # Security: Block execution, ignore setuid, and disable device nodes
+                "fmask=0177" # файлы: 600
+                "dmask=0077" # каталоги: 700
+                "noexec,nosuid,nodev" # без exec/setuid/device nodes
               ];
             };
           };
-          # The root partition
+          # корень (LUKS)
           luks = {
             size = "100%";
             content = {
@@ -46,10 +46,10 @@
                 # fallbackToPassword = true;
                 allowDiscards = true;
               };
-              # Whether to add a boot.initrd.luks.devices entry for the specified disk.
+              # boot.initrd.luks.devices для этого диска
               initrdUnlock = true;
 
-              # encrypt the root partition with luks2 and argon2id, will prompt for a passphrase, which will be used to unlock the partition.
+              # корень: LUKS2 + argon2id, пароль при unlock
               # cryptsetup luksFormat
               extraFormatArgs = [
                 "--type luks2"
@@ -58,7 +58,7 @@
                 "--iter-time 5000"
                 "--key-size 256"
                 "--pbkdf argon2id"
-                # use true random data from /dev/random, will block until enough entropy is available
+                # энтропия из /dev/random (может подождать)
                 "--use-random"
               ];
               extraOpenArgs = [
@@ -66,14 +66,13 @@
               ];
               content = {
                 type = "btrfs";
-                extraArgs = [ "-f" ]; # Force override existing partition
+                extraArgs = [ "-f" ]; # перезаписать существующий раздел
                 subvolumes = {
-                  # mount the top-level subvolume at /btr_pool
-                  # it will be used by btrbk to create snapshots
+                  # корневой subvol → /btr_pool (снимки btrbk)
                   "/" = {
                     mountpoint = "/btr_pool";
-                    # btrfs's top-level subvolume, internally has an id 5
-                    # we can access all other subvolumes from this subvolume.
+                    # корень btrfs, id 5
+                    # отсюда видны остальные subvol
                     mountOptions = [ "subvolid=5" ];
                   };
                   "@nix" = {

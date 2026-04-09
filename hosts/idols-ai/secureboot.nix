@@ -5,27 +5,25 @@
   ...
 }:
 {
-  # How to enter setup mode - msi motherboard
-  ## 1. enter BIOS via [Del] Key
+  # Secure Boot: плата MSI
+  ## 1. BIOS — [Del]
   ## 2. <Advance mode> => <Settings> => <Security> => <Secure Boot>
-  ## 3. enable <Secure Boot>
-  ## 4. set <Secure Boot Mode> to <Custom>
-  ## 5. enter <Key Management>
-  ## 6. select <Delete All Secure Boot Variables>, and then select <No> for <Reboot Without Saving>
-  ## 7. Press F10 to saving and reboot.
+  ## 3. включить <Secure Boot>
+  ## 4. <Secure Boot Mode> = <Custom>
+  ## 5. <Key Management>
+  ## 6. <Delete All Secure Boot Variables>, затем <No> у <Reboot Without Saving>
+  ## 7. F10 — сохранить и перезагрузка
   imports = [
     lanzaboote.nixosModules.lanzaboote
   ];
 
   environment.systemPackages = [
-    # For debugging and troubleshooting Secure Boot.
+    # отладка Secure Boot
     pkgs.sbctl
   ];
 
-  # Lanzaboote currently replaces the systemd-boot module.
-  # This setting is usually set to true in configuration.nix
-  # generated at installation time. So we force it to false
-  # for now.
+  # Lanzaboote вместо systemd-boot.
+  # После установки в configuration.nix часто systemd-boot = true — принудительно выключаем.
   boot.loader.systemd-boot.enable = lib.mkForce false;
 
   boot.lanzaboote = {

@@ -3,18 +3,18 @@
 
   ##################################################################################################################
   #
-  # Want to know Nix in details? Looking for a beginner-friendly tutorial?
-  # Check out https://github.com/ryan4yin/nixos-and-flakes-book !
+  # Хотите разобраться в Nix подробнее? Ищете понятный туториал для начинающих?
+  # См. https://github.com/ryan4yin/nixos-and-flakes-book !
   #
   ##################################################################################################################
 
   outputs = inputs: import ./outputs inputs;
 
-  # the nixConfig here only affects the flake itself, not the system configuration!
-  # for more information, see:
+  # nixConfig здесь влияет только на сам flake, не на system configuration!
+  # подробнее:
   #     https://nixos-and-flakes.thiscute.world/nix-store/add-binary-cache-servers
   nixConfig = {
-    # substituers will be appended to the default substituters when fetching packages
+    # substituters добавятся к default substituters при fetch пакетов
     extra-substituters = [
       "https://cache.numtide.com"
       # "https://nix-gaming.cachix.org"
@@ -29,33 +29,33 @@
     ];
   };
 
-  # This is the standard format for flake.nix. `inputs` are the dependencies of the flake,
-  # Each item in `inputs` will be passed as a parameter to the `outputs` function after being pulled and built.
+  # Стандартный формат flake.nix: `inputs` — зависимости flake,
+  # каждый элемент `inputs` передаётся в функцию `outputs` после pull и build.
   inputs = {
-    # There are many ways to reference flake inputs. The most widely used is github:owner/name/reference,
-    # which represents the GitHub repository URL + branch/commit-id/tag.
+    # Ссылаться на flake inputs можно по-разному; чаще всего github:owner/name/reference —
+    # это GitHub repo URL + branch/commit-id/tag.
 
-    # Official NixOS package source, using nixos's unstable branch by default
-    # Find git commit hash with build status here(3 jobs per day):
+    # Официальный источник пакетов NixOS, по умолчанию ветка nixos unstable
+    # Хэш коммита и статус сборок (3 job в день):
     # https://hydra.nixos.org/jobset/nixpkgs/unstable
-    # update via nix flake update nixpkgs --override-input nixpkgs github:NixOS/nixpkgs/<commit-hash>
+    # обновление: nix flake update nixpkgs --override-input nixpkgs github:NixOS/nixpkgs/<commit-hash>
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-2505.url = "github:nixos/nixpkgs/nixos-25.05";
 
-    # nixpkgs with some custom patches
+    # nixpkgs с кастомными патчами
     nixpkgs-patched.url = "github:ryan4yin/nixpkgs/nixos-unstable-patched";
-    # get some latest packages from the master branch
+    # свежие пакеты с ветки master
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
 
-    # home-manager, used for managing user configuration
+    # home-manager — user configuration
     home-manager = {
       url = "github:nix-community/home-manager/master";
       # url = "github:nix-community/home-manager/release-25.11";
 
-      # The `follows` keyword in inputs is used for inheritance.
-      # Here, `inputs.nixpkgs` of home-manager is kept consistent with the `inputs.nixpkgs` of the current flake,
-      # to avoid problems caused by different versions of nixpkgs dependencies.
+      # Ключевое слово `follows` во inputs — для наследования.
+      # Здесь `inputs.nixpkgs` у home-manager совпадает с `inputs.nixpkgs` текущего flake,
+      # чтобы не ловить проблемы из-за разных версий зависимостей nixpkgs.
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -74,16 +74,16 @@
       url = "github:nix-community/preservation";
     };
 
-    # generate iso/qcow2/docker/... image from nixos configuration
+    # iso/qcow2/docker/... image из nixos configuration
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # secrets management
     agenix = {
-      # lock with git commit at May 18, 2025
+      # зафиксировано на git commit от 18 мая 2025
       url = "github:ryantm/agenix/4835b1dc898959d8547a871ef484930675cb47f1";
-      # replaced with a type-safe reimplementation to get a better error message and less bugs.
+      # заменено type-safe reimplementation для лучших сообщений об ошибках и меньше багов
       # url = "github:ryan4yin/ragenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -93,7 +93,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # add git hooks to format nix code before commit
+    # git hooks: форматировать nix перед commit
     pre-commit-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -124,7 +124,7 @@
     };
 
     helix = {
-      # Helix with steel as plugin system
+      # Helix со steel как plugin system
       # https://github.com/helix-editor/helix/pull/8675
       url = "github:mattwparas/helix/steel-event-system";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -153,14 +153,14 @@
 
     ########################  My own repositories  #########################################
 
-    # my private secrets, it's a private repository, you need to replace it with your own.
-    # use ssh protocol to authenticate via ssh-agent/ssh-key, and shallow clone to save time
+    # приватные secrets — приватный репозиторий; у себя замените на свой
+    # ssh: аутентификация через ssh-agent/ssh-key, shallow clone для скорости
     mysecrets = {
       url = "git+ssh://git@github.com/ryan4yin/nix-secrets.git?shallow=1";
       flake = false;
     };
 
-    # my wallpapers
+    # обои
     wallpapers = {
       url = "github:ryan4yin/wallpapers";
       flake = false;

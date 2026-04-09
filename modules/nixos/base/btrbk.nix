@@ -1,33 +1,33 @@
 {
   # ==================================================================
   #
-  # Tool for creating snapshots and remote backups of btrfs subvolumes
+  # Снимки и remote backup subvolumes btrfs
   #   https://github.com/digint/btrbk
   #
-  # Usage:
-  #   1. btrbk will create snapshots on schedule
-  #   2. we can use `btrbk run` command to create a backup manually
+  # Использование:
+  #   1. btrbk по расписанию создаёт snapshots
+  #   2. вручную: команда `btrbk run`
   #
-  # How to restore a snapshot:
-  #   1. Find the snapshot you want to restore in /snapshots
-  #   2. Use `btrfs subvol delete /btr_pool/@persistent` to delete the current subvolume
-  #   3. Use `btrfs subvol snapshot /snapshots/2021-01-01 /btr_pool/@persistent` to restore the snapshot
-  #   4. reboot the system or remount the filesystem to see the changes
+  # Восстановление snapshot:
+  #   1. Нужный snapshot в /snapshots
+  #   2. `btrfs subvol delete /btr_pool/@persistent` — удалить текущий subvolume
+  #   3. `btrfs subvol snapshot /snapshots/2021-01-01 /btr_pool/@persistent`
+  #   4. reboot или remount, чтобы увидеть изменения
   #
   # ==================================================================
 
   services.btrbk.instances.btrbk = {
-    # How often this btrbk instance is started. See systemd.time(7) for more information about the format.
+    # Период запуска instance. Формат: systemd.time(7)
     onCalendar = "Tue,Sat *-*-* 3:45:20";
     settings = {
-      # how to prune local snapshots:
-      # 1. keep daily snapshots for xx days
+      # prune локальных snapshots:
+      # 1. daily на xx дней
       snapshot_preserve = "7d";
-      # 2. keep all snapshots for 2 days, no matter how frequently you (or your cron job) run btrbk
+      # 2. все snapshots 2 дня, как часто ни запускай btrbk/cron
       snapshot_preserve_min = "2d";
 
-      # hot to prune remote incremental baqckups:
-      # keep daily backups for 9 days, weekly backups for 4 weeks, and monthly backups for 2 months
+      # prune remote incremental backups:
+      # daily 9d, weekly 4w, monthly 2m
       target_preserve = "9d 4w 2m";
       target_preserve_min = "no";
 
@@ -39,8 +39,8 @@
             };
           };
 
-          # backup to a remote server or a local directory
-          # its prune policy is defined by `target_preserve` and `target_preserve_min`
+          # backup на remote или в локальную директорию
+          # prune: `target_preserve` и `target_preserve_min`
           # target = "/snapshots";
         };
       };

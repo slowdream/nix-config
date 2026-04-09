@@ -6,18 +6,18 @@
 }:
 #############################################################
 #
-#  Akane - a NixOS VM running on macOS's UTM App
+#  Akane — NixOS VM в UTM на macOS
 #
 #############################################################
 let
-  hostName = "akane"; # Define your hostname.
+  hostName = "akane"; # имя хоста
 in
 {
   imports = (mylib.scanPaths ./.) ++ [
     disko.nixosModules.default
   ];
 
-  # supported file systems, so we can mount any removable disks with these filesystems
+  # ФС для съёмных носителей
   boot.supportedFilesystems = [
     "ext4"
     "btrfs"
@@ -28,7 +28,7 @@ in
     "vfat"
     "exfat"
 
-    # for file sharing between host & guests
+    # обмен файлами хост ↔ гость
     "virtiofs"
   ];
 
@@ -43,7 +43,7 @@ in
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-  # Use the systemd-boot EFI boot loader.
+  # systemd-boot EFI
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -55,11 +55,6 @@ in
     networkmanager.enable = true;
   };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "26.05"; # Did you read the comment?
+  # stateVersion — см. man configuration.nix / nixos options
+  system.stateVersion = "26.05"; # комментарий выше прочитан?
 }

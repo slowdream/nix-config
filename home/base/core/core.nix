@@ -1,41 +1,40 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    # nix related
+    # nix
     #
-    # it provides the command `nom` works just like `nix
-    # with more details log output
+    # команда `nom` как `nix`, но с более подробными логами
     nix-output-monitor
-    hydra-check # check hydra(nix's build farm) for the build status of a package
-    nix-index # A small utility to index nix store paths
-    nix-init # generate nix derivation from url
+    hydra-check # статус сборки пакета на hydra (build farm nix)
+    nix-index # индекс путей nix store
+    nix-init # derivation из URL
     # https://github.com/nix-community/nix-melt
-    nix-melt # A TUI flake.lock viewer
+    nix-melt # TUI для flake.lock
     # https://github.com/utdemir/nix-tree
-    nix-tree # A TUI to visualize the dependency graph of a nix derivation
+    nix-tree # TUI: граф зависимостей derivation
 
-    # misc
+    # прочее
     cowsay
     gnupg
-    caddy # A webserver with automatic HTTPS via Let's Encrypt(replacement of nginx)
-    # A fast and polyglot tool for code searching, linting, rewriting at large scale
-    # supported languages: only some mainstream languages currently(do not support nix/nginx/yaml/toml/...)
+    caddy # веб-сервер с HTTPS (Let's Encrypt), замена nginx
+    # быстрый поиск/линт/рефакторинг по коду в масштабе
+    # языки: в основном мейнстрим (nix/nginx/yaml/toml — нет)
     ast-grep
 
-    # other core cli tools are installed at system-level
+    # остальной базовый CLI — на уровне системы
   ];
 
-  # A modern replacement for ‘ls’
-  # useful in bash/zsh prompt, not in nushell.
+  # Современная замена ls
+  # удобно в prompt bash/zsh, не в nushell
   programs.eza = {
     enable = true;
-    # do not enable aliases in nushell!
+    # алиасы в nushell не включать
     enableNushellIntegration = false;
     git = true;
     icons = "auto";
   };
 
-  # a cat(1) clone with syntax highlighting and Git integration.
+  # cat(1) с подсветкой и интеграцией с git
   programs.bat = {
     enable = true;
     config = {
@@ -43,10 +42,10 @@
     };
   };
 
-  # A command-line fuzzy finder
+  # нечёткий поиск в терминале
   programs.fzf.enable = true;
 
-  # very fast version of tldr in Rust
+  # tldr на Rust
   programs.tealdeer = {
     enable = true;
     enableAutoUpdates = true;
@@ -62,23 +61,22 @@
     };
   };
 
-  # zoxide is a smarter cd command, inspired by z and autojump.
-  # It remembers which directories you use most frequently,
-  # so you can "jump" to them in just a few keystrokes.
-  # zoxide works on all major shells.
+  # zoxide — умнее cd (как z / autojump).
+  # Помнит частые каталоги — переход за пару нажатий.
+  # Работает в основных shell.
   #
-  #   z foo              # cd into highest ranked directory matching foo
-  #   z foo bar          # cd into highest ranked directory matching foo and bar
-  #   z foo /            # cd into a subdirectory starting with foo
+  #   z foo              # cd в лучший матч по foo
+  #   z foo bar          # cd в лучший матч по foo и bar
+  #   z foo /            # cd в подкаталог, начинающийся с foo
   #
-  #   z ~/foo            # z also works like a regular cd command
-  #   z foo/             # cd into relative path
-  #   z ..               # cd one level up
-  #   z -                # cd into previous directory
+  #   z ~/foo            # как обычный cd
+  #   z foo/             # относительный путь
+  #   z ..               # уровень вверх
+  #   z -                # предыдущий каталог
   #
-  #   zi foo             # cd with interactive selection (using fzf)
+  #   zi foo             # интерактивный выбор (fzf)
   #
-  #   z foo<SPACE><TAB>  # show interactive completions (zoxide v0.8.0+, bash 4.4+/fish/zsh only)
+  #   z foo<SPACE><TAB>  # completions (zoxide v0.8.0+, bash 4.4+/fish/zsh)
   programs.zoxide = {
     enable = true;
     enableBashIntegration = true;
@@ -86,10 +84,8 @@
     enableNushellIntegration = true;
   };
 
-  # Atuin replaces your existing shell history with a SQLite database,
-  # and records additional context for your commands.
-  # Additionally, it provides optional and fully encrypted
-  # synchronisation of your history between machines, via an Atuin server.
+  # Atuin: история shell в SQLite + контекст команд.
+  # Опционально E2E-синхронизация между машинами через сервер Atuin.
   programs.atuin = {
     enable = true;
     enableBashIntegration = true;

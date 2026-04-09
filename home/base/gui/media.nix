@@ -3,13 +3,13 @@
   config,
   ...
 }:
-# processing audio/video
+# обработка аудио/видео
 {
   home.packages = with pkgs; [
     ffmpeg-full
 
-    # images
-    viu # Terminal image viewer with native support for iTerm and Kitty
+    # изображения
+    viu # просмотр картинок в терминале (iTerm, Kitty)
     imagemagick
     graphviz
   ];

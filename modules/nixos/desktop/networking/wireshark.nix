@@ -1,9 +1,9 @@
 {
   programs.wireshark = {
     enable = true;
-    # Whether to allow users in the 'wireshark' group to capture network traffic(via a setcap wrapper).
+    # Пользователям группы wireshark — захват трафика (setcap wrapper).
     dumpcap.enable = true;
-    # Whether to allow users in the 'wireshark' group to capture USB traffic (via udev rules).
+    # Пользователям группы wireshark — захват USB (udev rules).
     usbmon.enable = false;
   };
 }

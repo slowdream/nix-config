@@ -6,20 +6,20 @@
 }:
 {
   nix.settings = {
-    # enable flakes globally
+    # flakes глобально
     experimental-features = [
       "nix-command"
       "flakes"
     ];
 
-    # given the users in this list the right to specify additional substituters via:
-    #    1. `nixConfig.substituers` in `flake.nix`
-    #    2. command line args `--options substituers http://xxx`
+    # пользователям из списка разрешено задавать дополнительные substituters через:
+    #    1. `nixConfig.substituers` в `flake.nix`
+    #    2. аргументы CLI `--options substituers http://xxx`
     trusted-users = [ myvars.username ];
 
-    # substituers that will be considered before the official ones(https://cache.nixos.org)
+    # substituters смотрятся раньше официальных (https://cache.nixos.org)
     substituters = [
-      # cache mirror located in China
+      # cache mirror в Китае
       # status: https://mirrors.ustc.edu.cn/status/
       "https://mirrors.ustc.edu.cn/nix-channels/store"
       # status: https://mirror.sjtu.edu.cn/
@@ -29,7 +29,7 @@
       "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
 
       "https://nix-community.cachix.org"
-      # my own cache server, currently not used.
+      # свой cache server — сейчас не используется
       # "https://ryan4yin.cachix.org"
     ];
 

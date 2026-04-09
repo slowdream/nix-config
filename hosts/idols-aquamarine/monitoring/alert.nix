@@ -7,23 +7,22 @@
       "httpListenAddr" = "127.0.0.1:8880";
 
       "datasource.url" = "http://localhost:9090";
-      "notifier.url" = [ "http://localhost:9093" ]; # alertmanager's api
-      # Recording rules results are persisted via remote write.
+      "notifier.url" = [ "http://localhost:9093" ]; # эндпойнт Alertmanager API
+      # recording rules и remote write (куда пишутся метрики)
       "remoteWrite.url" = "http://localhost:9090";
       "remoteRead.url" = "http://localhost:9090";
 
-      # Whether to disable long-lived connections to the datasource.
+      # не держать долгие keep-alive к datasource
       "datasource.disableKeepAlive" = true;
-      # Whether to avoid stripping sensitive information such as auth headers or passwords
-      # from URLs in log messages or UI and exported metrics.
+      # не маскировать URL с паролями в логах/UI/metrics
       "datasource.showURL" = false;
-      # Path to the files with alerting and/or recording rules.
+      # файлы alerting / recording rules
       rule = [
         "${./alert_rules}/*.yml"
         "${./recoding_rules}/*.yml"
       ];
       # https://docs.victoriametrics.com/victoriametrics/vmalert/#link-to-alert-source
-      # Set this two args to generate the correct `.GeneratorURL`
+      # для корректного `.GeneratorURL`
       "external.url" = "https://grafana.writefor.fun";
       "external.alert.source" =
         ''explore?left={"datasource":"{{ if eq .Type \"vlogs\" }}VictoriaLogs{{ else }}VictoriaMetrics{{ end }}","queries":[{"expr":{{ .Expr|jsonEscape|queryEscape }},"refId":"A"}],"range":{"from":"{{ .ActiveAt.UnixMilli }}","to":"now"}}'';
@@ -39,12 +38,12 @@
     environmentFile = config.age.secrets."alertmanager.env".path;
     configuration = {
       global = {
-        # The smarthost and SMTP sender used for mail notifications.
+        # SMTP smarthost и отправитель
         smtp_smarthost = "smtp.qq.com:465";
         smtp_from = "$SMTP_SENDER_EMAIL";
         smtp_auth_username = "$SMTP_AUTH_USERNAME";
         smtp_auth_password = "$SMTP_AUTH_PASSWORD";
-        # smtp.qq.com:465 support SSL only, so we need to disable TLS here.
+        # smtp.qq.com:465 — SSL; TLS STARTTLS отключаем
         # https://service.mail.qq.com/detail/0/310
         smtp_require_tls = false;
       };
@@ -53,25 +52,25 @@
         routes = [
           {
             receiver = "telegram";
-            # group alerts by labels
+            # группировка по labels
             group_by = [
               "job"
-              # --- Alert labels ---
+              # --- метки алертов ---
               "alertname"
               "alertgroup"
-              # --- kubernetes labels ---
+              # --- метки Kubernetes ---
               "namespace"
-              # --- custom labels ---
+              # --- свои метки ---
               "cluster"
               "env"
               "type"
             ];
-            group_wait = "3m"; # wait for other alerts to "group by" before send notification
-            group_interval = "5m"; # wait for an interval, before send a new alert in the same group
-            repeat_interval = "5h"; # avoiding repeating reminders too frequently
+            group_wait = "3m"; # подождать группировку перед отправкой
+            group_interval = "5m"; # интервал между алертами той же группы
+            repeat_interval = "5h"; # не спамить повтором
           }
           # {
-          #   # Route only prod env's critical alerts to email (most severe alerts)
+          #   # только critical из prd → email
           #   match = {
           #     severity = "critical";
           #     env = "prd";
@@ -95,7 +94,7 @@
         #   email_configs = [
         #     {
         #       to = "ryan4yin@linux.com";
-        #       # Whether to notify about resolved alerts.
+        #       # уведомлять о resolved
         #       send_resolved = true;
         #     }
         #   ];
@@ -105,15 +104,15 @@
           telegram_configs = [
             {
               bot_token = "$TELEGRAM_BOT_TOKEN";
-              chat_id = 586169186; # My Telegram ID
-              # Whether to notify about resolved alerts.
+              chat_id = 586169186; # ID чата в Telegram
+              # уведомлять о resolved
               send_resolved = true;
-              # Disable notifications for resolved alerts
+              # не отключать уведомления для resolved
               disable_notifications = false;
-              # Telegram's MarkdownV2 & Markdown are all very painful, we use html instead.
+              # Markdown в Telegram неудобен — HTML
               # https://core.telegram.org/bots/api#formatting-options
               parse_mode = "HTML";
-              # Message template
+              # шаблон сообщения
               message = ''
                 {{- if eq .Status "firing" }}
                 🟡 <b>告警触发</b>  {{ .CommonLabels.alertname }} [{{ index .CommonLabels "severity" | title }}]

@@ -3,16 +3,16 @@
   pkgs-x64,
   ...
 }:
-# media - control and enjoy audio/video
+# медиа: звук и видео
 {
   home.packages = with pkgs; [
-    # audio control
+    # звук
     pavucontrol
     playerctl
     pulsemixer
-    imv # simple image viewer
+    imv # просмотр картинок
 
-    # video/audio tools
+    # видео / Vulkan / VA
     libva-utils
     vdpauinfo
     vulkan-tools

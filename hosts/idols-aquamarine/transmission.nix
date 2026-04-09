@@ -9,16 +9,14 @@ let
   name = "transmission";
 in
 {
-  # Join the shared fileshare group so transmission can read/write files
-  # created by sftpgo, and vice versa (via setgid directories).
+  # Общая группа fileshare — transmission и sftpgo пишут в одни каталоги (setgid).
   users.users.${name}.extraGroups = [ "fileshare" ];
 
-  # Set up transmission's home dir with setgid + fileshare group ownership.
-  # The setgid bit (2) causes all files created here to inherit the group
-  # 'fileshare', regardless of which service creates them.
+  # Домашний каталог transmission: setgid + группа fileshare.
+  # setgid (2) — новые файлы наследуют группу fileshare, кто бы ни создал.
   systemd.tmpfiles.rules = [
-    # Keep shared parent owned by root to avoid tmpfiles "unsafe path transition"
-    # when another service creates subdirectories under /data/fileshare/public.
+    # Родитель /data/fileshare — root, иначе tmpfiles ругается на «unsafe path transition»,
+    # когда другой сервис создаёт подкаталоги в /data/fileshare/public.
     "d /data/fileshare 2775 root fileshare -"
 
     "d ${dataDir} 2775 ${name} fileshare -"
@@ -27,7 +25,7 @@ in
     "d ${dataDir}/watch 2775 ${name} fileshare -"
   ];
 
-  # the headless Transmission BitTorrent daemon
+  # headless Transmission (демон без GUI)
   # https://github.com/NixOS/nixpkgs/blob/nixos-25.11/nixos/modules/services/torrent/transmission.nix
   # https://wiki.archlinux.org/title/transmission
   services.transmission = {
@@ -35,103 +33,90 @@ in
     package = pkgs.transmission_4;
     user = name;
     group = name;
-    # 2775: setgid preserves fileshare group on download/incomplete dirs.
+    # 2775: setgid сохраняет группу fileshare в download/incomplete
     downloadDirPermissions = "2775";
 
-    # Whether to enable tweaking of kernel parameters to open many more connections at the same time.
-    # Note that you may also want to increase peer-limit-global.
-    # And be aware that these settings are quite aggressive and might not suite your regular desktop use.
-    # For instance, SSH sessions may time out more easily.
+    # Подкрутка sysctl под много соединений; поднять и peer-limit-global.
+    # Агрессивные значения — на десктопе SSH может чаще рваться.
     performanceNetParameters = true;
 
-    # Path to a JSON file to be merged with the settings.
-    # Useful to merge a file which is better kept out of the Nix store to set secret config parameters like `rpc-password`.
+    # JSON с настройками вне store (секреты вроде rpc-password).
     credentialsFile = config.age.secrets."transmission-credentials.json".path;
 
-    # Whether to open the RPC port in the firewall.
+    # RPC в firewall не открывать
     openRPCPort = false;
     openPeerPorts = true;
 
     # https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md
     settings = {
-      # 0 = None, 1 = Critical, 2 = Error, 3 = Warn, 4 = Info, 5 = Debug, 6 = Trace;
+      # 0 = None, 1 = Critical, 2 = Error, 3 = Warn, 4 = Info, 5 = Debug, 6 = Trace
       message-level = 3;
 
-      # Encryption may help get around some ISP filtering,
-      # but at the cost of slightly higher CPU use.
-      # 0 = Prefer unencrypted connections,
-      # 1 = Prefer encrypted connections,
-      # 2 = Require encrypted connections; default = 1)
+      # Шифрование — обход фильтров ISP, чуть выше CPU.
+      # 0 = предпочитать открытые, 1 = предпочитать шифрование, 2 = только шифрование; по умолчанию 1
       encryption = 2;
 
-      # rpc = Web Interface
+      # rpc = веб-интерфейс
       rpc-port = 9091;
       rpc-bind-address = "127.0.0.1";
       anti-brute-force-enabled = true;
-      # After this amount of failed authentication attempts is surpassed,
-      # the RPC server will deny any further authentication attempts until it is restarted.
-      # This is not tracked per IP but in total.
+      # После стольких неудачных попыток входа RPC не принимает auth, пока сервис не перезапустят.
+      # Счётчик общий, не per-IP.
       anti-brute-force-threshold = 20;
       rpc-authentication-required = true;
 
-      # Comma-delimited list of IP addresses.
-      # Wildcards allowed using '*'. Example: "127.0.0.*,192.168.*.*",
+      # Список IP через запятую, `*` — wildcard. Пример: "127.0.0.*,192.168.*.*"
       rpc-whitelist-enabled = true;
       rpc-whitelist = "127.0.0.*,192.168.*.*";
-      # Comma-delimited list of domain names.
-      # Wildcards allowed using '*'. Example: "*.foo.org,example.com",
+      # Домены через запятую. Пример: "*.foo.org,example.com"
       rpc-host-whitelist-enabled = true;
       rpc-host-whitelist = "*.writefor.fun,localhost,192.168.5.*";
       rpc-user = myvars.username;
       rpc-username = myvars.username;
-      # rpc-password = "test"; # you'd better use the credentialsFile for this.
+      # rpc-password = "test"; # лучше credentialsFile
 
       incomplete-dir-enabled = true;
       incomplete-dir = "${dataDir}/incomplete";
       download-dir = "${dataDir}/downloads";
 
-      # Watch a directory for torrent files and add them to transmission.
+      # Каталог watch: .torrent подхватываются
       watch-dir-enabled = false;
       watch-dir = "${dataDir}/watch";
-      # Whether to enable Micro Transport Protocol (µTP).
+      # µTP
       utp-enabled = true;
-      # Executable to be run at torrent completion.
+      # Скрипт по завершении торрента
       script-torrent-done-enabled = false;
       # script-torrent-done-filename = "/path/to/script";
 
-      # Enable Local Peer Discovery (LPD).
+      # LPD
       lpd-enabled = true;
-      # The peer port to listen for incoming connections.
+      # Порт для входящих peer
       peer-port = 51413;
-      # Enable UOnP or NAT-PMP to forward a port through your firewall(NAT).
+      # UPnP / NAT-PMP для проброса порта
       # https://github.com/transmission/transmission/blob/main/docs/Port-Forwarding-Guide.md
       port-forwarding-enabled = true;
 
-      # "normal" speed limits
+      # лимиты скорости
       speed-limit-down-enabled = true;
       speed-limit-down = 30000; # KB/s
       speed-limit-up-enabled = true;
       speed-limit-up = 500; # KB/s
       upload-slots-per-torrent = 8;
 
-      # Start torrents as soon as they are added
+      # стартовать торренты сразу после добавления
       start-added-torrents = true;
 
-      # Queuing
-      # When true, Transmission will only download
-      # download-queue-size non-stalled torrents at once.
+      # очередь
+      # true — качает не больше download-queue-size не-stalled торрентов
       download-queue-enabled = true;
       download-queue-size = 5;
 
-      # When true, torrents that have not shared data for
-      # queue-stalled-minutes are treated as 'stalled'
-      # and are not counted against the queue-download-size
-      # and seed-queue-size limits.
+      # true — торренты без отдачи дольше queue-stalled-minutes считаются stalled
+      # и не учитываются в лимитах download/seed queue
       queue-stalled-enabled = true;
       queue-stalled-minutes = 60;
 
-      # When true. Transmission will only seed seed-queue-size
-      # non-stalled torrents at once.
+      # true — одновременно не больше seed-queue-size не-stalled сидов
       seed-queue-enabled = true;
       seed-queue-size = 10;
     };

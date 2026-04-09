@@ -1,4 +1,4 @@
-# for provider
+# для provider
 #
 # export MINIO_PASSWORD="xxx"
 #

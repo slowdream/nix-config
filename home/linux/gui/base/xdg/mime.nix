@@ -1,16 +1,16 @@
 {
   xdg.configFile."mimeapps.list".force = true;
 
-  # manage $XDG_CONFIG_HOME/mimeapps.list
-  # xdg search all desktop entries from $XDG_DATA_DIRS, check it by command:
+  # $XDG_CONFIG_HOME/mimeapps.list
+  # desktop-файлы ищутся по $XDG_DATA_DIRS, проверка:
   #  echo $XDG_DATA_DIRS
-  # the system-level desktop entries can be list by command:
+  # системные .desktop:
   #   ls -l /run/current-system/sw/share/applications/
-  # the user-level desktop entries can be list by command(user ryan):
+  # пользовательские (пример user ryan):
   #  ls /etc/profiles/per-user/ryan/share/applications/
   xdg.mimeApps = {
     enable = true;
-    # let `xdg-open` to open the url with the correct application.
+    # `xdg-open` открывает URL нужным приложением
     defaultApplications =
       let
         browser = [
@@ -26,7 +26,7 @@
       in
       {
         "application/json" = browser;
-        "application/pdf" = browser; # TODO: pdf viewer
+        "application/pdf" = browser; # TODO: отдельный pdf viewer
 
         "text/html" = browser;
         "text/xml" = browser;
@@ -43,17 +43,17 @@
         "application/x-extension-xhtml" = browser;
         "application/x-wine-extension-ini" = editor;
 
-        # define default applications for some url schemes.
-        "x-scheme-handler/about" = browser; # open `about:` url with `browser`
-        "x-scheme-handler/ftp" = browser; # open `ftp:` url with `browser`
+        # схемы URL
+        "x-scheme-handler/about" = browser; # about: → browser
+        "x-scheme-handler/ftp" = browser; # ftp: → browser
         "x-scheme-handler/http" = browser;
         "x-scheme-handler/https" = browser;
         # https://github.com/microsoft/vscode/issues/146408
-        "x-scheme-handler/vscode" = [ "code-url-handler.desktop" ]; # open `vscode://` url with `code-url-handler.desktop`
-        "x-scheme-handler/vscode-insiders" = [ "code-insiders-url-handler.desktop" ]; # open `vscode-insiders://` url with `code-insiders-url-handler.desktop`
+        "x-scheme-handler/vscode" = [ "code-url-handler.desktop" ]; # vscode://
+        "x-scheme-handler/vscode-insiders" = [ "code-insiders-url-handler.desktop" ]; # vscode-insiders://
         "x-scheme-handler/zoommtg" = [ "Zoom.desktop" ];
 
-        # all other unknown schemes will be opened by this default application.
+        # прочие схемы — дефолтное приложение
         # "x-scheme-handler/unknown" = editor;
 
         "x-scheme-handler/tg" = [ "org.telegram.desktop.desktop " ];

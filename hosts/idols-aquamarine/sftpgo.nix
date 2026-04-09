@@ -4,19 +4,17 @@ let
   dataDir = "/data/apps/sftpgo";
 in
 {
-  # Read SFTPGO_DEFAULT_ADMIN_USERNAME and SFTPGO_DEFAULT_ADMIN_PASSWORD from a file
+  # SFTPGO_DEFAULT_ADMIN_USERNAME / SFTPGO_DEFAULT_ADMIN_PASSWORD из файла
   systemd.services.sftpgo.serviceConfig = {
     EnvironmentFile = config.age.secrets."sftpgo.env".path;
   };
 
-  # Join the shared fileshare group (defined globally in user-group.nix) so
-  # sftpgo can read/write files created by transmission, and vice versa.
+  # Группа fileshare (user-group.nix) — общий доступ с transmission
   users.users.${user}.extraGroups = [ "fileshare" ];
 
-  # Create Directories
+  # Каталоги
   # https://www.freedesktop.org/software/systemd/man/latest/tmpfiles.d.html#Type
-  # Mode 2775: setgid ensures new files/dirs inherit the 'fileshare' group
-  # regardless of the creating process's primary group.
+  # 2775 + setgid → новые файлы с группой fileshare
   systemd.tmpfiles.rules = [
     "d ${dataDir} 0755 ${user} ${user} -"
   ];
@@ -34,84 +32,78 @@ in
     # https://github.com/drakkan/sftpgo/blob/2.5.x/docs/full-configuration.md
     settings = {
       common = {
-        # Auto-blocking policy for SFTPGo and thus helps to prevent DoS (Denial of Service) and brute force password guessing.
+        # defender: блокировки, DoS и brute-force
         defender = {
           enable = true;
         };
       };
-      # Where to store stfpgo's data
+      # данные SFTPGo
       data_provider = {
         driver = "sqlite";
         name = "sftpgo.db";
         password_hashing = {
           algo = "argon2id";
-          # options for argon2id hashing algorithm.
-          # The memory and iterations parameters control the computational cost of hashing the password.
+          # argon2id: память и итерации = стоимость хэша
           argon2_options = {
             memory = 65536; # KiB
-            iterations = 2; # The number of iterations over the memory.
-            parallelism = 2; # The number of threads (or lanes) used by the algorithm.
+            iterations = 2; # проходы по памяти
+            parallelism = 2; # потоки (lanes)
           };
         };
         password_validation = {
-          # What Entropy Value Should I Use?
-          # somewhere in the 50-70 range seems "reasonable".
+          # энтропия пароля — ориентир 50–70
           # https://github.com/wagslane/go-password-validator#what-entropy-value-should-i-use
           admins.min_entropy = 60;
           users.min_entropy = 60;
         };
-        # Cache passwords in memory to avoid hashing the same password multiple times(it costs).
+        # кэш хэшей паролей в RAM
         password_caching = true;
-        # create the default admin user via environment variables
+        # дефолтный admin из env
         # SFTPGO_DEFAULT_ADMIN_USERNAME and SFTPGO_DEFAULT_ADMIN_PASSWORD
         create_default_admin = true;
       };
 
-      # WebDAV is a popular protocol for file sharing, better than CIFS/SMB, NFS, etc.
-      # it's save to use WebDAV over HTTPS on public networks.
+      # WebDAV для файлов; по HTTPS в публичных сетях ок
       webdavd.bindings = [
         {
           address = "127.0.0.1";
           port = 3303;
         }
       ];
-      # HTTP Server provides a simple web interface to manage the server.
+      # HTTP — админка и клиент
       httpd.bindings = [
         {
           address = "127.0.0.1";
           enable_https = false;
           port = 3302;
           client_ip_proxy_header = "X-Forwarded-For";
-          # a basic built-in web interface that allows you to manage users,
-          # virtual folders, admins and connections.
+          # веб-админка: пользователи, VFS, админы, сессии
           # url: http://127.0.0.1:8080/web/admin
           enable_web_admin = true;
-          # A basic front-end web interface for your users.
-          # It allows end-users to browse and manage their files and change their credentials.
+          # веб-клиент для пользователей
           enable_web_client = true;
           enable_rest_api = true;
         }
       ];
-      # prometheus metrics
+      # метрики для Prometheus
       telemetry = {
         bind_port = 10000;
         bind_address = "0.0.0.0";
         # auth_user_file = "";
       };
-      # multi-factor authentication settings
+      # двухфакторка (MFA, TOTP)
       mfa.totp = [
         {
-          # Unique configuration name, not visible to the authentication apps.
-          # Should not to be changed after the first user has been created.
+          # имя конфига, не видно в приложениях; не менять после первого пользователя
           name = "SFTPGo";
-          # Name of the issuing Organization/Company
+          # issuer для TOTP
           issuer = "SFTPGo";
-          # Algorithm to use for HMAC
-          # Currently Google Authenticator app on iPhone seems to only support sha1
+          # HMAC для TOTP
+          # Google Authenticator на iPhone часто только sha1
           algo = "sha1";
         }
       ];
-      # SMTP configuration enables SFTPGo email sending capabilities
+      # SMTP для писем из SFTPGo
       # smtp = {};
     };
   };

@@ -21,22 +21,22 @@
         http_port = 3351;
         protocol = "http";
         domain = "grafana.writefo.fun";
-        # Redirect to correct domain if the host header does not match the domain. Prevents DNS rebinding attacks.
+        # редирект при несовпадении Host — защита от DNS rebinding
         serve_from_sub_path = false;
-        # Add subpath to the root_url if serve_from_sub_path is true
+        # subpath в root_url, если serve_from_sub_path = true
         root_url = "%(protocol)s://%(domain)s:%(http_port)s/";
         enforce_domain = false;
         read_timeout = "180s";
-        # Enable HTTP compression, this can improve transfer speed and bandwidth utilization.
+        # gzip для HTTP
         enable_gzip = true;
-        # Cdn for accelerating loading of frontend assets.
+        # CDN для статики фронта
         # cdn_url = "https://cdn.jsdelivr.net/npm/grafana@7.5.5";
       };
 
       security = {
         admin_user = myvars.username;
         admin_email = myvars.useremail;
-        # Use file provider to read the admin password from a file.
+        # пароль admin из файла (file provider)
         # https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider
         admin_password = "$__file{${config.age.secrets."grafana-admin-password".path}}";
         secret_key = "$__file{${config.age.secrets."grafana-secret-key".path}}";
@@ -51,7 +51,7 @@
     # https://github.com/NixOS/nixpkgs/tree/master/pkgs/servers/monitoring/grafana/plugins
     declarativePlugins = with pkgs.grafanaPlugins; [
       # https://github.com/VictoriaMetrics/victoriametrics-datasource
-      # supports victoria-metrics's MetricsQL, template, tracing, prettify, etc.
+      # MetricsQL, шаблоны, tracing, prettify и т.д.
       victoriametrics-metrics-datasource
       # https://github.com/VictoriaMetrics/victorialogs-datasource
       victoriametrics-logs-datasource
@@ -67,10 +67,10 @@
       frser-sqlite-datasource
 
       # https://github.com/grafana/grafana-infinity-datasource
-      # Visualize data from JSON, CSV, XML, GraphQL and HTML endpoints in Grafana
+      # JSON, CSV, XML, GraphQL, HTML в Grafana
       yesoreyeram-infinity-datasource
 
-      # plugins not included in nixpkgs: trino, grafana advisor, llm, kafka
+      # нет в nixpkgs: trino, advisor, llm, kafka
     ];
   };
 

@@ -4,7 +4,7 @@
   ...
 }:
 {
-  # Don't allow mutation of users outside the config.
+  # Не давать менять users вне конфига
   users.mutableUsers = false;
 
   users.groups = {
@@ -12,20 +12,20 @@
     podman = { };
     docker = { };
     wireshark = { };
-    # for android platform tools's udev rules
+    # udev rules android platform tools
     adbusers = { };
     dialout = { };
-    # for openocd (embedded system development)
+    # openocd (embedded development)
     plugdev = { };
     # misc
     uinput = { };
-    # shared group for services that read/write the same data directory
-    # (e.g. sftpgo + transmission on aquamarine)
+    # общая группа для сервисов с одним data directory
+    # (напр. sftpgo + transmission на aquamarine)
     fileshare = { };
   };
 
   users.users."${myvars.username}" = {
-    # we have to use initialHashedPassword here when using tmpfs for /
+    # при tmpfs на / нужен initialHashedPassword
     inherit (myvars) initialHashedPassword;
     home = "/home/${myvars.username}";
     isNormalUser = true;
@@ -33,17 +33,17 @@
       myvars.username
       "users"
       "wheel"
-      "networkmanager" # for nmtui / nm-connection-editor
+      "networkmanager" # nmtui / nm-connection-editor
       "podman"
       "docker"
       "wireshark"
-      "adbusers" # android debugging
+      "adbusers" # android debug
       "libvirtd" # virt-viewer / qemu
       "fileshare"
     ];
   };
 
-  # root's ssh key are mainly used for remote deployment
+  # ssh-ключи root в основном для remote deploy
   users.users.root = {
     inherit (myvars) initialHashedPassword;
     openssh.authorizedKeys.keys = myvars.mainSshAuthorizedKeys ++ myvars.secondaryAuthorizedKeys;

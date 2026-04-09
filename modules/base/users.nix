@@ -4,18 +4,18 @@
 
   users.users.${myvars.username} = {
     description = myvars.userfullname;
-    # Public Keys that can be used to login to all my PCs and servers.
+    # Публичные ключи для входа на все мои ПК и серверы.
     #
-    # Since its authority is so large, we must strengthen its security:
-    # 1. The corresponding private key must be:
-    #    1. Generated locally on every trusted client via:
+    # Раз права такие широкие, усиливаем security:
+    # 1. Соответствующий private key должен:
+    #    1. Генерироваться локально на каждом доверенном клиенте, например:
     #      ```bash
-    #      # KDF: bcrypt with 256 rounds):
-    #      # Passphrase: digits + letters + symbols, 12+ chars
-    #      ssh-keygen -t ed25519 -a 256 -C "ryan@xxx" -f ~/.ssh/xxx`
+    #      # KDF: bcrypt, 256 rounds
+    #      # Passphrase: цифры + буквы + символы, 12+ символов
+    #      ssh-keygen -t ed25519 -a 256 -C "ryan@xxx" -f ~/.ssh/xxx
     #      ```
-    #    2. Never leave the device and never sent over the network.
-    # 2. Or just use hardware security keys like Yubikey/CanoKey.
+    #    2. Никогда не покидать устройство и не передаваться по сети.
+    # 2. Либо hardware security keys вроде Yubikey/CanoKey.
     openssh.authorizedKeys.keys = myvars.mainSshAuthorizedKeys;
   };
 }

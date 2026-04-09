@@ -21,10 +21,10 @@ in
     '';
   };
 
-  # NOTE: only works in bash/zsh, not nushell
+  # NOTE: только bash/zsh, не nushell
   home.shellAliases = shellAliases;
 
-  # NOTE: nushell will be launched in bash, so it can inherit all the eenvironment variables.
+  # NOTE: nushell стартует из bash, поэтому наследует переменные окружения.
   programs.nushell = {
     enable = true;
     configFile.source = ./config.nu;

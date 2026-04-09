@@ -1,42 +1,41 @@
 { pkgs, ... }:
 {
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # Пакеты в system profile. Поиск: nix search wget
   environment.systemPackages = with pkgs; [
-    # system call monitoring
-    strace # system call monitoring
-    ltrace # library call monitoring
-    lsof # list open files
+    # syscalls
+    strace
+    ltrace # library calls
+    lsof # открытые файлы
 
-    # ebpf related tools
+    # eBPF
     # https://github.com/bpftrace/bpftrace
-    bpftrace # powerful tracing tool
-    bpftop # monitor BPF programs
-    bpfmon # BPF based visual packet rate monitor
+    bpftrace
+    bpftop
+    bpfmon
 
-    # system monitoring
+    # мониторинг
     sysstat
     iotop-c
     iftop
     nmon
     sysbench
     systemctl-tui
-    pv # pipe view
+    pv
 
-    # system tools
-    psmisc # killall/pstree/prtstat/fuser/...
-    lm_sensors # for `sensors` command
+    # системные утилиты
+    psmisc # killall/pstree/…
+    lm_sensors # `sensors`
     ethtool
     pciutils # lspci
     usbutils # lsusb
-    hdparm # for disk performance, command
-    dmidecode # a tool that reads information about your system's hardware from the BIOS according to the SMBIOS/DMI standard
+    hdparm
+    dmidecode # SMBIOS/DMI из BIOS
     parted
-    smartmontools # smartctl -a /dev/nvme0n1
+    smartmontools # smartctl
     nvme-cli
   ];
 
-  # BCC - Tools for BPF-based Linux IO analysis, networking, monitoring, and more
+  # BCC — IO/network/monitoring на BPF
   # https://github.com/iovisor/bcc
   programs.bcc.enable = true;
 }

@@ -1,18 +1,16 @@
 { myvars, ... }:
 {
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
+  # Home Manager нужны базовые сведения о вас и путях,
+  # которыми он должен управлять.
   home = {
     inherit (myvars) username;
 
-    # This value determines the Home Manager release that your
-    # configuration is compatible with. This helps avoid breakage
-    # when a new Home Manager release introduces backwards
-    # incompatible changes.
+    # Это значение задаёт релиз Home Manager, с которым совместима
+    # ваша конфигурация. Так проще избежать поломок, когда новый релиз
+    # Home Manager вносит обратно несовместимые изменения.
     #
-    # You can update Home Manager without changing this value. See
-    # the Home Manager release notes for a list of state version
-    # changes in each release.
+    # Home Manager можно обновлять, не меняя это значение. Список
+    # изменений state version по релизам — в release notes Home Manager.
     stateVersion = "24.11";
   };
 }

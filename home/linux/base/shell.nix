@@ -11,22 +11,22 @@ in
 rec {
   home.homeDirectory = "/home/${myvars.username}";
 
-  # environment variables that always set at login
+  # переменные окружения при логине
   home.sessionVariables = {
-    # clean up ~
+    # порядок в ~
     LESSHISTFILE = cache + "/less/history";
     LESSKEY = c + "/less/lesskey";
     WINEPREFIX = d + "/wine";
 
-    # set this variable make i3 failed to start
-    # related issue:
+    # с этой переменной i3 не стартует
+    # issue:
     #   https://github.com/sddm/sddm/issues/871
     # XAUTHORITY = "$XDG_RUNTIME_DIR/Xauthority";
 
-    # set default applications
+    # приложения по умолчанию
     BROWSER = "firefox";
 
-    # enable scrolling in git diff
+    # прокрутка в git diff
     DELTA_PAGER = "less -R";
   };
 }

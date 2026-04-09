@@ -2,7 +2,7 @@ def repeat-str [s: string, n: int] {
   (1..$n | each { $s } | str join)
 }
 
-# ================= NixOS related =========================
+# ================= NixOS =========================
 
 export def nixos-switch [
     name: string
@@ -11,7 +11,7 @@ export def nixos-switch [
     print $"nixos-switch '($name)' in '($mode)' mode..."
     print (repeat-str "=" 50)
     if "debug" == $mode {
-        # show details via nix-output-monitor
+        # подробности через nix-output-monitor
         nom build $".#nixosConfigurations.($name).config.system.build.toplevel" --show-trace --verbose
         nixos-rebuild switch --sudo --flake $".#($name)" --show-trace --verbose
     } else {
@@ -31,9 +31,9 @@ export def make-editable [
     rsync -avz --copy-links --chmod=D2755,F744 $"($tmpdir)/" $path
 }
 
-# ==================== Virtual Machines related =====================
+# ==================== Virtual Machines =====================
 
-# Build and upload a VM image
+# Сборка и upload образа VM
 export def upload-vm [
     name: string
     mode: string

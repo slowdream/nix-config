@@ -7,6 +7,6 @@ _:
   rime-data = ./rime-data-flypy;
   fcitx5-rime = super.fcitx5-rime.override { rimeDataPkgs = [ ./rime-data-flypy ]; };
 
-  # used by macOS Squirrel
+  # для macOS Squirrel
   flypy-squirrel = ./rime-data-flypy;
 })

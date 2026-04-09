@@ -16,7 +16,7 @@ in
     lib.mkMerge [
       {
         home.packages = with pkgs; [
-          # Niri v25.08 will create X11 sockets on disk, export $DISPLAY, and spawn `xwayland-satellite` on-demand when an X11 client connects
+          # Niri v25.08: X11-сокеты на диске, $DISPLAY, `xwayland-satellite` по требованию при X11-клиенте
           xwayland-satellite
         ];
 
@@ -51,13 +51,13 @@ in
           };
         };
 
-        # NOTE: this executable is used by greetd to start a wayland session when system boot up
-        # with such a vendor-no-locking script, we can switch to another wayland compositor without modifying greetd's config in NixOS module
+        # greetd вызывает этот скрипт для Wayland-сессии при загрузке;
+        # без vendor lock можно сменить compositor, не трогая greetd в модуле NixOS
         home.file.".wayland-session" = {
           source = pkgs.writeScript "init-session" ''
-            # trying to stop a previous niri session
+            # остановить предыдущую сессию niri
             systemctl --user is-active niri.service && systemctl --user stop niri.service
-            # and then we start a new one
+            # новая сессия
             /run/current-system/sw/bin/niri-session
           '';
           executable = true;

@@ -1,40 +1,40 @@
 { lib, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-    moonlight-qt # moonlight client, for streaming games/desktop from a PC
+    moonlight-qt # клиент Moonlight — стрим игр/десктопа с ПК
   ];
 
   # ===============================================================================
   #
-  # Sunshine: A self-hosted game stream server for Moonlight(Client).
-  # It's designed for game streaming, but it can be used for remote desktop as well.
+  # Sunshine: свой game stream server для Moonlight (client).
+  # Для стриминга игр, но подходит и для remote desktop.
   #
-  # How to use:
-  #  1. setup user via Web Console: <https://localhost:47990/>):
-  #  2. on another machine, connect to sunshine on via moonlight-qt client
+  # Как пользоваться:
+  #  1. Настроить пользователя в Web Console: <https://localhost:47990/>):
+  #  2. С другой машины подключиться через moonlight-qt
   #
-  # Docs:
+  # Документация:
   #  https://docs.lizardbyte.dev/projects/sunshine/latest/index.html
   #
-  # Check Service Status
+  # Статус сервиса
   #   systemctl --user status sunshine
-  # Check logs
+  # Логи
   #   journalctl --user -u sunshine --since "2 minutes ago"
   #
-  # References:
+  # Ссылки:
   #   https://github.com/NixOS/nixpkgs/blob/nixos-25.11/nixos/modules/services/networking/sunshine.nix
   #
   # ===============================================================================
   services.sunshine = {
-    enable = lib.mkDefault false; # default to false, for security reasons.
+    enable = lib.mkDefault false; # по умолчанию выключено из соображений безопасности
     autoStart = true;
-    capSysAdmin = true; # only needed for Wayland -- omit this when using with Xorg
+    capSysAdmin = true; # нужно для Wayland — убрать при Xorg
     openFirewall = true;
     settings = {
-      # pc  - Only localhost may access the web ui
-      # lan - Only LAN devices may access the web ui
+      # pc  — только localhost к web UI
+      # lan — только устройства в LAN
       origin_web_ui_allowed = "pc";
-      # 2   -	encryption is mandatory and unencrypted connections are rejected
+      # 2 — шифрование обязательно, без шифрования отклоняется
       lan_encryption_mode = 2;
       wan_encryption_mode = 2;
     };

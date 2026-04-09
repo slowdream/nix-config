@@ -6,7 +6,7 @@
     settings =
       let
         my_terminal_desktop = [
-          # NOTE: We have add these packages at user level
+          # Примечание: эти пакеты добавлены на уровне пользователя
           "Alacritty.desktop"
           "kitty.desktop"
           "foot.desktop"
@@ -35,7 +35,7 @@
 
     config = {
       common = {
-        # Use xdg-desktop-portal-gtk for every portal interface...
+        # xdg-desktop-portal-gtk для всех portal interface...
         default = [
           "gtk"
           "gnome"
@@ -43,18 +43,16 @@
       };
     };
 
-    # Sets environment variable NIXOS_XDG_OPEN_USE_PORTAL to 1
-    # This will make xdg-open use the portal to open programs,
-    # which resolves bugs involving programs opening inside FHS envs or with unexpected env vars set from wrappers.
-    # xdg-open is used by almost all programs to open a unknown file/uri
-    # alacritty as an example, it use xdg-open as default, but you can also custom this behavior
-    # and vscode has open like `External Uri Openers`
+    # Выставляет NIXOS_XDG_OPEN_USE_PORTAL=1
+    # xdg-open идёт через portal — меньше багов с открытием из FHS env и неожиданными env из wrappers.
+    # xdg-open используют почти все программы для неизвестных file/uri;
+    # например alacritty по умолчанию через xdg-open; в vscode — «External Uri Openers».
     xdgOpenUsePortal = true;
 
     # ls /run/current-system/sw/share/xdg-desktop-portal/portals/
     extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk # for provides file picker / OpenURI
-      xdg-desktop-portal-gnome # for screensharing
+      xdg-desktop-portal-gtk # file picker / OpenURI
+      xdg-desktop-portal-gnome # screensharing
     ];
   };
 }

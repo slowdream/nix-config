@@ -1,8 +1,8 @@
-# Disko layout for idols-ai data disk (LUKS + btrfs, mount at /persistent/data).
+# Второй диск idols-ai: LUKS + btrfs → /persistent/data (см. фактический mount в конфиге).
 #
-# Destroy, format & mount (wipes disk; from nixos-installer: cd nix-config/nixos-installer):
+# destroy, format, mount:
 #   nix run github:nix-community/disko -- --mode destroy,format,mount ../hosts/idols-ai/disko-fs-data.nix
-# Mount only (after first format):
+# только mount:
 #   nix run github:nix-community/disko -- --mode mount ../hosts/idols-ai/disko-fs-data.nix
 #
 {
@@ -17,13 +17,13 @@
             size = "100%";
             content = {
               type = "luks";
-              name = "data-luks"; # Mapper name; match boot.initrd.luks
+              name = "data-luks"; # mapper = boot.initrd.luks
               settings = {
-                allowDiscards = true; # TRIM for SSDs; slightly less secure, better performance
+                allowDiscards = true; # TRIM
               };
-              # Add boot.initrd.luks.devices so initrd prompts for passphrase at boot
+              # пароль в initrd
               initrdUnlock = true;
-              # cryptsetup luksFormat options
+              # cryptsetup luksFormat
               extraFormatArgs = [
                 "--type luks2"
                 "--cipher aes-xts-plain64"
@@ -31,14 +31,14 @@
                 "--iter-time 5000"
                 "--key-size 256"
                 "--pbkdf argon2id"
-                "--use-random" # Block until enough entropy from /dev/random
+                "--use-random" # /dev/random
               ];
               extraOpenArgs = [
                 "--timeout 10"
               ];
               content = {
                 type = "btrfs";
-                extraArgs = [ "-f" ]; # Force overwrite if filesystem already exists
+                extraArgs = [ "-f" ]; # перезапись ФС
                 subvolumes = {
                   "@data" = {
                     mountpoint = "/data";
@@ -49,7 +49,7 @@
                 };
                 postMountHook = ''
                   chown ryan:users /mnt/data
-                  # Set SGID + rwx for owner/group, read-only for others; new files inherit group
+                  # SGID 2755 — новые файлы с группой каталога
                   chmod 2755 /mnt/data
                 '';
               };

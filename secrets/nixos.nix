@@ -56,12 +56,12 @@ in
         agenix.packages."${pkgs.stdenv.hostPlatform.system}".default
       ];
 
-      # if you changed this key, you need to regenerate all encrypt files from the decrypt contents!
+      # если ключ сменили — перегенерируйте все .age из расшифрованного содержимого
       age.identityPaths =
         if cfg.preservation.enable then
           [
-            # To decrypt secrets on boot, this key should exists when the system is booting,
-            # so we should use the real key file path(prefixed by `/persistent/`) here, instead of the path mounted by preservation.
+            # Для decrypt secrets при boot ключ должен существовать при загрузке,
+            # поэтому здесь реальный путь к файлу ключа (с префиксом `/persistent/`), а не путь, смонтированный preservation.
             "/persistent/etc/ssh/ssh_host_ed25519_key" # Linux
           ]
         else
@@ -69,18 +69,18 @@ in
             "/etc/ssh/ssh_host_ed25519_key"
           ];
 
-      # secrets that are used by all nixos hosts
+      # secrets, общие для всех nixos hosts
       age.secrets = {
         "nix-access-tokens" = {
           file = "${mysecrets}/nix-access-tokens.age";
         }
-        # access-token needs to be readable by the user running the `nix` command
+        # access-token должен читать пользователь, под которым идёт команда `nix`
         // user_readable;
       };
 
       assertions = [
         {
-          # This expression should be true to pass the assertion
+          # Выражение должно быть true, иначе assertion не пройдёт
           assertion = !(cfg.desktop.enable && enabledServerSecrets);
           message = "Enable either desktop or server's secrets, not both!";
         }
@@ -90,18 +90,18 @@ in
     (mkIf cfg.desktop.enable {
       age.secrets = {
         # ---------------------------------------------
-        # no one can read/write this file, even root.
+        # никто не может читать/писать файл, даже root
         # ---------------------------------------------
 
-        # .age means the decrypted file is still encrypted by age(via a passphrase)
+        # .age: расшифрованный файл всё ещё зашифрован age (passphrase)
         "ryan4yin-gpg-subkeys.priv.age" = {
           file = "${mysecrets}/ryan4yin-gpg-subkeys-2024-01-27.priv.age.age";
         }
         // noaccess;
 
-        # Used only by NixOS Modules
+        # Только для NixOS modules
 
-        # referenced in /etc/fstab to mount davfs volume
+        # ссылка в /etc/fstab для mount davfs volume
         "davfs-secrets" = {
           file = "${mysecrets}/davfs-secrets.age";
         }
@@ -113,7 +113,7 @@ in
         // high_security;
 
         # ---------------------------------------------
-        # user can read this file.
+        # пользователь может читать файл
         # ---------------------------------------------
 
         "ssh-key-romantic" = {
@@ -128,7 +128,7 @@ in
         // user_readable;
       };
 
-      # place secrets in /etc/
+      # secrets в /etc/
       environment.etc = {
         "agenix/rclone.conf" = {
           source = config.age.secrets."rclone.conf".path;
@@ -145,11 +145,11 @@ in
           mode = "0000";
         };
 
-        # The following secrets are used by home-manager modules
-        # So we need to make then readable by the user
+        # Следующие secrets используются home-manager модулями
+        # — сделать читаемыми для пользователя
         "agenix/alias-for-work.nushell" = {
           source = config.age.secrets."alias-for-work.nushell".path;
-          mode = "0644"; # both the original file and the symlink should be readable and executable by the user
+          mode = "0644"; # и оригинал, и symlink должны быть readable (и executable) для пользователя
         };
       };
     })
@@ -241,7 +241,7 @@ in
         };
       };
 
-      # place secrets in /etc/
+      # secrets в /etc/
       environment.etc = {
         "agenix/hdd-luks-crypt-key" = {
           source = config.age.secrets."hdd-luks-crypt-key".path;

@@ -7,7 +7,7 @@ in
   programs.zellij = {
     enable = true;
   };
-  # only works in bash/zsh, not nushell
+  # только bash/zsh, не nushell
   home.shellAliases = shellAliases;
   programs.nushell.shellAliases = shellAliases;
 }

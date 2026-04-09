@@ -1,8 +1,8 @@
-# Refer:
-# - Flatpak manifest's docs:
+# Ссылки:
+# - Flatpak manifest:
 #   - https://docs.flatpak.org/en/latest/manifests.html
 #   - https://docs.flatpak.org/en/latest/sandbox-permissions.html
-# - QQ's flatpak manifest: https://github.com/flathub/com.qq.QQ/blob/master/com.qq.QQ.yaml
+# - flatpak manifest QQ: https://github.com/flathub/com.qq.QQ/blob/master/com.qq.QQ.yaml
 {
   lib,
   qq,
@@ -32,9 +32,9 @@ let
         ];
 
         bubblewrap = {
-          # To trace all the home files QQ accesses, you can use the following nushell command:
+          # Какие файлы в $HOME трогает QQ — трассировка:
           #   just trace-access qq
-          # See the Justfile in the root of this repository for more information.
+          # Подробности в Justfile в корне репозитория.
           bind.rw = [
             sloth.xdgDocumentsDir
             sloth.xdgDownloadDir

@@ -4,20 +4,20 @@
   ...
 }:
 {
-  boot.loader.timeout = lib.mkForce 10; # wait for x seconds to select the boot entry
+  boot.loader.timeout = lib.mkForce 10; # ждать x секунд для выбора пункта загрузки
 
-  # add user's shell into /etc/shells
+  # добавить shell пользователя в /etc/shells
   environment.shells = with pkgs; [
     bashInteractive
     nushell
   ];
-  # set user's default shell system-wide
+  # дефолтный shell пользователя на уровне системы
   users.defaultUserShell = pkgs.bashInteractive;
 
-  # fix for `sudo xxx` in kitty/wezterm/foot and other modern terminal emulators
+  # fix для `sudo xxx` в kitty/wezterm/foot и других современных terminal emulators
   security.sudo.keepTerminfo = true;
 
-  # List packages installed in system profile. To search, run:
+  # Пакеты в system profile. Поиск:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     gnumake
@@ -25,15 +25,15 @@
   ];
 
   services = {
-    gvfs.enable = true; # Mount, trash, and other functionalities
-    tumbler.enable = true; # Thumbnail support for images
+    gvfs.enable = true; # монтирование, корзина и прочее
+    tumbler.enable = true; # превью изображений
   };
 
   programs = {
-    # dconf is a low-level configuration system.
+    # dconf — low-level configuration system.
     dconf.enable = true;
 
-    # thunar file manager(part of xfce) related options
+    # опции файлового менеджера thunar (часть xfce)
     thunar = {
       enable = true;
       plugins = with pkgs; [

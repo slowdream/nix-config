@@ -1,9 +1,9 @@
 { lib }:
 rec {
-  mainGateway = "192.168.5.1"; # main router
-  mainGateway6 = "fe80::5"; # main router's link-local address
-  # use suzi as the default gateway
-  # it's a subrouter with a transparent proxy
+  mainGateway = "192.168.5.1"; # основной router
+  mainGateway6 = "fe80::5"; # link-local адрес основного router
+  # suzi как default gateway
+  # это subrouter с transparent proxy
   proxyGateway = "192.168.5.178";
   proxyGateway6 = "fe80::8";
   nameservers = [
@@ -18,7 +18,7 @@ rec {
 
   hostsAddr = {
     # ============================================
-    # Homelab's Physical Machines (KubeVirt Nodes)
+    # Физические машины homelab (KubeVirt nodes)
     # ============================================
     kubevirt-shoryu = {
       iface = "eno1";
@@ -34,16 +34,16 @@ rec {
     };
 
     # ============================================
-    # Other VMs and Physical Machines
+    # Другие VM и физические машины
     # ============================================
     ai = {
       # Desktop PC
       iface = "enp5s0";
       ipv4 = "192.168.5.100";
-      ipv6 = "fe80::10"; # Link-local Address
+      ipv6 = "fe80::10"; # link-local address
     };
     # akane = {
-    #   # VM (running in macOS's UTM App), using DHCP instead of static ip.
+    #   # VM (macOS UTM App), static ip не используем — DHCP
     #   iface = "enp0s1";
     #   ipv4 = "192.168.64.2";
     # };
@@ -63,12 +63,12 @@ rec {
       ipv4 = "192.168.5.103";
     };
     nozomi = {
-      # LicheePi 4A's wireless interface - RISC-V
+      # Wi‑Fi LicheePi 4A — RISC-V
       iface = "wlan0";
       ipv4 = "192.168.5.104";
     };
     yukina = {
-      # LicheePi 4A's wireless interface - RISC-V
+      # Wi‑Fi LicheePi 4A — RISC-V
       iface = "wlan0";
       ipv4 = "192.168.5.105";
     };
@@ -78,29 +78,29 @@ rec {
       ipv4 = "192.168.5.106";
     };
     suzu = {
-      # Orange Pi 5 - ARM
+      # Orange Pi 5 — ARM
       iface = "end1";
       ipv4 = "192.168.5.107";
     };
     rakushun = {
-      # Orange Pi 5 - ARM
-      # RJ45 port 1 - enP4p65s0
-      # RJ45 port 2 - enP3p49s0
+      # Orange Pi 5 — ARM
+      # RJ45 порт 1 — enP4p65s0
+      # RJ45 порт 2 — enP3p49s0
       iface = "enP4p65s0";
       ipv4 = "192.168.5.179";
     };
     suzi = {
-      iface = "enp2s0"; # fake iface, it's not used by the host
+      iface = "enp2s0"; # фиктивный iface, хост его не использует
       ipv4 = "192.168.5.178";
-      ipv6 = "fe80::8"; # Link-local Address, can be used as default gateway
+      ipv6 = "fe80::8"; # link-local, можно как default gateway
     };
     mitsuha = {
-      iface = "enp2s0"; # fake iface, it's not used by the host
+      iface = "enp2s0"; # фиктивный iface, хост его не использует
       ipv4 = "192.168.5.177";
     };
 
     # ============================================
-    # Kubernetes Clusters
+    # Kubernetes clusters
     # ============================================
     k3s-prod-1-master-1 = {
       # VM
@@ -163,14 +163,14 @@ rec {
   }) hostsAddr;
 
   ssh = {
-    # define the host alias for remote builders
-    # this config will be written to /etc/ssh/ssh_config
+    # алиасы хостов для remote builders
+    # пишется в /etc/ssh/ssh_config
     #
-    # Config format:
-    #   Host —  given the pattern used to match against the host name given on the command line.
-    #   HostName — specify nickname or abbreviation for host
-    #   IdentityFile — the location of your SSH key authentication file for the account.
-    # Format in details:
+    # Формат config:
+    #   Host — pattern для имени из командной строки
+    #   HostName — nickname или сокращение хоста
+    #   IdentityFile — путь к SSH key для аутентификации
+    # Подробнее:
     #   https://www.ssh.com/academy/ssh/config
     extraConfig = (
       lib.attrsets.foldlAttrs (
@@ -184,9 +184,9 @@ rec {
       ) "" hostsAddr
     );
 
-    # this config will be written to /etc/ssh/ssh_known_hosts
+    # пишется в /etc/ssh/ssh_known_hosts
     knownHosts =
-      # Update only the values of the given attribute set.
+      # Обновить только значения в данном attribute set.
       #
       #   mapAttrs
       #   (name: value: ("bar-" + value))
@@ -198,13 +198,13 @@ rec {
           publicKey = value.publicKey;
         })
         {
-          # Define the root user's host key for remote builders, so that nix can verify all the remote builders
+          # host key пользователя root для remote builders, чтобы nix мог проверять remote builders
 
           aquamarine.publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEOXFhFu9Duzp6ZBE288gDZ6VLrNaeWL4kDrFUh9Neic root@aquamarine";
           # ruby.publicKey = "";
           # kana.publicKey = "";
 
-          # ==================================== Other SSH Service's Public Key =======================================
+          # ==================================== Публичные ключи других SSH-сервисов =======================================
 
           # https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints
           "github.com".publicKey =

@@ -9,50 +9,50 @@ let
   mylib = import ../lib { inherit lib; };
   myvars = import ../vars { inherit lib; };
 
-  # Add my custom lib, vars, nixpkgs instance, and all the inputs to specialArgs,
-  # so that I can use them in all my nixos/home-manager modules.
+  # Кастомный lib, vars, инстанс nixpkgs и все inputs в specialArgs,
+  # чтобы использовать их во всех nixos/home-manager модулях.
   genSpecialArgs =
     system:
     inputs
     // {
       inherit mylib myvars;
 
-      # use unstable branch for some packages to get the latest updates
+      # unstable для части пакетов — свежие обновления
       # pkgs-unstable = import inputs.nixpkgs-unstable {
-      #   inherit system; # refer the `system` parameter form outer scope recursively
-      #   # To use chrome, we need to allow the installation of non-free software
+      #   inherit system; # `system` из внешней области видимости
+      #   # Chrome: нужен non-free software
       #   config.allowUnfree = true;
       # };
       pkgs-2505 = import inputs.nixpkgs-2505 {
         inherit system;
-        # To use chrome, we need to allow the installation of non-free software
+        # Chrome: нужен non-free software
         config.allowUnfree = true;
       };
       pkgs-stable = import inputs.nixpkgs-stable {
         inherit system;
-        # To use chrome, we need to allow the installation of non-free software
+        # Chrome: нужен non-free software
         config.allowUnfree = true;
       };
       pkgs-patched = import inputs.nixpkgs-patched {
         inherit system;
-        # to use chrome, we need to allow the installation of non-free software
+        # Chrome: нужен non-free software
         config.allowUnfree = true;
       };
       pkgs-master = import inputs.nixpkgs-master {
         inherit system;
-        # to use chrome, we need to allow the installation of non-free software
+        # Chrome: нужен non-free software
         config.allowUnfree = true;
       };
 
       pkgs-x64 = import nixpkgs {
         system = "x86_64-linux";
 
-        # To use chrome, we need to allow the installation of non-free software
+        # Chrome: нужен non-free software
         config.allowUnfree = true;
       };
     };
 
-  # This is the args for all the haumea modules in this folder.
+  # Аргументы для всех haumea-модулей в этой папке.
   args = {
     inherit
       inputs
@@ -63,7 +63,7 @@ let
       ;
   };
 
-  # modules for each supported system
+  # модули для каждой поддерживаемой system
   nixosSystems = {
     x86_64-linux = import ./x86_64-linux (args // { system = "x86_64-linux"; });
     aarch64-linux = import ./aarch64-linux (args // { system = "aarch64-linux"; });
@@ -74,11 +74,11 @@ let
   nixosSystemValues = builtins.attrValues nixosSystems;
   allSystemValues = nixosSystemValues;
 
-  # Helper function to generate a set of attributes for each system
+  # Вспомогательная функция: attribute set на каждую system
   forAllSystems = func: (nixpkgs.lib.genAttrs allSystemNames func);
 in
 {
-  # Add attribute sets into outputs, for debugging
+  # Доп. attribute sets в outputs для отладки
   debugAttrs = {
     inherit
       nixosSystems
@@ -87,12 +87,12 @@ in
       ;
   };
 
-  # NixOS Hosts
+  # NixOS hosts
   nixosConfigurations = lib.attrsets.mergeAttrsList (
     map (it: it.nixosConfigurations or { }) nixosSystemValues
   );
 
-  # Colmena - remote deployment via SSH
+  # Colmena — remote deploy по SSH
   colmena = {
     meta =
       (
@@ -100,13 +100,13 @@ in
           system = "x86_64-linux";
         in
         {
-          # colmena's default nixpkgs & specialArgs
+          # default nixpkgs и specialArgs у colmena
           nixpkgs = import nixpkgs { inherit system; };
           specialArgs = genSpecialArgs system;
         }
       )
       // {
-        # per-node nixpkgs & specialArgs
+        # nixpkgs и specialArgs per-node
         nodeNixpkgs = lib.attrsets.mergeAttrsList (
           map (it: it.colmenaMeta.nodeNixpkgs or { }) nixosSystemValues
         );
@@ -120,11 +120,11 @@ in
   # Packages
   packages = forAllSystems (system: allSystems.${system}.packages or { });
 
-  # Eval Tests for all NixOS systems.
+  # Eval tests для всех NixOS system.
   evalTests = lib.lists.all (it: it.evalTests == { }) allSystemValues;
 
   checks = forAllSystems (system: {
-    # eval-tests per system
+    # eval-tests на каждую system
     eval-tests = allSystems.${system}.evalTests == { };
 
     pre-commit-check = pre-commit-hooks.lib.${system}.run {
@@ -134,29 +134,29 @@ in
           enable = true;
           settings.width = 100;
         };
-        # Source code spell checker
+        # spell checker для исходников
         typos = {
           enable = true;
           settings = {
-            write = true; # Automatically fix typos
-            configPath = ".typos.toml"; # relative to the flake root
+            write = true; # автоисправление typos
+            configPath = ".typos.toml"; # от корня flake
             exclude = "rime-data/";
           };
         };
         prettier = {
           enable = true;
           settings = {
-            write = true; # Automatically format files
-            configPath = ".prettierrc.yaml"; # relative to the flake root
+            write = true; # автоформатирование файлов
+            configPath = ".prettierrc.yaml"; # от корня flake
           };
         };
-        # deadnix.enable = true; # detect unused variable bindings in `*.nix`
-        # statix.enable = true; # lints and suggestions for Nix code(auto suggestions)
+        # deadnix.enable = true; # неиспользуемые bindings в `*.nix`
+        # statix.enable = true; # линты и подсказки для Nix (auto suggestions)
       };
     };
   });
 
-  # Development Shells
+  # Development shells
   devShells = forAllSystems (
     system:
     let
@@ -165,11 +165,11 @@ in
     {
       default = pkgs.mkShell {
         packages = with pkgs; [
-          # fix https://discourse.nixos.org/t/non-interactive-bash-errors-from-flake-nix-mkshell/33310
+          # см. https://discourse.nixos.org/t/non-interactive-bash-errors-from-flake-nix-mkshell/33310
           bashInteractive
-          # fix `cc` replaced by clang, which causes nvim-treesitter compilation error
+          # `cc` не должен быть только clang — иначе ошибки сборки nvim-treesitter
           gcc
-          # Nix-related
+          # всё про Nix
           nixfmt
           deadnix
           statix
@@ -184,6 +184,6 @@ in
     }
   );
 
-  # Format the nix code in this flake
+  # Форматирование nix в этом flake
   formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
 }

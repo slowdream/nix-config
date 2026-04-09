@@ -1,6 +1,5 @@
-# XDG stands for "Cross-Desktop Group", with X used to mean "cross".
-# It's a bunch of specifications from freedesktop.org intended to standardize desktops and
-# other GUI applications on various systems (primarily Unix-like) to be interoperable:
+# XDG — Cross-Desktop Group (X здесь = cross).
+# Спеки freedesktop.org для единообразия десктопов и GUI на Unix-подобных системах:
 #   https://www.freedesktop.org/wiki/Specifications/
 {
   mylib,
@@ -12,7 +11,7 @@
   imports = mylib.scanPaths ./.;
 
   home.packages = with pkgs; [
-    xdg-utils # provides cli tools such as `xdg-mime` `xdg-open`
+    xdg-utils # `xdg-mime`, `xdg-open` и т.д.
     xdg-user-dirs
   ];
 

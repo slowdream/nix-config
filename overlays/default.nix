@@ -1,14 +1,14 @@
 args:
-# execute and import all overlay files in the current directory with the given args
-builtins.map (f: (import (./. + "/${f}") args)) # execute and import the overlay file
+# выполнить и импортировать все overlay-файлы в этой директории с переданными args
+builtins.map (f: (import (./. + "/${f}") args)) # выполнить и импортировать overlay-файл
 
   (
-    builtins.filter # find all overlay files in the current directory
+    builtins.filter # найти все overlay-файлы в этой директории
 
       (
         f:
-        f != "default.nix" # ignore default.nix
-        && f != "README.md" # ignore README.md
+        f != "default.nix" # пропустить default.nix
+        && f != "README.md" # пропустить README.md
       )
       (builtins.attrNames (builtins.readDir ./.))
   )

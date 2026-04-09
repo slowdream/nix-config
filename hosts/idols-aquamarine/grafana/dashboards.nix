@@ -1,34 +1,31 @@
 {
 
-  # Declaratively provision Grafana's data sources, dashboards, and alerting rules.
-  # Grafana's alerting rules is not recommended to use, we use Prometheus alertmanager instead.
+  # Декларативный provisioning дашбордов (и см. datasources.nix).
+  # Алертинг Grafana не используем — Alertmanager.
   # https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources
   services.grafana.provision.dashboards.settings = {
     apiVersion = 1;
 
     providers = [
       {
-        # <string> an unique provider name. Required
+        # уникальное имя провайдера
         name = "Homelab";
-        # An organization is an entity that helps you isolate users and resources such as dashboards,
-        # annotations, and data sources from each other.
+        # организация — изоляция пользователей и ресурсов
         #
-        # <int> Org id. Default to 1
-        #
-        # If you want to customize this id, you need to create the organizations first.
+        # org id, по умолчанию 1; свой id — сначала создать org в Grafana
         orgId = 1;
-        # <string> provider type. Default to 'file'
+        # тип провайдера, по умолчанию file
         type = "file";
-        # <bool> disable dashboard deletion
+        # запрет удаления дашбордов
         disableDeletion = true;
-        # <int> how often Grafana will scan for changed dashboards
+        # интервал сканирования JSON на диске
         updateIntervalSeconds = 20;
-        # <bool> allow updating provisioned dashboards from the UI
+        # правки provisioned дашбордов из UI
         allowUiUpdates = false;
         options = {
-          # <string, required> path to dashboard files on disk. Required when using the 'file' type
+          # путь к файлам дашбордов (для type=file)
           path = "/etc/grafana/dashboards/";
-          # <bool> use folder names from filesystem to create folders in Grafana
+          # папки на диске → папки в Grafana
           foldersFromFilesStructure = true;
         };
       }

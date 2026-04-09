@@ -9,11 +9,11 @@
   programs.ssh = {
     enable = true;
 
-    # default config
+    # конфиг по умолчанию отключён
     enableDefaultConfig = false;
     matchBlocks."*" = {
       forwardAgent = false;
-      # "a private key that is used during authentication will be added to ssh-agent if it is running"
+      # при аутентификации приватный ключ попадёт в ssh-agent, если он запущен
       addKeysToAgent = "yes";
       compression = true;
       serverAliveInterval = 0;
@@ -27,22 +27,21 @@
 
     matchBlocks = {
       "github.com" = {
-        # "Using SSH over the HTTPS port for GitHub"
-        # "(port 22 is banned by some proxies / firewalls)"
+        # SSH к GitHub через порт HTTPS
+        # (порт 22 иногда режут прокси / firewall)
         hostname = "ssh.github.com";
         port = 443;
         user = "git";
 
-        # Specifies that ssh should only use the identity file explicitly configured above
-        # required to prevent sending default identity files first.
+        # только явно заданный identity, без дефолтных ключей первым
         identitiesOnly = true;
       };
 
       "192.168.*" = {
-        # "allow to securely use local SSH agent to authenticate on the remote machine."
-        # "It has the same effect as adding cli option `ssh -A user@host`"
+        # безопасно использовать локальный SSH agent на удалённой машине
+        # эквивалент `ssh -A user@host`
         forwardAgent = true;
-        # "romantic holds my homelab~"
+        # romantic — ключ для homelab
         identityFile = "/etc/agenix/ssh-key-romantic";
         identitiesOnly = true;
       };

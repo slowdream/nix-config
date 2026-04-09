@@ -11,12 +11,12 @@
   ];
 
   boot.loader = {
-    # depending on how you configured your disk mounts, change this to /boot or /boot/efi.
+    # при другой разметке диска — /boot или /boot/efi
     efi.efiSysMountPoint = "/boot/";
     efi.canTouchEfiVariables = true;
     systemd-boot.enable = true;
   };
-  # clear /tmp on boot to get a stateless /tmp directory.
+  # чистый /tmp при каждой загрузке
   boot.tmp.cleanOnBoot = true;
 
   boot.initrd.availableKernelModules = [
@@ -31,9 +31,9 @@
     "kvm-amd"
     "vfio-pci"
   ];
-  boot.extraModprobeConfig = "options kvm_amd nested=1"; # for amd cpu
+  boot.extraModprobeConfig = "options kvm_amd nested=1"; # nested KVM на AMD
 
-  # supported file systems, so we can mount any removable disks with these filesystems
+  # ФС для съёмных дисков
   boot.supportedFilesystems = [
     "ext4"
     "btrfs"
@@ -43,10 +43,8 @@
     "vfat"
   ];
 
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  # DHCP на ethernet/wifi: ок со scripted networking;
+  # с systemd-networkd лучше явно `networking.interfaces.<iface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp5s0.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;

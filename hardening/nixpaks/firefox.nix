@@ -1,8 +1,8 @@
-# Refer:
-# - Flatpak manifest's docs:
+# Ссылки:
+# - Flatpak manifest:
 #   - https://docs.flatpak.org/en/latest/manifests.html
 #   - https://docs.flatpak.org/en/latest/sandbox-permissions.html
-# - Firefox's flatpak manifest: https://hg.mozilla.org/mozilla-central/file/tip/taskcluster/docker/firefox-flatpak/runme.sh#l151
+# - Firefox flatpak: https://hg.mozilla.org/mozilla-central/file/tip/taskcluster/docker/firefox-flatpak/runme.sh#l151
 {
   lib,
   firefox,
@@ -35,12 +35,12 @@ let
         ];
 
         bubblewrap = {
-          # To trace all the home files Firefox accesses, you can use the following nushell command:
+          # Трассировка доступа Firefox к файлам в home:
           #   just trace-access firefox
-          # See the Justfile in the root of this repository for more information.
+          # См. Justfile в корне репозитория.
           bind.rw = [
-            # given the read write permission to the following directories.
-            # NOTE: sloth.mkdir is used to create the directory if it does not exist!
+            # RW на каталоги ниже
+            # NOTE: sloth.mkdir создаёт каталог, если его нет
             (sloth.mkdir (sloth.concat' sloth.homeDir "/.mozilla"))
 
             sloth.xdgDocumentsDir
@@ -56,13 +56,13 @@ let
               "/app/etc/firefox"
             ]
 
-            # ================ for browserpass extension ===============================
+            # ================ расширение browserpass ===============================
             "/etc/gnupg"
-            (sloth.concat' sloth.homeDir "/.gnupg") # gpg's config
-            (sloth.concat' sloth.homeDir "/.local/share/password-store") # my secrets
-            (sloth.concat' sloth.runtimeDir "/gnupg") # for access gpg-agent socket
+            (sloth.concat' sloth.homeDir "/.gnupg") # конфиг gpg
+            (sloth.concat' sloth.homeDir "/.local/share/password-store") # pass
+            (sloth.concat' sloth.runtimeDir "/gnupg") # сокет gpg-agent
 
-            # Unsure
+            # точно не ясно, оставляем
             (sloth.concat' sloth.xdgConfigHome "/dconf")
           ];
 

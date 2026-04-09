@@ -21,7 +21,7 @@
         "x86_64-linux"
         "aarch64-linux"
       ];
-      # Helper function to generate a set of attributes for each system
+      # Вспомогательная функция: attribute set на каждую system
       forAllSystems = func: (nixpkgs.lib.genAttrs systems func);
     in
     {
@@ -39,13 +39,13 @@
             nativeBuildInputs = with pkgs; [
               pkg-config
               clang
-              # lld is much faster at linking than the default Rust linker
+              # lld быстрее линкует, чем default Rust linker
               lld
             ];
             buildInputs =
               with pkgs;
               [
-                # rust toolchain
+                # toolchain Rust
                 (pkgs.fenix.complete.withComponents [
                   "cargo"
                   "clippy"
@@ -53,7 +53,7 @@
                   "rustc"
                   "rustfmt"
                 ])
-                # use rust-analyzer-nightly for better type inference
+                # rust-analyzer-nightly — лучше type inference
                 rust-analyzer-nightly
                 cargo-watch
               ]
@@ -65,9 +65,9 @@
                 libX11
                 libXcursor
                 libXi
-                libXrandr # To use the x11 feature
+                libXrandr # x11 feature
                 libxkbcommon
-                wayland # To use the wayland feature
+                wayland # wayland feature
               ])
               ;
             LD_LIBRARY_PATH = lib.makeLibraryPath buildInputs;

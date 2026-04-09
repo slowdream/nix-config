@@ -4,7 +4,7 @@
     (modulesPath + "/profiles/hardened.nix")
   ];
 
-  # disable coredump that could be exploited later
-  # and also slow down the system when something crash
+  # отключить coredump — иначе их можно эксплуатировать позже,
+  # плюс система тормозит при падении процессов
   systemd.coredump.enable = false;
 }

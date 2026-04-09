@@ -8,44 +8,44 @@
   home.packages =
     with pkgs;
     [
-      # creative
-      # gimp      # image editing, I prefer using figma in browser instead of this one
-      inkscape # vector graphics
-      krita # digital painting
-      musescore # music notation
-      # reaper # audio production
-      # sonic-pi # music programming
+      # творчество
+      # gimp      # растровый редактор; удобнее Figma в браузере
+      inkscape # векторная графика
+      krita # цифровая живопись
+      musescore # ноты
+      # reaper # аудио
+      # sonic-pi # музыка и код
 
-      # 2d game design
-      # aseprite # Animated sprite editor & pixel art tool
+      # 2d-игры
+      # aseprite # пиксель-арт и спрайты
 
-      # this app consumes a lot of storage, so do not install it currently
-      # kicad     # 3d printing, electrical engineering
+      # много места на диске — пока не ставим
+      # kicad     # печатки, 3d-печать
 
-      # Astronomy
-      stellarium # See what you can see with your eyes, binoculars or a small telescope.
-      celestia # Real-time 3D simulation of space, travel throughout the solar system.
+      # Астрономия
+      stellarium # небо глазами, биноклем или небольшим телескопом
+      celestia # 3D-солнечная система в реальном времени
     ]
     ++ (lib.optionals pkgs.stdenv.isx86_64 [
       # https://github.com/edolstra/nix-warez/blob/master/blender/flake.nix
-      blender-bin.packages.${pkgs.stdenv.hostPlatform.system}.blender_4_2 # 3d modeling
+      blender-bin.packages.${pkgs.stdenv.hostPlatform.system}.blender_4_2 # 3d
 
-      ldtk # A modern, versatile 2D level editor
+      ldtk # 2D level editor
 
       # fpga
       # python313Packages.apycula # gowin fpga
       # yosys # fpga synthesis
-      # nextpnr # fpga place and route
+      # nextpnr # размещение и разводка (FPGA)
       # openfpgaloader # fpga programming
       # nur-ryan4yin.packages.${pkgs.stdenv.hostPlatform.system}.gowin-eda-edu-ide # app: `gowin-env` => `gw_ide` / `gw_pack` / ...
     ]);
 
   programs = {
-    # live streaming
+    # стриминг
     obs-studio = {
       enable = pkgs.stdenv.isx86_64;
       plugins = with pkgs.obs-studio-plugins; [
-        # screen capture
+        # захват экрана
         wlrobs
         # obs-ndi
         # obs-nvfbc

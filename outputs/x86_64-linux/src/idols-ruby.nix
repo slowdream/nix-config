@@ -1,7 +1,7 @@
 {
-  # NOTE: the args not used in this file CAN NOT be removed!
-  # because haumea pass argument lazily,
-  # and these arguments are used in the functions like `mylib.nixosSystem`, `mylib.colmenaSystem`, etc.
+  # ВАЖНО: неиспользуемые в этом файле args удалять нельзя:
+  # haumea передаёт аргументы лениво,
+  # они используются в `mylib.nixosSystem`, `mylib.colmenaSystem` и т.д.
   inputs,
   lib,
   mylib,
@@ -22,17 +22,17 @@ let
   modules = {
     nixos-modules =
       (map mylib.relativeToRoot [
-        # common
+        # общие
         "secrets/nixos.nix"
         "modules/nixos/server/server.nix"
         "modules/nixos/server/kubevirt-hardware-configuration.nix"
-        # host specific
+        # только этот хост
         "hosts/idols-${name}"
       ])
       ++ [
       ];
     home-modules = map mylib.relativeToRoot [
-      # host specific
+      # только этот хост
       "home/hosts/linux/idols-${name}.nix"
     ];
   };
@@ -46,6 +46,6 @@ in
 
   packages.${name} = inputs.self.nixosConfigurations.${name}.config.formats.kubevirt;
 
-  # nixos tests
+  # тесты NixOS
   packages."${name}-nixos-tests" = import ../nixos-tests/idols-ruby.nix systemArgs;
 }

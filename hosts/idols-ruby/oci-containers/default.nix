@@ -15,11 +15,11 @@
     docker.enable = true;
     # podman = {
     #   enable = true;
-    #   # Create a `docker` alias for podman, to use it as a drop-in replacement
+    #   # алиас `docker` → podman
     #   dockerCompat = true;
-    #   # Required for containers under podman-compose to be able to talk to each other.
+    #   # DNS между контейнерами podman-compose
     #   defaultNetwork.settings.dns_enabled = true;
-    #   # Periodically prune Podman resources
+    #   # периодическая очистка Podman
     #   autoPrune = {
     #     enable = true;
     #     dates = "weekly";

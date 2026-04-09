@@ -17,6 +17,6 @@
     ../../base
   ];
 
-  # Fix: jasper is marked as broken, refusing to evaluate.
+  # Обход: jasper помечен как broken и ломает evaluation
   environment.enableAllTerminfo = lib.mkForce false;
 }

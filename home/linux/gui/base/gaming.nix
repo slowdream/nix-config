@@ -19,33 +19,32 @@ in
 
   config = mkIf cfg.enable {
     # ==========================================================================
-    # Other Optimizations
-    # Usage:
-    #  Lutris - enable advanced options, go to the System options -> Command prefix, add: `mangohud`
-    #  Steam  - add this as a launch option: `mangohud %command%` / `gamemoderun %command%`
+    # Доп. настройки
+    # Lutris: расширенные опции → System → Command prefix: `mangohud`
+    # Steam: в параметрах запуска: `mangohud %command%` / `gamemoderun %command%`
     # ==========================================================================
 
     home.packages =
       (with pkgs; [
         # https://github.com/flightlessmango/MangoHud
-        # a simple overlay program for monitoring FPS, temperature, CPU and GPU load, and more.
+        # оверлей: FPS, температура, загрузка CPU/GPU и т.д.
         mangohud
 
-        # GUI for installing custom Proton versions like GE_Proton
-        # proton - a Wine distribution aimed at gaming
+        # GUI для кастомных Proton (GE_Proton)
+        # proton — Wine для игр
         protonplus
-        # Script to install various redistributable runtime libraries in Wine.
+        # рантаймы для Wine
         winetricks
         # https://github.com/Open-Wine-Components/umu-launcher
-        # a unified launcher for Windows games on Linux
+        # единый лаунчер Windows-игр на Linux
         umu-launcher
 
-        # Sed-like editor for binary files
-        # required by some games to fix problems
+        # sed для бинарников
+        # некоторым играм нужен для фиксов
         bbe
       ])
       ++ (with pkgs-x64; [
-        # a game launcher - great for epic games and gog games
+        # лаунчер игр — Epic, GOG
         # (heroic.override {
         #   extraPkgs = _pkgs: [
         #     pkgs.gamescope # aarch64
@@ -53,7 +52,7 @@ in
         # })
       ]);
 
-    # a GUI game launcher for Steam/GoG/Epic
+    # GUI-лаунчер Steam/GOG/Epic
     # https://lutris.net/games?ordering=-popularity
     programs.lutris = {
       enable = true;

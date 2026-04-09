@@ -1,27 +1,26 @@
 { pkgs, ... }:
 {
   programs.foot = {
-    # foot is designed only for Linux
+    # foot только под Linux
     enable = pkgs.stdenv.isLinux;
 
-    # foot can also be run in a server mode. In this mode, one process hosts multiple windows.
-    # All Wayland communication, VT parsing and rendering is done in the server process.
-    # New windows are opened by running footclient, which remains running until the terminal window is closed.
+    # foot можно в server mode: один процесс, много окон.
+    # Wayland, VT и рендер — в сервере.
+    # Новые окна — `footclient`, живёт пока открыто окно.
     #
-    # Advantages to run foot in server mode including reduced memory footprint and startup time.
-    # The downside is a performance penalty. If one window is very busy with, for example, producing output,
-    # then other windows will suffer. Also, should the server process crash, all windows will be gone.
+    # Плюсы: меньше памяти и быстрее старт.
+    # Минус: одно окно грузит CPU/вывод — страдают остальные; падение сервера — все окна пропадут.
     server.enable = true;
 
     # https://man.archlinux.org/man/foot.ini.5
     settings = {
       main = {
-        term = "foot"; # or "xterm-256color" for maximum compatibility
+        term = "foot"; # или "xterm-256color" для максимальной совместимости
         font = "Maple Mono NF CN:size=13";
-        dpi-aware = "no"; # scale via window manager instead
-        resize-keep-grid = "no"; # do not resize the window on font resizing
+        dpi-aware = "no"; # масштаб через compositor/wm
+        resize-keep-grid = "no"; # не менять размер окна при смене шрифта
 
-        # Spawn a nushell in login mode via `bash`
+        # Запуск nushell в login mode через `bash`
         shell = "${pkgs.bash}/bin/bash --login -c 'nu --login --interactive'";
       };
 

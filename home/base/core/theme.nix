@@ -6,11 +6,11 @@
   ];
 
   catppuccin = {
-    # The default `enable` value for all available programs.
+    # Значение `enable` по умолчанию для всех доступных программ.
     enable = true;
-    # one of "latte", "frappe", "macchiato", "mocha"
+    # одно из: "latte", "frappe", "macchiato", "mocha"
     flavor = "mocha";
-    # one of "blue", "flamingo", "green", "lavender", "maroon", "mauve", "peach", "pink", "red", "rosewater", "sapphire", "sky", "teal", "yellow"
+    # одно из: "blue", "flamingo", "green", "lavender", "maroon", "mauve", "peach", "pink", "red", "rosewater", "sapphire", "sky", "teal", "yellow"
     accent = "pink";
   };
 }

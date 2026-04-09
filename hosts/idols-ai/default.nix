@@ -6,11 +6,11 @@
 }:
 #############################################################
 #
-#  Ai - my main computer, with NixOS + I5-13600KF + RTX 4090 GPU, for gaming & daily use.
+#  Ai — основной ПК: NixOS, i5-13600KF, RTX 4090, игры и повседневное использование
 #
 #############################################################
 let
-  hostName = "ai"; # Define your hostname.
+  hostName = "ai"; # имя хоста
 
   inherit (myvars.networking) mainGateway mainGateway6 nameservers;
   inherit (myvars.networking.hostsAddr.${hostName}) iface ipv4 ipv6;
@@ -20,12 +20,12 @@ in
 {
   imports = [
     disko.nixosModules.default
-    # disks
+    # диски
     ./disko-fs.nix
     ./disko-fs-data.nix
     ./netdev-mount.nix
 
-    # Include the results of the hardware scan.
+    # снимок железа (hardware-configuration)
     ./hardware-configuration.nix
     ./nvidia.nix
     ./ai
@@ -34,7 +34,7 @@ in
     ./secureboot.nix
   ];
 
-  # Zram consumes physical memory for compression, which can cause a deadlock and system hang if the model size approaches the physical memory limit.
+  # zram жрёт RAM под сжатие — при модели ~RAM возможен deadlock
   zramSwap.enable = lib.mkForce false;
 
   services.sunshine.enable = false;
@@ -43,8 +43,8 @@ in
   networking = {
     inherit hostName;
 
-    # we use networkd instead
-    networkmanager.enable = false; # provides nmcli/nmtui for wifi adjustment
+    # systemd-networkd вместо NM
+    networkmanager.enable = false; # nmcli/nmtui для Wi‑Fi при необходимости
     useDHCP = false;
   };
 
@@ -59,8 +59,8 @@ in
         ipv6WithMask
       ];
       DNS = nameservers;
-      DHCP = "ipv6"; # enable DHCPv6 only, so we can get a GUA.
-      IPv6AcceptRA = true; # for Stateless IPv6 Autoconfiguraton (SLAAC)
+      DHCP = "ipv6"; # только DHCPv6 для GUA
+      IPv6AcceptRA = true; # SLAAC
       LinkLocalAddressing = "ipv6";
     };
     routes = [
@@ -71,17 +71,12 @@ in
       {
         Destination = "::/0";
         Gateway = mainGateway6;
-        GatewayOnLink = true; # it's a gateway on local link.
+        GatewayOnLink = true; # шлюз на линке
       }
     ];
     linkConfig.RequiredForOnline = "routable";
   };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.11"; # Did you read the comment?
+  # stateVersion — см. man configuration.nix
+  system.stateVersion = "25.11"; # комментарий выше прочитан?
 }

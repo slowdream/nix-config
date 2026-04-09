@@ -5,11 +5,11 @@
 }:
 #############################################################
 #
-#  Ruby - a NixOS VM running on Proxmox/KubeVirt
+#  Ruby — NixOS VM на Proxmox/KubeVirt
 #
 #############################################################
 let
-  hostName = "ruby"; # Define your hostname.
+  hostName = "ruby"; # имя хоста
 
   inherit (myvars.networking) proxyGateway proxyGateway6 nameservers;
   inherit (myvars.networking.hostsAddr.${hostName}) iface ipv4;
@@ -21,16 +21,16 @@ in
     ./oci-containers
   ];
 
-  # Enable binfmt emulation of aarch64-linux, this is required for cross compilation.
+  # binfmt: эмуляция aarch64-linux для кросс-компиляции
   boot.binfmt.emulatedSystems = [
     "aarch64-linux"
     "riscv64-linux"
   ];
-  # This enables the kernel to preload the emulator binaries when the binfmt registrations are added,
-  # obviating the need to make the emulator binaries available inside chroots and chroot-like sandboxes.
-  boot.binfmt.preferStaticEmulators = true; # required to work with podman
+  # Ядро подгружает статические эмуляторы при регистрации binfmt —
+  # не нужно класть их в chroot (podman и т.п.).
+  boot.binfmt.preferStaticEmulators = true; # для podman
 
-  # supported file systems, so we can mount any removable disks with these filesystems
+  # ФС для съёмных носителей
   boot.supportedFilesystems = [
     "ext4"
     "btrfs"
@@ -43,12 +43,12 @@ in
   ];
 
   boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModprobeConfig = "options kvm_amd nested=1"; # for amd cpu
+  boot.extraModprobeConfig = "options kvm_amd nested=1"; # nested KVM на AMD
 
   networking = {
     inherit hostName;
 
-    # we use networkd instead
+    # networkd вместо NetworkManager
     networkmanager.enable = false;
     useDHCP = false;
   };
@@ -62,8 +62,8 @@ in
       Address = [ ipv4WithMask ];
       # DNS = nameservers;
       DNS = [ proxyGateway ];
-      DHCP = "ipv6"; # enable DHCPv6 only, so we can get a GUA.
-      IPv6AcceptRA = true; # for Stateless IPv6 Autoconfiguraton (SLAAC)
+      DHCP = "ipv6"; # только DHCPv6 для GUA
+      IPv6AcceptRA = true; # SLAAC
       LinkLocalAddressing = "ipv6";
     };
     routes = [
@@ -74,17 +74,12 @@ in
       {
         Destination = "::/0";
         Gateway = proxyGateway6;
-        GatewayOnLink = true; # it's a gateway on local link.
+        GatewayOnLink = true; # шлюз в локальном сегменте
       }
     ];
     linkConfig.RequiredForOnline = "routable";
   };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  # stateVersion — см. комментарий в конфиге Kana / man configuration.nix
+  system.stateVersion = "24.11"; # комментарий выше прочитан?
 }

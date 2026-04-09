@@ -8,14 +8,14 @@
   security.apparmor = {
     enable = true;
 
-    # kill process that are not confined but have apparmor profiles enabled
+    # убивать процессы без confinement, если для них есть профили AppArmor
     killUnconfinedConfinables = true;
     packages = with pkgs; [
       apparmor-utils
       apparmor-profiles
     ];
 
-    # apparmor policies
+    # политики AppArmor
     policies = {
       "default_deny" = {
         enforce = false;

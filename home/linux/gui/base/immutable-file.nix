@@ -6,14 +6,13 @@
 }:
 ##############################################################################################
 #
-#  Provide a option `home.immutable-file`, it works like `home.file` but make the generated file immutable.
+#  Опция `home.immutable-file`: как `home.file`, но файл делается immutable.
 #
-#  Copy from https://github.com/iosmanthus/nixos-config/blob/349917b/modules/immutable-file.nix
+#  Отсюда: https://github.com/iosmanthus/nixos-config/blob/349917b/modules/immutable-file.nix
 #
-#  this module use the `chattr +i` to make the file immutable, `i` indicates `immutable`,
-#  it's a i-node flags only works on Linux.
+#  `chattr +i`, флаг `i` = immutable в inode (только Linux).
 #
-#  TODO not used yet, need to test it.
+#  TODO пока не используется — протестировать.
 #
 ##############################################################################################
 with lib;

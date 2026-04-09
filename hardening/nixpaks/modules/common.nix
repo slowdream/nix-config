@@ -12,13 +12,13 @@ let
 in
 {
   config = {
-    # list all dbus services:
+    # список dbus-сервисов:
     #   ls -al /run/current-system/sw/share/dbus-1/services/
     #   ls -al /etc/profiles/per-user/ryan/share/dbus-1/services/
     dbus = {
-      # `--see`: The bus name can be enumerated by the application.
-      # `--talk`: The application can send messages to, and receive replies and signals from, the bus name.
-      # `--own`: The application can own the bus name
+      # `--see`: имя шины видно приложению при перечислении
+      # `--talk`: сообщения к шине, ответы и сигналы
+      # `--own`: приложение может владеть именем шины
       policies = {
         "${appId}" = "own";
         "${appId}.*" = "own";
@@ -33,24 +33,24 @@ in
         )
       ))
       // {
-        # --- MPRIS Media Control ---
-        # Allows the app to register as a media player. These are derived from the appID.
+        # --- MPRIS ---
+        # Регистрация как медиаплеер; имена от appID
         "org.mpris.MediaPlayer2.${appId}" = "own";
         "org.mpris.MediaPlayer2.${appId}.*" = "own";
         "org.mpris.MediaPlayer2.${lib.lists.last (lib.strings.splitString "." appId)}" = "own";
         "org.mpris.MediaPlayer2.${lib.lists.last (lib.strings.splitString "." appId)}.*" = "own";
 
-        # --- General Desktop Integration ---
-        "com.canonical.AppMenu.Registrar" = "talk"; # For Ubuntu AppMenu
+        # --- интеграция с десктопом ---
+        "com.canonical.AppMenu.Registrar" = "talk"; # Ubuntu AppMenu
         "org.freedesktop.FileManager1" = "talk";
         "org.freedesktop.Notifications" = "talk";
         "org.kde.StatusNotifierWatcher" = "talk";
         "org.gnome.Shell.Screencast" = "talk";
 
-        # --- Accessibility (a11y) 无障碍服务 ---
+        # --- a11y ---
         "org.a11y.Bus" = "see";
 
-        # --- Portal Access ---
+        # --- порталы ---
         # "org.freedesktop.portal.*" = "talk";
         "org.freedesktop.portal.Documents" = "talk";
         "org.freedesktop.portal.FileTransfer" = "talk";
@@ -62,21 +62,21 @@ in
         "org.freedesktop.portal.Print" = "talk";
         "org.freedesktop.portal.Request" = "see";
 
-        # --- Input Method Portals ---
+        # --- порталы IME ---
         "org.freedesktop.portal.Fcitx" = "talk";
         "org.freedesktop.portal.Fcitx.*" = "talk";
         "org.freedesktop.portal.IBus" = "talk";
         "org.freedesktop.portal.IBus.*" = "talk";
       };
-      # '--call' rules permit specific method calls on D-Bus interfaces.
+      # `--call`: разрешённые вызовы методов D-Bus
       rules.call = {
-        # --- Accessibility (a11y) 无障碍服务 ---
+        # --- a11y ---
         "org.a11y.Bus" = [
           "org.a11y.Bus.GetAddress@/org/a11y/bus"
           "org.freedesktop.DBus.Properties.Get@/org/a11y/bus"
         ];
 
-        # --- General Portal Rules ---
+        # --- общие порталы ---
         "org.freedesktop.FileManager1" = [ "*" ];
         "org.freedesktop.Notifications.*" = [ "*" ];
         "org.freedesktop.portal.Documents" = [ "*" ];
@@ -93,10 +93,10 @@ in
         "org.freedesktop.portal.Print" = [ "*" ];
         "org.freedesktop.portal.Request" = [ "*" ];
 
-        # --- Main Desktop Portal Interface ---
-        # A comprehensive list of permissions for interacting with the desktop environment.
+        # --- главный интерфейс портала рабочего стола ---
+        # Права на взаимодействие с окружением
         "org.freedesktop.portal.Desktop" = [
-          # Properties & Settings
+          # свойства и настройки
           "org.freedesktop.DBus.Properties.GetAll"
           "org.freedesktop.DBus.Properties.Get@/org/freedesktop/portal/desktop"
           "org.freedesktop.portal.Session.Close"
@@ -104,29 +104,29 @@ in
           "org.freedesktop.portal.Settings.Read"
           "org.freedesktop.portal.Account.GetUserInformation"
 
-          # Network & Proxy
+          # сеть и прокси
           "org.freedesktop.portal.NetworkMonitor"
           "org.freedesktop.portal.NetworkMonitor.*"
           "org.freedesktop.portal.ProxyResolver.Lookup"
           "org.freedesktop.portal.ProxyResolver.Lookup.*"
 
-          # Screenshot / Screen Capture & Sharing
+          # скриншот / захват экрана
           "org.freedesktop.portal.ScreenCast"
           "org.freedesktop.portal.ScreenCast.*"
           "org.freedesktop.portal.Screenshot"
           "org.freedesktop.portal.Screenshot.Screenshot"
 
-          # Device Access(Camera / USB)
+          # устройства (камера / USB)
           "org.freedesktop.portal.Camera"
           "org.freedesktop.portal.Camera.*"
           "org.freedesktop.portal.Usb"
           "org.freedesktop.portal.Usb.*"
 
-          # Remote Desktop
+          # портал удалённого рабочего стола (RemoteDesktop)
           "org.freedesktop.portal.RemoteDesktop"
           "org.freedesktop.portal.RemoteDesktop.*"
 
-          # File Operations
+          # файлы
           "org.freedesktop.portal.Documents"
           "org.freedesktop.portal.Documents.*"
           "org.freedesktop.portal.FileChooser"
@@ -134,45 +134,45 @@ in
           "org.freedesktop.portal.FileTransfer"
           "org.freedesktop.portal.FileTransfer.*"
 
-          # Notifications & Printing
+          # уведомления и печать
           "org.freedesktop.portal.Notification"
           "org.freedesktop.portal.Notification.*"
           "org.freedesktop.portal.Print"
           "org.freedesktop.portal.Print.*"
 
-          # Open/Launch Handlers
+          # открытие URI / запуск
           "org.freedesktop.portal.OpenURI"
           "org.freedesktop.portal.OpenURI.*"
           "org.freedesktop.portal.Email.ComposeEmail"
 
-          # Input Methods
+          # IME
           "org.freedesktop.portal.Fcitx"
           "org.freedesktop.portal.Fcitx.*"
           "org.freedesktop.portal.IBus"
           "org.freedesktop.portal.IBus.*"
 
-          # Secrets (Keyring)
+          # хранилище секретов (Secret / keyring)
           "org.freedesktop.portal.Secret"
           "org.freedesktop.portal.Secret.RetrieveSecret"
 
-          # Get/Update GlobalShortcuts
+          # глобальные горячие клавиши (GlobalShortcuts)
           # "org.freedesktop.portal.GlobalShortcuts"
           # "org.freedesktop.portal.GlobalShortcuts.*"
 
-          # -- get the user's location
+          # геолокация
           # "org.freedesktop.portal.Location"
           # "org.freedesktop.portal.Location.*"
 
-          # -- inhibit the user session from ending, suspending, idling or getting switched away.
+          # inhibit: конец сессии, suspend, idle, смена VT
           "org.freedesktop.portal.Inhibit"
           "org.freedesktop.portal.Inhibit.*"
 
-          # Generic Request Fallback
+          # fallback для Request
           "org.freedesktop.portal.Request"
         ];
       };
 
-      # 'broadcast' rules permit receiving signals from D-Bus names.
+      # `broadcast`: приём сигналов от имён D-Bus
       rules.broadcast = {
         "org.freedesktop.portal.*" = [ "@/org/freedesktop/portal/*" ];
       };

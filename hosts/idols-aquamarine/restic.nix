@@ -9,31 +9,27 @@ in
   services.restic.backups = {
     homelab-backup = {
       inherit passwordFile;
-      initialize = true; # Initialize the repository if it doesn't exist.
-      repository = "rclone:smb-downloads:/Downloads/kubevirt-backup/"; # backup to a rclone remote
+      initialize = true; # создать repo, если нет
+      repository = "rclone:smb-downloads:/Downloads/kubevirt-backup/"; # удалённое хранилище через rclone remote
 
-      # rclone related
+      # rclone
       # rcloneOptions = {
-      #   bwlimit = "100M";  # Limit the bandwidth used by rclone.
+      #   bwlimit = "100M";  # лимит скорости rclone
       # };
       inherit rcloneConfigFile;
 
-      # Which local paths to backup, in addition to ones specified via `dynamicFilesFrom`.
+      # Локальные пути плюс `dynamicFilesFrom`
       paths = [
         "/tmp/restic-backup-temp"
       ];
       #
-      # A script that produces a list of files to back up.  The
-      # results of this command are given to the '--files-from'
-      # option. The result is merged with paths specified via `paths`.
+      # Скрипт → список файлов для `--files-from`, объединяется с `paths`
       # dynamicFilesFrom = "find /home/matt/git -type d -name .git";
       #
-      # Patterns to exclude when backing up. See
-      #   https://restic.readthedocs.io/en/latest/040_backup.html#excluding-files
-      # for details on syntax.
+      # Исключения: https://restic.readthedocs.io/en/latest/040_backup.html#excluding-files
       exclude = [ ];
 
-      # A script that must run before starting the backup process.
+      # Перед backup
       backupPrepareCommand = ''
         ${pkgs.nushell}/bin/nu -c '
           let kubevirt_nodes = [
@@ -49,27 +45,23 @@ in
           }
         '
       '';
-      # A script that must run after finishing the backup process.
+      # После backup
       backupCleanupCommand = "rm -rf /tmp/restic-backup-temp";
 
-      # Extra extended options to be passed to the restic --option flag.
+      # restic --option
       # extraOptions = [];
 
-      # Extra arguments passed to restic backup.
       # extraBackupArgs = [
       #   "--exclude-file=/etc/restic/excludes-list"
       # ];
 
-      # repository = "/mnt/backup-hdd"; # backup to a local directory
-      # When to run the backup. See {manpage}`systemd.timer(5)` for details.
+      # repository = "/mnt/backup-hdd"; # локальный каталог
+      # Расписание: systemd.timer(5)
       timerConfig = {
         OnCalendar = "01:30";
         RandomizedDelaySec = "1h";
       };
-      # A list of options (--keep-* et al.) for 'restic forget --prune',
-      # to automatically prune old snapshots.
-      # The 'forget' command is run *after* the 'backup' command, so
-      # keep that in mind when constructing the --keep-* options.
+      # Опции для `restic forget --prune` после backup
       pruneOpts = [
         "--keep-daily 3"
         "--keep-weekly 3"

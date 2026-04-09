@@ -5,12 +5,12 @@
 }:
 ##############################################################################
 #
-#  Template for KubeVirt's VM, mainly based on:
+#  Шаблон VM под KubeVirt, в основном по:
 #    https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/kubevirt.nix
 #
-#  We write our hardware-configuration.nix, so that we can do some customization more easily.
+#  Свой hardware-configuration.nix — проще кастомизировать.
 #
-#  the url above is used by `nixos-generator` to generate the KubeVirt's qcow2 image file.
+#  URL выше использует `nixos-generator` для qcow2 под KubeVirt.
 #
 ##############################################################################
 {
@@ -19,7 +19,7 @@
   ];
 
   config = {
-    # disable backups in the VM
+    # бэкапы внутри VM не нужны
     services.btrbk.instances = lib.mkForce { };
 
     boot.growPartition = true;
@@ -28,7 +28,7 @@
 
     services.qemuGuest.enable = true; # qemu-guest-agent
     services.openssh.enable = true;
-    # we configure the host via nixos itself, so we don't need the cloud-init
+    # хост настраиваем через nixos — cloud-init не нужен
     services.cloud-init.enable = lib.mkForce false;
     systemd.services."serial-getty@ttyS0".enable = true;
   };

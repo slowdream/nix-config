@@ -12,37 +12,37 @@
         #-- nix
         nil
         nixd
-        statix # Lints and suggestions for the nix programming language
-        deadnix # Find and remove unused code in .nix source files
-        nixfmt # Nix Code Formatter
+        statix # линт и подсказки для Nix
+        deadnix # неиспользуемый код в .nix
+        nixfmt # форматтер Nix
 
-        #-- nickel lang
+        #-- nickel
         nickel
 
-        #-- json like
-        # terraform  # install via brew on macOS
+        #-- json-подобные
+        # terraform  # на macOS через brew
         terraform-ls
         jsonnet
         jsonnet-language-server
-        taplo # TOML language server / formatter / validator
+        taplo # TOML: LSP / formatter / validator
         yaml-language-server
-        actionlint # GitHub Actions linter
+        actionlint # линтер GitHub Actions
 
         #-- dockerfile
-        hadolint # Dockerfile linter
+        hadolint
         dockerfile-language-server
 
         #-- markdown
-        marksman # language server for markdown
-        glow # markdown previewer
-        pandoc # document converter
+        marksman # LSP для markdown
+        glow # превью markdown
+        pandoc # конвертер документов
         pkgs-master.hugo # static site generator
 
         #-- sql
         sqlfluff
 
         #-- protocol buffer
-        buf # linting and formatting
+        buf # lint и format
       ]
       ++
         #-*- General Purpose Languages -*-#
@@ -52,28 +52,26 @@
           cmake-language-server
           gnumake
           checkmake
-          # c/c++ compiler, required by nvim-treesitter!
+          # компилятор c/c++ для nvim-treesitter
           gcc
           gdb
-          # c/c++ tools with clang-tools, the unwrapped version won't
-          # add alias like `cc` and `c++`, so that it won't conflict with gcc
+          # clang-tools: не unwrapped — иначе появятся `cc`/`c++` и конфликт с gcc
           # llvmPackages.clang-unwrapped
           clang-tools
           lldb
-          vscode-extensions.vadimcn.vscode-lldb.adapter # codelldb - debugger
+          vscode-extensions.vadimcn.vscode-lldb.adapter # codelldb
 
           #-- python
-          uv # python project package manager
-          pipx # Install and Run Python Applications in Isolated Environments
+          uv # менеджер пакетов проекта
+          pipx # изолированные Python-приложения
           (python313.withPackages (
             ps: with ps; [
-              # python language server
               pyright
               ruff
 
-              black # python formatter
+              black # formatter
 
-              # my commonly used python packages
+              # часто используемые пакеты
               jupyter
               ipython
               pandas
@@ -82,28 +80,28 @@
               pyyaml
               boto3
 
-              # misc
-              protobuf # protocol buffer compiler
+              # прочее
+              protobuf
               numpy
             ]
           ))
 
           #-- rust
-          # we'd better use the rust-overlays for rust development
+          # для разработки лучше rust-overlay
           pkgs-master.rustc
           pkgs-master.rust-analyzer
-          pkgs-master.cargo # rust package manager
+          pkgs-master.cargo
           pkgs-master.rustfmt
-          pkgs-master.clippy # rust linter
+          pkgs-master.clippy
 
           #-- golang
           go
           gomodifytags
-          iferr # generate error handling code for go
-          impl # generate function implementation for go
-          gotools # contains tools like: godoc, goimports, etc.
-          gopls # go language server
-          delve # go debugger
+          iferr # шаблоны обработки ошибок
+          impl # заготовки реализаций
+          gotools # godoc, goimports, …
+          gopls
+          delve
 
           # -- java
           jdk17
@@ -124,19 +122,19 @@
           shellcheck
           shfmt
         ]
-      #-*- Web Development -*-#
+      #-*- Web -*-#
       ++ [
         nodejs_24
         pnpm
         typescript
         typescript-language-server
         bun
-        # HTML/CSS/JSON/ESLint language servers extracted from vscode
+        # LSP из vscode: HTML/CSS/JSON/ESLint
         vscode-langservers-extracted
         tailwindcss-language-server
         emmet-ls
       ]
-      # -*- Lisp like Languages -*-#
+      # -*- Lisp -*-#
       # ++ [
       #   guile
       #   racket-minimal
@@ -148,16 +146,16 @@
       #   )
       # ]
       ++ [
-        proselint # English prose linter
+        proselint # линтер английской прозы
 
         #-- verilog / systemverilog
         verible
 
-        #-- Optional Requirements:
-        prettier # common code formatter
+        #-- опционально
+        prettier
         fzf
-        gdu # disk usage analyzer, required by AstroNvim
-        (ripgrep.override { withPCRE2 = true; }) # recursively searches directories for a regex pattern
+        gdu # для AstroNvim
+        (ripgrep.override { withPCRE2 = true; }) # поиск по regex в дереве
       ]
     );
 }

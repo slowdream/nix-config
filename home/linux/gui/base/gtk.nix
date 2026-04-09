@@ -4,9 +4,9 @@
   ...
 }:
 {
-  # If your themes for mouse cursor, icons or windows don’t load correctly,
-  # try setting them with home.pointerCursor and gtk.theme,
-  # which enable a bunch of compatibility options that should make the themes load in all situations.
+  # Если курсор, иконки или тема окон не подхватываются,
+  # задайте их через home.pointerCursor и gtk.theme —
+  # включится совместимость, темы грузятся стабильнее.
 
   home.pointerCursor = {
     gtk.enable = true;
@@ -16,15 +16,15 @@
     size = 24;
   };
 
-  # set dpi for 4k monitor
+  # DPI для 4K
   xresources.properties = {
-    # dpi for Xorg's font
+    # DPI шрифтов Xorg
     "Xft.dpi" = 150;
-    # or set a generic dpi
+    # или общий DPI
     "*.dpi" = 150;
   };
 
-  # gtk's theme settings, generate files:
+  # GTK: генерит
   #   1. ~/.gtkrc-2.0
   #   2. ~/.config/gtk-3.0/settings.ini
   #   3. ~/.config/gtk-4.0/settings.ini

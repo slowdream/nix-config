@@ -4,17 +4,17 @@
   ...
 }:
 {
-  # Since victoriametrics use DynamicUser, the user & group do not exists before the service starts.
-  # this group is used as a supplementary Unix group for the service to access our data dir(/data/apps/xxx)
+  # VictoriaMetrics с DynamicUser — до старта сервиса user/group нет.
+  # Доп. группа для доступа к /data/apps/…
   users.groups.victoriametrics-data = { };
 
-  # Workaround for victoriametrics to store data in another place
+  # Каталог данных вне дефолта
   # https://www.freedesktop.org/software/systemd/man/latest/tmpfiles.d.html#Type
   systemd.tmpfiles.rules = [
     "d /data/apps/victoriametrics 0770 root victoriametrics-data - -"
   ];
 
-  # Symlinks do not work with DynamicUser, so we should use bind mount here.
+  # С symlink DynamicUser не работает — bind mount
   # https://github.com/systemd/systemd/issues/25097#issuecomment-1929074961
   systemd.services.victoriametrics.serviceConfig = {
     SupplementaryGroups = [ "victoriametrics-data" ];
@@ -28,17 +28,16 @@
     retentionPeriod = "30d";
 
     extraOptions = [
-      # Allowed percent of system memory VictoriaMetrics caches may occupy.
+      # лимит RAM под кэши VM (%)
       "-memory.allowedPercent=50"
     ];
-    # Directory below /var/lib to store victoriametrics metrics data.
     stateDir = "victoriametrics";
 
-    # specifies a set of targets and parameters describing how to scrape metrics from them.
+    # scrape_configs Prometheus-формата
     # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
     prometheusConfig = {
       scrape_configs = [
-        # --- Homelab Applications --- #
+        # --- приложения homelab --- #
 
         {
           job_name = "dnsmasq-exporter";
@@ -122,7 +121,7 @@
           metrics_path = "/metrics";
           static_configs = [
             {
-              # scrape vm itself
+              # self-scrape самой VictoriaMetrics
               targets = [ "localhost:9090" ];
               labels.type = "app";
               labels.app = "victoriametrics";
@@ -133,7 +132,7 @@
           ];
         }
       ]
-      # --- Hosts --- #
+      # --- Хосты --- #
       ++ (lib.attrsets.foldlAttrs (
         acc: hostname: addr:
         acc
@@ -144,7 +143,7 @@
             metrics_path = "/metrics";
             static_configs = [
               {
-                # All my NixOS hosts.
+                # все NixOS-хосты из myvars
                 targets = [ "${addr.ipv4}:9100" ];
                 labels.type = "node";
                 labels.host = hostname;

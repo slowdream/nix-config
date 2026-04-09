@@ -11,28 +11,28 @@ in
   programs.password-store = {
     enable = true;
     package = pkgs.pass.withExtensions (exts: [
-      # support for one-time-password (OTP) tokens
-      # NOTE: Saving the password and OTP together runs counter to the purpose of secondary verification!
+      # OTP-токены
+      # NOTE: хранить пароль и OTP вместе противоречит идее второго фактора!
       # exts.pass-otp
 
-      # exts.pass-import # a generic importer tool from other password managers
-      exts.pass-update # an easy flow for updating passwords
+      # exts.pass-import # импорт из других менеджеров
+      exts.pass-update # простой сценарий обновления паролей
     ]);
-    # See the “Environment variables” section of pass(1) and the extension man pages for more information about the available keys.
+    # См. pass(1) «Environment variables» и man страниц расширений.
     settings = {
       PASSWORD_STORE_DIR = passwordStoreDir;
-      # Overrides the default gpg key identification set by init.
-      # Hexadecimal key signature is recommended.
-      # Multiple keys may be specified separated by spaces.
+      # Переопределяет gpg key id из init.
+      # Лучше hex fingerprint.
+      # Несколько ключей — через пробел.
       PASSWORD_STORE_KEY = lib.strings.concatStringsSep " " [
-        "EF824EB73CFD6CC7" # E - Ryan Yin (For pass & ssh only) <ryan4yin@linux.com>
+        "EF824EB73CFD6CC7" # E — Ryan Yin (только pass и SSH) <ryan4yin@linux.com>
       ];
-      # all .gpg-id files and non-system extension files must be signed using a detached signature using the GPG key specified by
-      #   the full 40 character upper-case fingerprint in this variable.
-      # If multiple fingerprints are specified, each separated by a whitespace character, then signatures must match at least one.
-      # The init command will keep signatures of .gpg-id files up to date.
+      # Все .gpg-id и несистемные расширения подписываются detached signature этим GPG-ключом
+      #   (40 символов fingerprint, upper-case).
+      # Несколько fingerprint — через пробел, подпись должна совпасть хотя бы с одним.
+      # init поддерживает подписи .gpg-id в актуальном состоянии.
       PASSWORD_STORE_SIGNING_KEY = lib.strings.concatStringsSep " " [
-        "C2A313F98166C942" # S - Ryan Yin (For pass & ssh only) <ryan4yin@linux.com>
+        "C2A313F98166C942" # S — Ryan Yin (только pass и SSH) <ryan4yin@linux.com>
       ];
       PASSWORD_STORE_CLIP_TIME = "60";
       PASSWORD_STORE_GENERATED_LENGTH = "12";
@@ -40,8 +40,8 @@ in
     };
   };
 
-  # password-store extensions for browsers
-  # you need to install the browser extension for this to work
+  # расширения password-store для браузеров
+  # нужно поставить расширение в браузер
   # https://github.com/browserpass/browserpass-extension
   programs.browserpass = {
     enable = true;

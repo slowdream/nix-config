@@ -15,7 +15,7 @@ in
     isSystemUser = true;
   };
 
-  # Install the homepage-dashboard configuration files
+  # Раскладка конфигов homepage-dashboard
   system.activationScripts.installHomepageDashboardConfig = ''
     mkdir -p ${configDir}
     ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F644 ${./config}/ ${configDir}/
@@ -24,12 +24,12 @@ in
 
   # https://github.com/NixOS/nixpkgs/blob/nixos-25.11/nixos/modules/virtualisation/oci-containers.nix
   virtualisation.oci-containers.containers = {
-    # check its logs via `journalctl -u podman-homepage`
+    # логи: `journalctl -u podman-homepage`
     homepage = {
       hostname = "homepage";
       image = "ghcr.io/gethomepage/homepage:latest";
       ports = [ "127.0.0.1:54401:3000" ];
-      # https://github.com/louislam/uptime-kuma/wiki/Environment-Variables
+      # https://github.com/gethomepage/homepage/wiki/Environment-Variables
       environment = {
         # "PUID" = config.users.users.${user}.uid;
         # "PGID" = config.users.groups.${user}.gid;

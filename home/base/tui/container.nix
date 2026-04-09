@@ -7,29 +7,29 @@
 {
   home.packages = with pkgs; [
     podman-compose
-    dive # explore docker layers
-    lazydocker # Docker terminal UI.
-    skopeo # copy/sync images between registries and local storage
-    go-containerregistry # provides `crane` & `gcrane`, it's similar to skopeo
+    dive # слои образа Docker
+    lazydocker # Docker TUI
+    skopeo # копирование/синхронизация образов между registry и локально
+    go-containerregistry # `crane` и `gcrane`, по смыслу как skopeo
 
     kubectl
-    kubectx # kubectx & kubens
-    kubie # same as kubectl-ctx, but per-shell (won’t touch kubeconfig).
+    kubectx # kubectx и kubens
+    kubie # как kubectl-ctx, но per-shell (kubeconfig не трогает глобально).
     kubectl-view-secret # kubectl view-secret
     kubectl-tree # kubectl tree
-    kubectl-node-shell # exec into node
-    kubepug # kubernetes pre upgrade checker
-    kubectl-cnpg # cloudnative-pg's cli tool
+    kubectl-node-shell # exec на ноду
+    kubepug # проверка перед апгрейдом kubernetes
+    kubectl-cnpg # CLI cloudnative-pg
 
     kubebuilder
     istioctl
-    clusterctl # for kubernetes cluster-api
+    clusterctl # kubernetes cluster-api
     kubevirt # virtctl
     pkgs-2505.kubernetes-helm
     fluxcd
     # argocd
 
-    ko # build go project to container image
+    ko # сборка Go-проекта в образ
   ];
 
   programs.k9s.enable = true;

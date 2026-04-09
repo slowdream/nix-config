@@ -1,85 +1,84 @@
 { pkgs, ... }:
 {
-  # for security reasons, do not load neovim's user config
-  # since EDITOR may be used to edit some critical files
+  # security: не подхватывать user config neovim — EDITOR может править критичные файлы
   environment.variables.EDITOR = "nvim --clean";
 
   environment.systemPackages = with pkgs; [
-    # core tools
+    # базовые утилиты
     nushell # nushell
     fastfetch
-    neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    neovim # не забудьте редактор для configuration.nix; nano ставится по умолчанию
     gnumake # Makefile
-    just # a command runner like gnumake, but simpler
-    git # used by nix flakes
-    git-lfs # used by huggingface models
+    just # runner команд вроде gmake, проще
+    git # для nix flakes
+    git-lfs # для huggingface models
 
-    # system monitoring
-    procs # a moreden ps
+    # мониторинг системы
+    procs # современный ps
     btop
 
-    # archives
+    # архивы
     zip
     xz
     zstd
     unzipNLS
     p7zip
 
-    # Text Processing
+    # текст
     # Docs: https://github.com/learnbyexample/Command-line-text-processing
-    gnugrep # GNU grep, provides `grep`/`egrep`/`fgrep`
-    gawk # GNU awk, a pattern scanning and processing language
+    gnugrep # GNU grep: `grep`/`egrep`/`fgrep`
+    gawk # GNU awk
     gnutar
-    gnused # GNU sed, very powerful(mainly for replacing text in files)
-    sad # CLI search and replace, just like sed, but with diff preview.
+    gnused # GNU sed
+    sad # search/replace как sed, с diff preview
 
-    jq # A lightweight and flexible command-line JSON processor
-    yq-go # yaml processor https://github.com/mikefarah/yq
-    jc # converts the output of popular cli tools & file-types to JSON, YAML
+    jq # JSON в CLI
+    yq-go # yaml https://github.com/mikefarah/yq
+    jc # вывод популярных CLI → JSON/YAML
 
-    # Interactively filter its input using fuzzy searching, not limit to filenames.
+    # fuzzy filter по stdin, не только имена файлов
     fzf
-    # search for files by name, faster than find
+    # поиск файлов по имени, быстрее find
     fd
     findutils
-    # search for files by its content, replacement of grep
+    # поиск по содержимому, вместо grep
     (ripgrep.override { withPCRE2 = true; })
 
-    duf # Disk Usage/Free Utility - a better 'df' alternative
-    dust # A more intuitive version of `du` in rust
-    gdu # disk usage analyzer(replacement of `du`)
-    ncdu # analyzer your disk usage Interactively, via TUI(replacement of `du`)
+    duf # лучше df
+    dust # du нагляднее
+    gdu # анализ диска (du)
+    ncdu # du интерактивно, TUI
 
-    # networking tools
-    mtr # A network diagnostic tool(traceroute)
-    gping # ping, but with a graph(TUI)
+    # сеть
+    mtr # диагностика сети (traceroute)
+    gping # ping с графиком (TUI)
     dnsutils # `dig` + `nslookup`
-    ldns # replacement of `dig`, it provide the command `drill`
-    doggo # DNS client for humans
+    ldns # вместо `dig`, команда `drill`
+    doggo # DNS client
     wget
     curl
-    curlie # curl with httpie
+    curlie # curl в стиле httpie
     httpie
-    aria2 # A lightweight multi-protocol & multi-source command-line download utility
-    socat # replacement of openbsd-netcat
-    nmap # A utility for network discovery and security auditing
-    ipcalc # it is a calculator for the IPv4/v6 addresses
-    iperf3 # network performance test
-    hyperfine # command-line benchmarking tool
-    tcpdump # network sniffer
+    aria2 # загрузки multi-protocol
+    socat # вместо openbsd-netcat
+    nmap # сеть / аудит
+    ipcalc # калькулятор IPv4/v6
+    iperf3 # пропускная способность
+    hyperfine # бенчмарк CLI
+    tcpdump # сниффер
 
-    # file transfer
+    # передача файлов
     rsync
-    croc # File transfer between computers securely and easily
+    croc # обмен между машинами
 
     # security
     libargon2
     openssl
 
-    # misc
+    # прочее
     file
     which
     tree
-    tealdeer # a very fast version of tldr
+    tealdeer # быстрый tldr
   ];
 }

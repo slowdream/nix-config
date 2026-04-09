@@ -2,23 +2,20 @@
 {
   # https://github.com/Mic92/nix-ld
   #
-  # nix-ld will install itself at `/lib64/ld-linux-x86-64.so.2` so that
-  # it can be used as the dynamic linker for non-NixOS binaries.
+  # nix-ld ставит себя в `/lib64/ld-linux-x86-64.so.2` как dynamic linker
+  # для бинарей не из NixOS.
   #
-  # nix-ld works like a middleware between the actual link loader located at `/nix/store/.../ld-linux-x86-64.so.2`
-  # and the non-NixOS binaries. It will:
+  # Прослойка между настоящим loader в `/nix/store/.../ld-linux-x86-64.so.2`
+  # и чужим бинарём:
   #
-  #   1. read the `NIX_LD` environment variable and use it to find the actual link loader.
-  #   2. read the `NIX_LD_LIBRARY_PATH` environment variable and use it to set the `LD_LIBRARY_PATH` environment variable
-  #      for the actual link loader.
+  #   1. `NIX_LD` — путь к реальному loader
+  #   2. `NIX_LD_LIBRARY_PATH` → `LD_LIBRARY_PATH` для loader
   #
-  # nix-ld's nixos module will set default values for `NIX_LD` and `NIX_LD_LIBRARY_PATH` environment variables, so
-  # it can work out of the box:
+  # Модуль NixOS задаёт дефолты `NIX_LD` и `NIX_LD_LIBRARY_PATH`:
   #
   #  - https://github.com/NixOS/nixpkgs/blob/nixos-25.11/nixos/modules/programs/nix-ld.nix#L37-L40
   #
-  # You can overwrite `NIX_LD_LIBRARY_PATH` in the environment where you run the non-NixOS binaries to customize the
-  # search path for shared libraries.
+  # `NIX_LD_LIBRARY_PATH` можно переопределить в окружении запуска.
   programs.nix-ld = {
     enable = true;
     libraries = with pkgs; [
@@ -32,8 +29,8 @@
 
     #-- python
     conda
-    uv # python project package manager
-    pipx # Install and Run Python Applications in Isolated Environments
+    uv # менеджер пакетов проекта
+    pipx # изолированные Python-приложения
     (python313.withPackages (
       ps: with ps; [
         pandas
@@ -42,17 +39,17 @@
         pyyaml
         numpy
 
-        # model downloaders
+        # загрузчики моделей
         huggingface-hub
         modelscope
       ]
     ))
 
     rustc
-    cargo # rust package manager
+    cargo
     go
 
-    # cryptography
+    # crypto
     age
     sops
     rclone
@@ -66,16 +63,16 @@
     fluxcd
     terraform
 
-    # db related
+    # БД
     pgcli
     mongosh
     sqlite
 
-    yt-dlp # youtube/bilibili/soundcloud/... video/music downloader
+    yt-dlp # youtube/bilibili/soundcloud/…
 
-    # need to run `conda-install` before using it
-    # need to run `conda-shell` before using command `conda`
-    # conda is not available for MacOS
+    # перед conda: `conda-install`
+    # перед командой conda: `conda-shell`
+    # на macOS conda нет
     conda
   ];
 }

@@ -1,7 +1,7 @@
 {
-  # NOTE: the args not used in this file CAN NOT be removed!
-  # because haumea pass argument lazily,
-  # and these arguments are used in the functions like `mylib.nixosSystem`, `mylib.colmenaSystem`, etc.
+  # ВАЖНО: неиспользуемые в этом файле args удалять нельзя:
+  # haumea передаёт аргументы лениво,
+  # они используются в `mylib.nixosSystem`, `mylib.colmenaSystem` и т.д.
   inputs,
   lib,
   mylib,
@@ -22,11 +22,11 @@ let
   modules = {
     nixos-modules =
       (map mylib.relativeToRoot [
-        # common
+        # общие
         "secrets/nixos.nix"
         "modules/nixos/server/server-aarch64.nix"
         "modules/nixos/server/qemu-guest.nix"
-        # host specific
+        # только этот хост
         "hosts/idols-${name}"
       ])
       ++ [

@@ -4,8 +4,8 @@
   xdg.configFile = {
     "fcitx5/profile" = {
       source = ./profile;
-      # every time fcitx5 switch input method, it will modify ~/.config/fcitx5/profile,
-      # so we need to force replace it in every rebuild to avoid file conflict.
+      # fcitx5 переписывает ~/.config/fcitx5/profile при смене метода ввода,
+      # поэтому force при каждой сборке — без конфликта файлов
       force = true;
     };
     "mozc/config1.db".source =
@@ -17,19 +17,19 @@
     type = "fcitx5";
     fcitx5.waylandFrontend = true;
     fcitx5.addons = with pkgs; [
-      qt6Packages.fcitx5-configtool # GUI for fcitx5
+      qt6Packages.fcitx5-configtool # GUI fcitx5
       fcitx5-gtk # gtk im module
 
-      # Chinese
-      fcitx5-rime # for flypy chinese input method
-      # fcitx5-chinese-addons # we use rime instead
+      # 中文
+      fcitx5-rime # 小鹤音形等 через rime
+      # fcitx5-chinese-addons # вместо этого rime
 
-      # Japanese
-      # ctrl-i / F7 - convert to takakana
-      # ctrl-u / F6 - convert to hiragana
-      fcitx5-mozc-ut # Moze with UT dictionary
+      # 日本語
+      # ctrl-i / F7 — катакана
+      # ctrl-u / F6 — хирагана
+      fcitx5-mozc-ut # Mozc + UT dictionary
 
-      # Korean
+      # 한국어
       fcitx5-hangul
     ];
   };

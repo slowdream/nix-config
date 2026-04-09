@@ -2,12 +2,11 @@
   pkgs,
   kubeconfigFile,
   tokenFile,
-  # Initialize HA cluster using an embedded etcd datastore.
-  # If you are configuring an HA cluster with an embedded etcd,
-  # the 1st server must have `clusterInit = true`
-  # and other servers must connect to it using `serverAddr`.
+  # Инициализация HA-кластера с встроенным etcd.
+  # При HA с embedded etcd первый server должен иметь `clusterInit = true`,
+  # остальные подключаются через `serverAddr`.
   #
-  # this can be a domain name or an IP address(such as kube-vip's virtual IP)
+  # Здесь может быть доменное имя или IP (например, virtual IP kube-vip)
   masterHost,
   clusterInit ? false,
   kubeletExtraArgs ? [ ],
@@ -30,14 +29,14 @@ in
     kubernetes-helm
     cilium-cli
     fluxcd
-    clusterctl # for kubernetes cluster-api
+    clusterctl # для kubernetes cluster-api
 
-    skopeo # copy/sync images between registries and local storage
-    go-containerregistry # provides `crane` & `gcrane`, it's similar to skopeo
-    dive # explore docker layers
+    skopeo # копирование/синхронизация образов между registry и локальным хранилищем
+    go-containerregistry # даёт `crane` и `gcrane`, по смыслу похоже на skopeo
+    dive # просмотр слоёв docker-образов
   ];
 
-  # Kernel modules required by cilium
+  # Модули ядра, нужные для Cilium
   boot.kernelModules = [
     "ip6_tables"
     "ip6table_mangle"
@@ -62,14 +61,14 @@ in
           "--write-kubeconfig=${kubeconfigFile}"
           "--write-kubeconfig-mode=644"
           "--service-node-port-range=80-32767"
-          "--kube-apiserver-arg='--allow-privileged=true'" # required by kubevirt
+          "--kube-apiserver-arg='--allow-privileged=true'" # нужно для kubevirt
           "--data-dir /var/lib/rancher/k3s"
           "--etcd-expose-metrics=true"
           "--etcd-snapshot-schedule-cron='0 */12 * * *'"
-          # disable some features we don't need
-          "--disable-helm-controller" # we use fluxcd instead
-          "--disable=traefik" # deploy our own ingress controller instead
-          "--disable=servicelb" # we use kube-vip instead
+          # отключаем ненужные фичи
+          "--disable-helm-controller" # вместо этого fluxcd
+          "--disable=traefik" # ставим свой ingress controller
+          "--disable=servicelb" # вместо этого kube-vip
           "--disable-network-policy"
           "--tls-san=${masterHost}"
         ]
@@ -82,15 +81,15 @@ in
       lib.concatStringsSep " " flagList;
   };
 
-  # create symlinks to link k3s's cni directory to the one used by almost all CNI plugins
-  # such as multus, calico, etc.
+  # Симлинки: каталог CNI k3s → тот же путь, что используют большинство CNI-плагинов
+  # (multus, calico и т.д.)
   # https://www.freedesktop.org/software/systemd/man/latest/tmpfiles.d.html#Type
   systemd.tmpfiles.rules = [
     # https://docs.k3s.io/networking/multus-ipams
     "L+ /opt/cni/bin - - - - /var/lib/rancher/k3s/data/cni/"
-    # If you have disabled flannel, you will have to create the directory via a tmpfiles rule
+    # Если flannel отключён, каталог создаём правилом tmpfiles
     "d /var/lib/rancher/k3s/agent/etc/cni/net.d 0751 root root - -"
-    # Link the CNI config directory
+    # Симлинк на каталог конфигов CNI
     "L+ /etc/cni/net.d - - - - /var/lib/rancher/k3s/agent/etc/cni/net.d"
   ];
 }

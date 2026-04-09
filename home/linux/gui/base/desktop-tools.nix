@@ -1,13 +1,13 @@
 { mylib, pkgs, ... }:
 {
-  # wayland related
+  # wayland
   home.sessionVariables = {
-    "NIXOS_OZONE_WL" = "1"; # for any ozone-based browser & electron apps to run on wayland
-    "MOZ_ENABLE_WAYLAND" = "1"; # for firefox to run on wayland
+    "NIXOS_OZONE_WL" = "1"; # ozone-браузеры и Electron на Wayland
+    "MOZ_ENABLE_WAYLAND" = "1"; # Firefox на Wayland
     "MOZ_WEBRENDER" = "1";
-    # enable native Wayland support for most Electron apps
+    # нативный Wayland у большинства Electron
     "ELECTRON_OZONE_PLATFORM_HINT" = "auto";
-    # misc
+    # прочее
     "_JAVA_AWT_WM_NONREPARENTING" = "1";
     "QT_WAYLAND_DISABLE_WINDOWDECORATION" = "1";
     "QT_QPA_PLATFORM" = "wayland";
@@ -17,22 +17,22 @@
   };
 
   home.packages = with pkgs; [
-    swaybg # the wallpaper
-    wl-clipboard # copying and pasting
-    hyprpicker # color picker
+    swaybg # обои
+    wl-clipboard # буфер обмена
+    hyprpicker # пипетка
     brightnessctl
-    # audio
-    alsa-utils # provides amixer/alsamixer/...
-    networkmanagerapplet # provide GUI app: nm-connection-editor
-    # screenshot/screencast
+    # звук
+    alsa-utils # amixer, alsamixer, …
+    networkmanagerapplet # nm-connection-editor
+    # скриншот / запись
     flameshot
-    hyprshot # screen shot
-    wf-recorder # screen recording
+    hyprshot
+    wf-recorder
   ];
 
-  # screen locker
+  # блокировка экрана
   programs.swaylock.enable = true;
 
-  # Logout Menu
+  # меню выхода
   programs.wlogout.enable = true;
 }

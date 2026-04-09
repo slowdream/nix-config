@@ -3,8 +3,8 @@
   home.packages =
     with pkgs;
     [
-      mitmproxy # http/https proxy tool
-      wireshark # network analyzer
+      mitmproxy # прокси http/https
+      wireshark # анализатор сети
     ]
     # AI Agent Tools
     ++ (with llm-agents.packages.${pkgs.stdenv.hostPlatform.system}; [
@@ -16,6 +16,6 @@
       opencode
 
       # Utilities
-      rtk # CLI proxy that reduces LLM token consumption
+      rtk # CLI-прокси, снижает расход LLM-токенов
     ]);
 }

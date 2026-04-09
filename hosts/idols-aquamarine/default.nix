@@ -8,11 +8,11 @@
 }:
 #############################################################
 #
-#  Aquamarine - A NixOS VM running on Proxmox/KubeVirt
+#  Aquamarine — NixOS VM на Proxmox/KubeVirt
 #
 #############################################################
 let
-  hostName = "aquamarine"; # Define your hostname.
+  hostName = "aquamarine"; # имя хоста
 
   inherit (myvars.networking) proxyGateway proxyGateway6 nameservers;
   inherit (myvars.networking.hostsAddr.${hostName}) iface ipv4;
@@ -23,7 +23,7 @@ in
     disko.nixosModules.default
   ];
 
-  # supported file systems, so we can mount any removable disks with these filesystems
+  # ФС для съёмных носителей
   boot.supportedFilesystems = [
     "ext4"
     "btrfs"
@@ -35,18 +35,17 @@ in
     "exfat"
   ];
 
-  # Maximum total amount of memory that can be stored in the zram swap devices (as a percentage of your total memory).
-  # Defaults to 1/2 of your total RAM. Run zramctl to check how good memory is compressed.
-  # This doesn’t define how much memory will be used by the zram swap devices.
+  # Лимит памяти под zram swap (% от RAM). По умолчанию ~половина RAM. Смотреть `zramctl`.
+  # Не то же самое, сколько реально займёт zram.
   zramSwap.memoryPercent = lib.mkForce 100;
 
   boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModprobeConfig = "options kvm_amd nested=1"; # for amd cpu
+  boot.extraModprobeConfig = "options kvm_amd nested=1"; # nested KVM на AMD
 
   networking = {
     inherit hostName;
 
-    # we use networkd instead
+    # networkd вместо NetworkManager
     networkmanager.enable = false;
     useDHCP = false;
   };
@@ -60,8 +59,8 @@ in
       Address = [ ipv4WithMask ];
       # DNS = nameservers;
       DNS = [ proxyGateway ];
-      DHCP = "ipv6"; # enable DHCPv6 only, so we can get a GUA.
-      IPv6AcceptRA = true; # for Stateless IPv6 Autoconfiguraton (SLAAC)
+      DHCP = "ipv6"; # только DHCPv6 для GUA
+      IPv6AcceptRA = true; # SLAAC
       LinkLocalAddressing = "ipv6";
     };
     routes = [
@@ -72,17 +71,12 @@ in
       {
         Destination = "::/0";
         Gateway = proxyGateway6;
-        GatewayOnLink = true; # it's a gateway on local link.
+        GatewayOnLink = true; # шлюз на линке
       }
     ];
     linkConfig.RequiredForOnline = "routable";
   };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  # stateVersion — см. man configuration.nix
+  system.stateVersion = "24.11"; # комментарий выше прочитан?
 }

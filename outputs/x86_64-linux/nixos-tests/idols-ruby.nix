@@ -4,7 +4,7 @@
   system,
   genSpecialArgs,
   nixos-modules,
-  # TODO: test home-manager too.
+  # TODO: также протестировать home-manager.
   home-modules ? [ ],
   myvars,
   ...
@@ -28,8 +28,7 @@ pkgs.testers.runNixOSTest {
     ruby.imports = nixos-modules;
   };
 
-  # Note that machine1 and machine2 are now available as
-  # Python objects and also as hostnames in the virtual network
+  # Узлы доступны как объекты Python и как hostname в виртуальной сети
   testScript = ''
     ruby.wait_for_unit("network-online.target")
 

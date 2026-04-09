@@ -6,21 +6,21 @@
 let
   inherit (inputs) haumea;
 
-  # Contains all the flake outputs of this system architecture.
+  # Все flake outputs для этой архитектуры system.
   data = haumea.lib.load {
     src = ./src;
     inputs = args;
   };
-  # nix file names is redundant, so we remove it.
+  # Имена nix-файлов избыточны — убираем.
   dataWithoutPaths = builtins.attrValues data;
 
-  # Merge all the machine's data into a single attribute set.
+  # Слить данные всех машин в один attribute set.
   outputs = {
     nixosConfigurations = lib.attrsets.mergeAttrsList (
       map (it: it.nixosConfigurations or { }) dataWithoutPaths
     );
     packages = lib.attrsets.mergeAttrsList (map (it: it.packages or { }) dataWithoutPaths);
-    # colmena contains some meta info, which need to be merged carefully.
+    # у colmena есть meta — merge аккуратно
     colmenaMeta = {
       nodeNixpkgs = lib.attrsets.mergeAttrsList (
         map (it: it.colmenaMeta.nodeNixpkgs or { }) dataWithoutPaths
@@ -34,9 +34,9 @@ let
 in
 outputs
 // {
-  inherit data; # for debugging purposes
+  inherit data; # для отладки
 
-  # NixOS's unit tests.
+  # unit tests NixOS
   evalTests = haumea.lib.loadEvalTests {
     src = ./tests;
     inputs = args // {

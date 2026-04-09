@@ -16,7 +16,7 @@ in
     nix-gaming.nixosModules.pipewireLowLatency
     nix-gaming.nixosModules.platformOptimizations
 
-    # run anime games on Linux
+    # запуск anime games на Linux
     aagl.nixosModules.default
   ];
 
@@ -28,51 +28,51 @@ in
 
   config = mkIf cfg.enable {
     # ==========================================================================
-    # Gaming on Linux
+    # Gaming на Linux
     #
-    #   <https://www.protondb.com/> can give you an idea what works where and how.
-    #   Begineer Guide: <https://www.reddit.com/r/linux_gaming/wiki/faq/>
+    #   <https://www.protondb.com/> — что где и как работает.
+    #   Руководство для начинающих: <https://www.reddit.com/r/linux_gaming/wiki/faq/>
     # ==========================================================================
 
-    # Games installed by Steam works fine on NixOS, no other configuration needed.
+    # Игры из Steam на NixOS обычно работают без доп. настройки.
     # https://github.com/NixOS/nixpkgs/blob/master/doc/packages/steam.section.md
     programs.steam = {
-      # Some location that should be persistent:
-      #   ~/.local/share/Steam - The default Steam install location
-      #   ~/.local/share/Steam/steamapps/common - The default Game install location
-      #   ~/.steam/root        - A symlink to ~/.local/share/Steam
-      #   ~/.steam             - Some Symlinks & user info
+      # Пути, которые лучше держать persistent:
+      #   ~/.local/share/Steam — дефолтная установка Steam
+      #   ~/.local/share/Steam/steamapps/common — дефолтная установка игр
+      #   ~/.steam/root        — symlink на ~/.local/share/Steam
+      #   ~/.steam             — symlinks и user info
       enable = true;
       package = pkgs-x64.steam;
       # https://github.com/ValveSoftware/gamescope
-      # Run a GameScope driven Steam session from your display-manager
-      # fix resolution upscaling and stretched aspect ratios
+      # Запуск Steam session через GameScope из display-manager;
+      # правит resolution upscaling и растянутые aspect ratio
       gamescopeSession.enable = true;
       # https://github.com/Winetricks/winetricks
-      # Whether to enable protontricks, a simple wrapper for running Winetricks commands for Proton-enabled games.
+      # Включить protontricks — обёртку для Winetricks для игр на Proton.
       protontricks.enable = true;
-      # Whether to enable Load the extest library into Steam, to translate X11 input events to uinput events (e.g. for using Steam Input on Wayland) .
+      # Загружать extest в Steam: перевод X11 input events в uinput (например Steam Input на Wayland).
       extest.enable = true;
       fontPackages = [
-        pkgs.wqy_zenhei # Need by steam for Chinese
+        pkgs.wqy_zenhei # нужен Steam для китайского интерфейса
       ];
     };
 
-    # see https://github.com/fufexan/nix-gaming/#pipewire-low-latency
+    # см. https://github.com/fufexan/nix-gaming/#pipewire-low-latency
     services.pipewire.lowLatency.enable = true;
     programs.steam.platformOptimizations.enable = true;
 
-    # Optimise Linux system performance on demand
+    # Оптимизация производительности Linux по требованию
     # https://github.com/FeralInteractive/GameMode
     # https://wiki.archlinux.org/title/Gamemode
     #
-    # Usage:
-    #   1. For games/launchers which integrate GameMode support:
+    # Использование:
+    #   1. Для игр/лаунчеров с интеграцией GameMode:
     #      https://github.com/FeralInteractive/GameMode#apps-with-gamemode-integration
-    #      simply running the game will automatically activate GameMode.
+    #      достаточно запустить игру — GameMode включится сам.
     programs.gamemode.enable = true;
 
-    # run anime games on Linux
+    # запуск anime games на Linux
     # https://github.com/an-anime-team/
     networking.mihoyo-telemetry.block = true;
     environment.systemPackages = with aagl.packages."x86_64-linux"; [

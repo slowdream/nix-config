@@ -11,7 +11,7 @@
   genKubeVirtHostModule = import ./genKubeVirtHostModule.nix;
   genKubeVirtGuestModule = import ./genKubeVirtGuestModule.nix;
 
-  # use path relative to the root of the project
+  # путь относительно корня репозитория
   relativeToRoot = lib.path.append ../.;
   scanPaths =
     path:
@@ -19,10 +19,10 @@
       builtins.attrNames (
         lib.attrsets.filterAttrs (
           path: _type:
-          (_type == "directory") # include directories
+          (_type == "directory") # включать каталоги
           || (
-            (path != "default.nix") # ignore default.nix
-            && (lib.strings.hasSuffix ".nix" path) # include .nix files
+            (path != "default.nix") # пропускать default.nix
+            && (lib.strings.hasSuffix ".nix" path) # включать .nix-файлы
           )
         ) (builtins.readDir path)
       )

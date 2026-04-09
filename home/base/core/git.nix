@@ -6,15 +6,15 @@
   ...
 }:
 {
-  # `programs.git` will generate the config file: ~/.config/git/config
-  # to make git use this config file, `~/.gitconfig` should not exist!
+  # `programs.git` создаёт ~/.config/git/config;
+  # чтобы git его читал, файла `~/.gitconfig` быть не должно!
   #
   #    https://git-scm.com/docs/git-config#Documentation/git-config.txt---global
   home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
     rm -f ${config.home.homeDirectory}/.gitconfig
   '';
 
-  # GitHub CLI tool
+  # GitHub CLI
   # https://cli.github.com/manual/
   programs.gh.enable = true;
 
@@ -29,7 +29,7 @@
 
     includes = [
       {
-        # use different email & name for work:
+        # отдельный email и имя для work:
         #
         # [user]
         #   email = "xxx@xxx.com"
@@ -44,12 +44,12 @@
       user.name = myvars.userfullname;
 
       init.defaultBranch = "main";
-      trim.bases = "develop,master,main"; # for git-trim
+      trim.bases = "develop,master,main"; # для git-trim
       push.autoSetupRemote = true;
       pull.rebase = true;
-      log.date = "iso"; # use iso format for date
+      log.date = "iso"; # дата в ISO-формате
 
-      # replace https with ssh
+      # https -> ssh
       url = {
         "ssh://git@github.com/ryan4yin" = {
           insteadOf = "https://github.com/ryan4yin";
@@ -60,36 +60,36 @@
       };
 
       alias = {
-        # common aliases
+        # частые алиасы
         br = "branch";
         co = "checkout";
         st = "status";
         ls = "log --pretty=format:\"%C(yellow)%h%Cred%d\\\\ %Creset%s%Cblue\\\\ [%cn]\" --decorate";
         ll = "log --pretty=format:\"%C(yellow)%h%Cred%d\\\\ %Creset%s%Cblue\\\\ [%cn]\" --decorate --numstat";
-        cm = "commit -m"; # commit via `git cm <message>`
-        ca = "commit -am"; # commit all changes via `git ca <message>`
+        cm = "commit -m"; # коммит: `git cm <message>`
+        ca = "commit -am"; # всё закоммитить: `git ca <message>`
         dc = "diff --cached";
 
-        amend = "commit --amend -m"; # amend commit message via `git amend <message>`
-        unstage = "reset HEAD --"; # unstage file via `git unstage <file>`
-        merged = "branch --merged"; # list merged(into HEAD) branches via `git merged`
-        unmerged = "branch --no-merged"; # list unmerged(into HEAD) branches via `git unmerged`
-        nonexist = "remote prune origin --dry-run"; # list non-exist(remote) branches via `git nonexist`
+        amend = "commit --amend -m"; # правка сообщения: `git amend <message>`
+        unstage = "reset HEAD --"; # убрать из индекса: `git unstage <file>`
+        merged = "branch --merged"; # влитые в HEAD: `git merged`
+        unmerged = "branch --no-merged"; # не влитые в HEAD: `git unmerged`
+        nonexist = "remote prune origin --dry-run"; # несуществующие на remote: `git nonexist`
 
-        # delete merged branches except master & dev & staging
-        #  `!` indicates it's a shell script, not a git subcommand
+        # удалить влитые ветки, кроме master / dev / staging
+        #  `!` — shell-скрипт, не подкоманда git
         delmerged = ''! git branch --merged | egrep -v "(^\*|main|master|dev|staging)" | xargs git branch -d'';
-        # delete non-exist(remote) branches
+        # удалить ветки, которых уже нет на remote
         delnonexist = "remote prune origin";
 
-        # aliases for submodule
+        # submodule
         update = "submodule update --init --recursive";
         foreach = "submodule foreach";
       };
     };
   };
 
-  # A syntax-highlighting pager for git, diff, grep, and blame output
+  # Пейджер с подсветкой для git diff / grep / blame
   programs.delta = {
     enable = true;
     enableGitIntegration = true;
@@ -97,14 +97,14 @@
       diff-so-fancy = true;
       line-numbers = true;
       true-color = "always";
-      # features => named groups of settings, used to keep related settings organized
+      # features — именованные группы настроек
       # features = "";
     };
   };
 
-  # Git terminal UI (written in go).
+  # Git TUI на Go
   programs.lazygit.enable = true;
 
-  # Yet another Git TUI (written in rust).
+  # Ещё один Git TUI на Rust
   programs.gitui.enable = false;
 }

@@ -4,22 +4,22 @@
 }:
 ###########################################################
 #
-# Alacritty Configuration
+# Конфигурация Alacritty
 #
-# Useful Hot Keys for macOS:
-#   1. Multi-Window: `command + N`
-#   2. Increase Font Size: `command + =` | `command + +`
-#   3. Decrease Font Size: `command + -` | `command + _`
-#   4. Search Text: `command + F`
-#   5. And Other common shortcuts such as Copy, Paste, Cursor Move, etc.
+# Горячие клавиши macOS:
+#   1. Новое окно: `command + N`
+#   2. Крупнее шрифт: `command + =` | `command + +`
+#   3. Мельче шрифт: `command + -` | `command + _`
+#   4. Поиск: `command + F`
+#   5. Прочее: Copy, Paste, движение курсора и т.д.
 #
-# Useful Hot Keys for Linux:
-#   1. Increase Font Size: `ctrl + shift + =` | `ctrl + shift + +`
-#   2. Decrease Font Size: `ctrl + shift + -` | `ctrl + shift + _`
-#   3. Search Text: `ctrl + shift + N`
-#   4. And Other common shortcuts such as Copy, Paste, Cursor Move, etc.
+# Горячие клавиши Linux:
+#   1. Крупнее шрифт: `ctrl + shift + =` | `ctrl + shift + +`
+#   2. Мельче шрифт: `ctrl + shift + -` | `ctrl + shift + _`
+#   3. Поиск: `ctrl + shift + N`
+#   4. Прочее: Copy, Paste, движение курсора и т.д.
 #
-# Note: Alacritty do not have support for Tabs, and any graphic protocol.
+# Alacritty: без вкладок и без graphic protocol.
 #
 ###########################################################
 {
@@ -29,10 +29,10 @@
     settings = {
       window = {
         opacity = 0.93;
-        startup_mode = "Maximized"; # Maximized window
+        startup_mode = "Maximized"; # окно на весь экран при старте
         dynamic_title = true;
-        option_as_alt = "Both"; # Option key acts as Alt on macOS
-        decorations = "None"; # Show neither borders nor title bar
+        option_as_alt = "Both"; # Option = Alt на macOS
+        decorations = "None"; # без рамки и title bar
       };
       scrolling = {
         history = 10000;
@@ -53,7 +53,7 @@
         size = 13;
       };
       terminal = {
-        # Spawn a nushell in login mode via `bash`
+        # Запуск nushell в login mode через `bash`
         shell = {
           program = "${pkgs.bash}/bin/bash";
           args = [
@@ -62,8 +62,8 @@
             "nu --login --interactive"
           ];
         };
-        # Controls the ability to write to the system clipboard with the OSC 52 escape sequence.
-        # It's used by zellij to copy text to the system clipboard.
+        # Запись в system clipboard через OSC 52
+        # zellij копирует в clipboard так
         osc52 = "CopyPaste";
       };
     };

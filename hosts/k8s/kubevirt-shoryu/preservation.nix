@@ -21,34 +21,33 @@ in
     pkgs.ncdu
   ];
 
-  # NOTE: `preservation` only mounts the directory/file list below to /persistent
-  # If the directory/file already exists in the root filesystem you should
-  # move those files/directories to /persistent first!
+  # NOTE: `preservation` монтирует в /persistent только список ниже
+  # Если каталог/файл уже есть в rootfs — сначала перенесите в /persistent!
   preservation.preserveAt."/persistent" = {
     directories = [
       "/etc/NetworkManager/system-connections"
       "/etc/ssh"
       "/etc/nix/inputs"
-      "/etc/secureboot" # lanzaboote - secure boot
-      # my secrets
+      "/etc/secureboot" # lanzaboote / secure boot
+      # секреты
       "/etc/agenix/"
 
       "/var/log"
       "/var/lib"
 
-      # k3s related
+      # k3s
       "/etc/iscsi"
       "/etc/rancher"
     ];
     files = [
-      # auto-generated machine ID
+      # machine-id
       {
         file = "/etc/machine-id";
         inInitrd = true;
       }
     ];
 
-    # the following directories will be passed to /persistent/home/$USER
+    # эти каталоги → /persistent/home/$USER
     users.${username} = {
       directories = [
         "codes"
@@ -58,19 +57,14 @@ in
     };
   };
 
-  # Create some directories with custom permissions.
+  # Каталоги с нужными правами.
   #
-  # In this configuration the path `/home/butz/.local` is not an immediate parent
-  # of any persisted file so it would be created with the systemd-tmpfiles default
-  # ownership `root:root` and mode `0755`. This would mean that the user `butz`
-  # could not create other files or directories inside `/home/butz/.local`.
+  # Здесь `/home/butz/.local` не является прямым родителем сохранённого файла,
+  # tmpfiles создал бы root:root 0755 — пользователь не сможет писать внутрь.
   #
-  # Therefore systemd-tmpfiles is used to prepare such directories with
-  # appropriate permissions.
+  # systemd-tmpfiles задаёт владельца и mode.
   #
-  # Note that immediate parent directories of persisted files can also be
-  # configured with ownership and permissions from the `parent` settings if
-  # `configureParent = true` is set for the file.
+  # Родители сохранённых файлов можно задать через `parent` и `configureParent = true`.
   systemd.tmpfiles.settings.preservation =
     let
       permission = {
@@ -87,13 +81,12 @@ in
       "/home/${username}/.terraform.d".d = permission;
     };
 
-  # systemd-machine-id-commit.service would fail but it is not relevant
-  # in this specific setup for a persistent machine-id so we disable it
+  # systemd-machine-id-commit упадёт — для persistent machine-id не нужен, отключаем
   #
-  # see the firstboot example below for an alternative approach
+  # альтернатива — пример firstboot ниже
   systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
 
-  # let the service commit the transient ID to the persistent volume
+  # закоммитить transient ID на persistent том
   systemd.services.systemd-machine-id-commit = {
     unitConfig.ConditionPathIsMountPoint = [
       ""

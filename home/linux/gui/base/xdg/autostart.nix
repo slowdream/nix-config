@@ -1,8 +1,8 @@
 { pkgs, lib, ... }:
 {
-  # XDG autostart entries - ensures apps start after portal services are ready
+  # XDG autostart — приложения после готовности portal
   xdg.autostart.enable = true;
-  # This fixes nixpak sandboxed apps (like firefox) accessing mapped folders correctly
+  # Чтобы nixpak (firefox и т.д.) видел смонтированные каталоги
   xdg.autostart.entries = [
     "${pkgs.foot}/share/applications/foot.desktop"
     "${pkgs.alacritty}/share/applications/Alacritty.desktop"

@@ -10,7 +10,7 @@ let
   ipv4WithMask = "${ipv4}/24";
 in
 {
-  # supported file systems, so we can mount any removable disks with these filesystems
+  # Поддерживаемые ФС — чтобы монтировать съёмные диски с этими файловыми системами
   boot.supportedFilesystems = [
     "ext4"
     "btrfs"
@@ -23,7 +23,7 @@ in
   networking = {
     inherit hostName;
 
-    # we use networkd instead
+    # вместо этого networkd
     networkmanager.enable = false;
     useDHCP = false;
   };
@@ -36,8 +36,8 @@ in
       Address = [ ipv4WithMask ];
       # DNS = nameservers;
       DNS = [ proxyGateway ];
-      DHCP = "ipv6"; # enable DHCPv6 only, so we can get a GUA.
-      IPv6AcceptRA = true; # for Stateless IPv6 Autoconfiguraton (SLAAC)
+      DHCP = "ipv6"; # только DHCPv6, чтобы получить GUA
+      IPv6AcceptRA = true; # Stateless IPv6 Autoconfiguration (SLAAC)
       LinkLocalAddressing = "ipv6";
     };
     routes = [
@@ -48,17 +48,15 @@ in
       {
         Destination = "::/0";
         Gateway = proxyGateway6;
-        GatewayOnLink = true; # it's a gateway on local link.
+        GatewayOnLink = true; # шлюз на локальном линке
       }
     ];
     linkConfig.RequiredForOnline = "routable";
   };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  # Это значение задаёт релиз NixOS, от которого взяты дефолты для stateful-данных
+  # (пути к файлам, версии БД и т.п.). Обычно его оставляют равным релизу первой
+  # установки системы. Перед сменой прочитайте документацию опции
+  # (например, man configuration.nix или https://nixos.org/nixos/options.html).
+  system.stateVersion = "24.11"; # Комментарий выше прочитали?
 }

@@ -6,30 +6,29 @@
 }:
 {
   # ===============================================================================================
-  # for Nvidia GPU
+  # NVIDIA GPU
   # https://wiki.nixos.org/wiki/NVIDIA
   # https://wiki.hyprland.org/Nvidia/
   # ===============================================================================================
 
   boot.kernelParams = [
-    # Since NVIDIA does not load kernel mode setting by default,
-    # enabling it is required to make Wayland compositors function properly.
+    # KMS для NVIDIA не включается сам — нужно для нормального Wayland
     "nvidia-drm.fbdev=1"
   ];
-  services.xserver.videoDrivers = [ "nvidia" ]; # will install nvidia-vaapi-driver by default
+  services.xserver.videoDrivers = [ "nvidia" ]; # подтянет nvidia-vaapi-driver
   hardware.nvidia = {
-    # Open-source kernel modules are preferred over and planned to steadily replace proprietary modules
+    # open kernel module предпочтительнее проприетарного (постепенная замена)
     open = true;
     nvidiaSettings = true;
 
-    # Optionally, you may need to select the appropriate driver version for your specific GPU.
+    # при необходимости зафиксировать версию драйвера под GPU
     # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/os-specific/linux/nvidia-x11/default.nix
     # package = config.boot.kernelPackages.nvidiaPackages.production;
 
     # https://github.com/NixOS/nixpkgs/issues/489947
     package = config.boot.kernelPackages.nvidiaPackages.latest;
 
-    # required by most wayland compositors!
+    # почти всем Wayland compositor нужен modesetting
     modesetting.enable = true;
     powerManagement.enable = true;
 
@@ -39,7 +38,7 @@
   hardware.nvidia-container-toolkit.enable = true;
   hardware.graphics = {
     enable = true;
-    # needed by nvidia-docker
+    # для nvidia-docker
     enable32Bit = true;
   };
 
@@ -52,9 +51,9 @@
   ];
 
   services.sunshine.settings = {
-    max_bitrate = 20000; # in Kbps
-    # NVIDIA NVENC Encoder
-    nvenc_preset = 3; # 1(fastest + worst quality) - 7(slowest + best quality)
-    nvenc_twopass = "full_res"; # quarter_res / full_res.
+    max_bitrate = 20000; # Kbps
+    # NVENC
+    nvenc_preset = 3; # 1 (быстро, хуже) — 7 (медленно, лучше)
+    nvenc_twopass = "full_res"; # quarter_res / full_res
   };
 }

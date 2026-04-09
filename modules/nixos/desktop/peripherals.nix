@@ -1,45 +1,45 @@
 { pkgs, ... }:
 {
-  #============================= Audio(PipeWire) =======================
+  #============================= Audio (PipeWire) =======================
 
-  # List packages installed in system profile. To search, run:
+  # Пакеты в system profile. Поиск:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    pulseaudio # provides `pactl`, which is required by some apps(e.g. sonic-pi)
+    pulseaudio # даёт `pactl`, нужен некоторым приложениям (например sonic-pi)
   ];
 
-  # PipeWire is a new low-level multimedia framework.
-  # It aims to offer capture and playback for both audio and video with minimal latency.
-  # It support for PulseAudio-, JACK-, ALSA- and GStreamer-based applications.
-  # PipeWire has a great bluetooth support, it can be a good alternative to PulseAudio.
+  # PipeWire — low-level multimedia framework.
+  # Захват и воспроизведение аудио/видео с минимальной задержкой.
+  # Совместимость с приложениями на PulseAudio, JACK, ALSA и GStreamer.
+  # Хорошая поддержка Bluetooth; альтернатива PulseAudio.
   #     https://nixos.wiki/wiki/PipeWire
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
+    # Для JACK-приложений раскомментируйте
     jack.enable = true;
     wireplumber.enable = true;
   };
-  # rtkit is optional but recommended
+  # rtkit опционален, но рекомендуется
   security.rtkit.enable = true;
-  # Disable pulseaudio, it conflicts with pipewire too.
+  # Отключить pulseaudio — конфликтует с pipewire.
   services.pulseaudio.enable = false;
 
   #============================= Bluetooth =============================
 
-  # enable bluetooth & gui paring tools - blueman
-  # or you can use cli:
+  # bluetooth и GUI для pairing — blueman
+  # или CLI:
   # $ bluetoothctl
   # [bluetooth] # power on
   # [bluetooth] # agent on
   # [bluetooth] # default-agent
   # [bluetooth] # scan on
-  # ...put device in pairing mode and wait [hex-address] to appear here...
+  # ...включите режим pairing на устройстве и дождитесь [hex-address]...
   # [bluetooth] # pair [hex-address]
   # [bluetooth] # connect [hex-address]
-  # Bluetooth devices automatically connect with bluetoothctl as well:
+  # Автоподключение устройств через bluetoothctl:
   # [bluetooth] # trust [hex-address]
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
@@ -47,23 +47,23 @@
   #================================= Misc =================================
 
   services = {
-    printing.enable = true; # Enable CUPS to print documents.
-    geoclue2.enable = true; # Enable geolocation services.
+    printing.enable = true; # CUPS для печати
+    geoclue2.enable = true; # геолокация
 
     udev.packages = with pkgs; [
       gnome-settings-daemon
-      # platformio # udev rules for platformio
-      # openocd # required by paltformio, see https://github.com/NixOS/nixpkgs/issues/224895
+      # platformio # udev rules для platformio
+      # openocd # нужен для platformio, см. https://github.com/NixOS/nixpkgs/issues/224895
       # openfpgaloader
     ];
 
-    # A key remapping daemon for linux.
+    # Демон переназначения клавиш для Linux.
     # https://github.com/rvaiya/keyd
     keyd = {
       enable = true;
       keyboards.default.settings = {
         main = {
-          # overloads the capslock key to function as both escape (when tapped) and control (when held)
+          # capslock: по tap — escape, при удержании — control
           capslock = "overload(control, esc)";
           esc = "capslock";
         };

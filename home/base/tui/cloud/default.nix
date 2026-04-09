@@ -20,17 +20,17 @@
     # pulumiPackages.pulumi-language-python
     # pulumiPackages.pulumi-language-nodejs
 
-    # aws
+    # AWS
     awscli2
-    ssm-session-manager-plugin # Amazon SSM Session Manager Plugin
+    ssm-session-manager-plugin # плагин Amazon SSM Session Manager
     aws-iam-authenticator
     eksctl
 
-    # aliyun
+    # Aliyun
     aliyun-cli
-    # digitalocean
+    # DigitalOcean
     doctl
-    # google cloud
+    # Google Cloud
     (google-cloud-sdk.withExtraComponents (
       with google-cloud-sdk.components;
       [
@@ -38,9 +38,9 @@
       ]
     ))
 
-    # cloud tools that nix do not have cache for.
+    # облачные утилиты без кэша в binary cache nix
     terraform
-    terraformer # generate terraform configs from existing cloud resources
-    packer # machine image builder
+    terraformer # terraform из существующих ресурсов
+    packer # образы машин
   ];
 }

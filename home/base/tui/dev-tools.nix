@@ -6,50 +6,49 @@
 {
   #############################################################
   #
-  #  Basic settings for development environment
+  #  Базовые настройки dev-окружения
   #
-  #  Please avoid to install language specific packages here(globally),
-  #  instead, install them:
-  #     1. per IDE, such as `programs.neovim.extraPackages`
-  #     2. per-project, using https://github.com/the-nix-way/dev-templates
+  #  Языковые пакеты сюда не класть (глобально), ставить:
+  #     1. в IDE, например `programs.neovim.extraPackages`
+  #     2. per-project: https://github.com/the-nix-way/dev-templates
   #
   #############################################################
 
   home.packages = with pkgs; [
-    colmena # nixos's remote deployment tool
+    colmena # удалённый деплой NixOS
 
-    tokei # count lines of code, alternative to cloc
+    tokei # строки кода, альтернатива cloc
 
-    # db related
+    # БД
     # mycli
     pgcli
     mongosh
     sqlite
 
-    # embedded development
+    # embedded
     minicom
 
-    # ai related
+    # AI
     python313Packages.huggingface-hub # huggingface-cli
     pkgs-patched.python313Packages.modelscope
-    yt-dlp # youtube/bilibili/soundcloud/... video/music downloader
+    yt-dlp # youtube/bilibili/soundcloud/... видео и музыка
 
-    # misc
+    # прочее
     devbox
-    bfg-repo-cleaner # remove large files from git history
-    k6 # load testing tool
+    bfg-repo-cleaner # убрать большие файлы из истории git
+    k6 # нагрузочное тестирование
 
-    # solve coding extercises - learn by doing
+    # задачи по программированию — учиться на практике
     exercism
 
-    # Automatically trims your branches whose tracking remote refs are merged or gone
-    # It's really useful when you work on a project for a long time.
+    # Обрезает ветки, у которых upstream влит или исчез
+    # Удобно на долгих проектах.
     git-trim
     gitleaks
 
-    # need to run `conda-install` before using it
-    # need to run `conda-shell` before using command `conda`
-    # conda is not available for MacOS
+    # перед использованием: `conda-install`
+    # перед командой `conda`: `conda-shell`
+    # conda нет на macOS
     conda
   ];
 

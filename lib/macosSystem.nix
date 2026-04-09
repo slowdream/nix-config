@@ -21,8 +21,8 @@ nix-darwin.lib.darwinSystem {
         { lib, ... }:
         {
           nixpkgs.pkgs = import nixpkgs-darwin {
-            inherit system; # refer the `system` parameter form outer scope recursively
-            # To use chrome, we need to allow the installation of non-free software
+            inherit system; # ссылка на параметр `system` из внешней области видимости
+            # Для Chrome нужно разрешить non-free пакеты
             config.allowUnfree = true;
           };
         }

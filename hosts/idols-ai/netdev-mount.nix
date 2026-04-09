@@ -3,7 +3,7 @@
   ...
 }:
 {
-  # enable davfs2 driver for webdav
+  # davfs2 для WebDAV
   services.davfs2 = {
     enable = true;
     # https://man.archlinux.org/man/davfs2.conf.5
@@ -11,14 +11,14 @@
       globalSection.use_locks = true;
       sections = {
         "/mnt/fileshare" = {
-          # try to get this information from all files in a directory with one PROPFIND request.
+          # один PROPFIND на каталог вместо запросов по каждому файлу
           gui_optimize = true;
         };
       };
     };
   };
 
-  # mount a webdav share
+  # WebDAV
   # https://wiki.archlinux.org/title/Davfs2
   fileSystems."/mnt/fileshare" = {
     device = "https://webdav.writefor.fun/";
@@ -26,12 +26,12 @@
     options = [
       # https://www.freedesktop.org/software/systemd/man/latest/systemd.mount.html
       "nofail"
-      "_netdev" # Wait for network
+      "_netdev" # после сети
       "rw"
       "uid=1000,gid=100,dir_mode=0750,file_mode=0750"
     ];
   };
-  # davfs2 reads its credentials from /etc/davfs2/secrets
+  # учётные данные в /etc/davfs2/secrets
   environment.etc."davfs2/secrets" = {
     source = config.age.secrets."davfs-secrets".path;
     mode = "0600";

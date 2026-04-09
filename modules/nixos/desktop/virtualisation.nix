@@ -6,20 +6,20 @@
 {
   ###################################################################################
   #
-  #  Virtualisation - Libvirt(QEMU/KVM) / Docker / LXD / WayDroid
+  #  Virtualisation — Libvirt (QEMU/KVM) / Docker / LXD / WayDroid
   #
   ###################################################################################
 
-  # Enable nested virtualization, required by security containers and nested vm.
-  # This should be set per host in /hosts, not here.
+  # Включить nested virtualization (нужно для security containers и nested VM).
+  # Задаётся per-host в /hosts, не здесь.
   #
-  ## For AMD CPU, add "kvm-amd" to kernelModules.
+  ## AMD CPU: добавить "kvm-amd" в kernelModules.
   # boot.kernelModules = ["kvm-amd"];
-  # boot.extraModprobeConfig = "options kvm_amd nested=1";  # for amd cpu
+  # boot.extraModprobeConfig = "options kvm_amd nested=1";  # amd cpu
   #
-  ## For Intel CPU, add "kvm-intel" to kernelModules.
+  ## Intel CPU: добавить "kvm-intel" в kernelModules.
   # boot.kernelModules = ["kvm-intel"];
-  # boot.extraModprobeConfig = "options kvm_intel nested=1"; # for intel cpu
+  # boot.extraModprobeConfig = "options kvm_intel nested=1"; # intel cpu
 
   boot.kernelModules = [ "vfio-pci" ];
 
@@ -29,11 +29,11 @@
     docker.enable = false;
     podman = {
       enable = true;
-      # Create a `docker` alias for podman, to use it as a drop-in replacement
+      # Алиас `docker` для podman как drop-in replacement
       dockerCompat = true;
-      # Required for containers under podman-compose to be able to talk to each other.
+      # Нужно, чтобы контейнеры под podman-compose могли общаться друг с другом.
       defaultNetwork.settings.dns_enabled = true;
-      # Periodically prune Podman resources
+      # Периодическая очистка ресурсов Podman
       autoPrune = {
         enable = true;
         dates = "weekly";
@@ -45,13 +45,13 @@
       backend = "podman";
     };
 
-    # Usage: https://wiki.nixos.org/wiki/Waydroid
+    # Использование: https://wiki.nixos.org/wiki/Waydroid
     # waydroid.enable = true;
 
     # libvirtd = {
     #   enable = true;
-    #   # hanging this option to false may cause file permission issues for existing guests.
-    #   # To fix these, manually change ownership of affected files in /var/lib/libvirt/qemu to qemu-libvirtd.
+    #   # Смена этой опции на false может сломать права на файлы у существующих guests.
+    #   # Починка: вручную сменить владельца в /var/lib/libvirt/qemu на qemu-libvirtd.
     #   qemu.runAsRoot = true;
     # };
 
@@ -59,24 +59,24 @@
   };
 
   environment.systemPackages = with pkgs; [
-    # This script is used to install the arm translation layer for waydroid
-    # so that we can install arm apks on x86_64 waydroid
+    # Скрипт для установки ARM translation layer в waydroid,
+    # чтобы ставить arm apk на x86_64 waydroid
     #
     # https://github.com/casualsnek/waydroid_script
     # https://github.com/AtaraxiaSjel/nur/tree/master/pkgs/waydroid-script
     # https://wiki.archlinux.org/title/Waydroid#ARM_Apps_Incompatible
     # nur-ataraxiasjel.packages.${pkgs.stdenv.hostPlatform.system}.waydroid-script
 
-    # Need to add [File (in the menu bar) -> Add connection] when start for the first time
+    # При первом запуске: [File (меню) -> Add connection]
     # virt-manager
 
-    # QEMU/KVM(HostCpuOnly), provides:
+    # QEMU/KVM (HostCpuOnly), даёт:
     #   qemu-storage-daemon qemu-edid qemu-ga
     #   qemu-pr-helper qemu-nbd elf2dmp qemu-img qemu-io
     #   qemu-kvm qemu-system-x86_64 qemu-system-aarch64 qemu-system-i386
     qemu_kvm
 
-    # Install QEMU(other architectures), provides:
+    # QEMU (другие архитектуры), даёт:
     #   ......
     #   qemu-loongarch64 qemu-system-loongarch64
     #   qemu-riscv64 qemu-system-riscv64 qemu-riscv32  qemu-system-riscv32

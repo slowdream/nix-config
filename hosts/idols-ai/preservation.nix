@@ -14,7 +14,7 @@ in
   ];
 
   preservation.enable = true;
-  # pverservation required initrd using systemd.
+  # preservation: нужен initrd с systemd
   boot.initrd.systemd.enable = true;
 
   environment.systemPackages = [
@@ -22,9 +22,9 @@ in
     pkgs.ncdu
   ];
 
-  # There are two ways to clear the root filesystem on every boot:
-  ##  1. use tmpfs for /
-  ##  2. (btrfs/zfs only)take a blank snapshot of the root filesystem and revert to it on every boot via:
+  # Два способа чистить root при каждой загрузке:
+  ##  1. tmpfs на /
+  ##  2. (только btrfs/zfs) пустой snapshot root и откат при загрузке:
   ##     boot.initrd.postDeviceCommands = ''
   ##       mkdir -p /run/mymount
   ##       mount -o subvol=/ /dev/disk/by-uuid/UUID /run/mymount
@@ -32,26 +32,25 @@ in
   ##       btrfs subvolume snapshot / /run/mymount
   ##     '';
   #
-  #  See also https://grahamc.com/blog/erase-your-darlings/
+  #  См. https://grahamc.com/blog/erase-your-darlings/
 
-  # NOTE: preservation only mounts the directory/file list below to /persistent
-  # If the directory/file already exists in the root filesystem you should
-  # move those files/directories to /persistent first!
+  # NOTE: preservation монтирует в /persistent только список ниже
+  # Если путь уже в rootfs — сначала перенесите в /persistent
   preservation.preserveAt."/persistent" = {
     directories = [
       "/etc/NetworkManager/system-connections"
       "/etc/ssh"
       "/etc/nix/inputs"
-      "/etc/secureboot" # lanzaboote - secure boot
-      # my secrets
+      "/etc/secureboot" # lanzaboote / secure boot
+      # секреты
       "/etc/agenix/"
 
       "/var/log"
 
-      # preserve davfs2 driver's cache to avoid large memory usage
+      # кэш davfs2 — иначе много RAM
       "/var/cache/davfs2"
 
-      # system-core
+      # ядро системы
       "/var/lib/nixos"
       "/var/lib/systemd"
       {
@@ -59,45 +58,45 @@ in
         mode = "0700";
       }
 
-      # containers
+      # контейнеры
       # "/var/lib/docker"
       "/var/lib/cni"
       "/var/lib/containers"
 
-      # other data
+      # прочие данные
       "/var/lib/flatpak"
 
-      # virtualisation
+      # виртуализация
       "/var/lib/libvirt"
       "/var/lib/lxc"
       "/var/lib/lxd"
       "/var/lib/qemu"
       # "/var/lib/waydroid"
 
-      # network
+      # сеть
       "/var/lib/bluetooth"
       "/var/lib/NetworkManager"
       "/var/lib/iwd"
       "/var/lib/tailscale"
-      "/var/lib/netbird-homelab" # netbird's homelab client
+      "/var/lib/netbird-homelab" # клиент netbird homelab
       "/etc/netbird-homelab"
     ];
     files = [
-      # auto-generated machine ID
+      # machine-id
       {
         file = "/etc/machine-id";
         inInitrd = true;
       }
     ];
 
-    # the following directories will be passed to /persistent/home/$USER
+    # каталоги → /persistent/home/$USER
     users.${username} = {
       commonMountOptions = [
         "x-gvfs-hide"
       ];
       directories = [
         # ======================================
-        # XDG Directories
+        # Каталоги XDG
         # ======================================
 
         "Desktop"
@@ -107,19 +106,19 @@ in
         "Documents"
         "Videos"
 
-        # Keep .cache off tmpfs to avoid high RAM usage; many apps use it and it is storage-heavy.
+        # .cache не на tmpfs — много приложений, объёмный дисковый кэш
         ".cache"
 
         # ======================================
-        # Codes / Work / Playground
+        # Код / работа / черновики
         # ======================================
-        "codes" # for personal code
-        "work" # for work contains a .gitconfig with my work email.
+        "codes" # личные репозитории
+        "work" # работа, отдельный .gitconfig
         "nix-config"
         "tmp"
 
         # ======================================
-        # Nix / Home Manager Profiles
+        # Nix / Home Manager
         # ======================================
 
         ".local/state/home-manager"
@@ -127,23 +126,23 @@ in
         ".local/share/nix"
 
         # ======================================
-        # IDE / Editors
+        # IDE / редакторы
         # ======================================
 
-        # neovim plugins
+        # neovim
         ".wakatime"
 
         # vscode
         ".vscode"
         ".config/Code"
 
-        # cursor ai editor / cli
+        # Cursor (IDE / CLI)
         ".cursor"
         ".config/cursor"
         ".config/Cursor"
 
-        # ai agents
-        ".agents" # skills for all agents
+        # AI-агенты
+        ".agents" # skills для агентов
         ".config/agents"
         ".claude"
         ".gemini"
@@ -152,18 +151,18 @@ in
         ".local/share/opencode"
         ".local/state/opencode"
         ".kimi" # kimi-cli
-        ".context7" # up-to-date docs and code examples for for LLMs & agents
+        ".context7" # актуальные docs/примеры для LLM и агентов
 
         # nvim
         ".local/share/nvim"
         ".local/state/nvim"
 
-        # helix & steel
+        # helix + steel
         ".local/share/steel"
 
         # Joplin
-        ".config/joplin" # tui client
-        ".config/Joplin" # joplin-desktop
+        ".config/joplin" # TUI
+        ".config/Joplin" # desktop
 
         ".local/share/jupyter"
         ".ipython"
@@ -172,7 +171,7 @@ in
         # Cloud Native
         # ======================================
         {
-          # pulumi - infrastructure as code
+          # pulumi — IaC
           directory = ".pulumi";
           mode = "0700";
         }
@@ -196,25 +195,25 @@ in
           directory = ".kube";
           mode = "0700";
         }
-        ".terraform.d/plugin-cache" # terraform's plugin cache
+        ".terraform.d/plugin-cache" # кэш плагинов terraform
 
         # ======================================
-        # language package managers
+        # Менеджеры пакетов языков
         # ======================================
-        ".npm" # typsescript/javascript
+        ".npm" # TypeScript/JavaScript
         "go"
         ".cargo" # rust
-        ".m2" # java maven
-        ".gradle" # java gradle
-        ".conda" # python generated by `conda-shell`
-        # python pipx
+        ".m2" # maven
+        ".gradle" # gradle
+        ".conda" # из `conda-shell`
+        # pipx
         ".local/pipx"
         ".local/bin"
-        # python uv
+        # uv
         ".local/share/uv"
 
         # ======================================
-        # Security
+        # Безопасность
         # ======================================
 
         {
@@ -234,13 +233,13 @@ in
           mode = "0700";
         }
         {
-          # gnmome keyrings
+          # GNOME keyrings
           directory = ".local/share/keyrings";
           mode = "0700";
         }
 
         # ======================================
-        # Games / Media
+        # Игры / медиа
         # ======================================
 
         "Games"
@@ -261,7 +260,7 @@ in
         ".local/share/feral-interactive"
 
         # ======================================
-        # Meeting / Remote Desktop / Recording
+        # Встречи / удалёнка / запись
         # ======================================
         ".zoom"
         ".config/obs-studio"
@@ -272,14 +271,14 @@ in
         ".local/share/remmina"
 
         # ======================================
-        # browsers
+        # Браузеры
         # ======================================
         ".mozilla"
         ".config/google-chrome"
         ".config/chromium"
 
         # ======================================
-        # CLI data
+        # Данные CLI
         # ======================================
         ".local/share/atuin"
         ".local/share/zoxide"
@@ -287,33 +286,33 @@ in
         ".local/share/k9s"
 
         # ======================================
-        # Containers
+        # Контейнеры
         # ======================================
         ".local/share/containers"
         ".local/share/flatpak"
-        # flatpak/nixpak app's data
+        # данные flatpak / nixpak
         {
           directory = ".var";
           mode = "0700";
         }
 
         # ======================================
-        # Misc
+        # Прочее
         # ======================================
 
         # Clash Verge Rev
         ".local/share/io.github.clash-verge-rev.clash-verge-rev"
         ".local/share/clash-verge"
 
-        # Audio
+        # звук
         ".config/pulse"
         ".local/state/wireplumber"
 
-        # Digital Painting
+        # цифровая живопись
         ".local/share/krita"
 
-        # Japanese IME
-        ".config/mozc" # used by fcitx5-mozc
+        # японский IME
+        ".config/mozc" # fcitx5-mozc
 
         ".config/nushell"
       ];
@@ -338,19 +337,14 @@ in
     };
   };
 
-  # Create some directories with custom permissions.
+  # Каталоги с нужными правами.
   #
-  # In this configuration the path `/home/butz/.local` is not an immediate parent
-  # of any persisted file so it would be created with the systemd-tmpfiles default
-  # ownership `root:root` and mode `0755`. This would mean that the user `butz`
-  # could not create other files or directories inside `/home/butz/.local`.
+  # Здесь `/home/butz/.local` не родитель сохранённого файла —
+  # tmpfiles создал бы root:root 0755, пользователь не сможет писать внутрь.
   #
-  # Therefore systemd-tmpfiles is used to prepare such directories with
-  # appropriate permissions.
+  # systemd-tmpfiles задаёт владельца и mode.
   #
-  # Note that immediate parent directories of persisted files can also be
-  # configured with ownership and permissions from the `parent` settings if
-  # `configureParent = true` is set for the file.
+  # Родители сохранённых файлов — через `parent` и `configureParent = true`.
   systemd.tmpfiles.settings.preservation =
     let
       permission = {
@@ -368,13 +362,12 @@ in
       "/home/${username}/.terraform.d".d = permission;
     };
 
-  # systemd-machine-id-commit.service would fail but it is not relevant
-  # in this specific setup for a persistent machine-id so we disable it
+  # systemd-machine-id-commit здесь не нужен при persistent machine-id
   #
-  # see the firstboot example below for an alternative approach
+  # см. пример firstboot в документации модуля
   systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
 
-  # let the service commit the transient ID to the persistent volume
+  # закоммитить transient ID на persistent том
   systemd.services.systemd-machine-id-commit = {
     unitConfig.ConditionPathIsMountPoint = [
       ""

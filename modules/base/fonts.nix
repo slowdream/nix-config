@@ -15,7 +15,7 @@ in
   config.fonts.packages =
     with pkgs;
     lib.mkIf cfg.fonts.enable [
-      # icon fonts
+      # иконочные шрифты
       material-design-icons
       font-awesome
 

@@ -1,20 +1,20 @@
 { lib, ... }:
 {
-  # Or disable the firewall altogether.
+  # Либо отключить firewall целиком.
   networking.firewall.enable = lib.mkDefault false;
-  # Enable the OpenSSH daemon.
+  # OpenSSH daemon
   services.openssh = {
     enable = true;
     settings = {
       X11Forwarding = true;
-      # root user is used for remote deployment, so we need to allow it
+      # root нужен для remote deploy
       PermitRootLogin = "prohibit-password";
-      PasswordAuthentication = false; # disable password login
+      PasswordAuthentication = false; # без пароля по SSH
     };
     openFirewall = true;
   };
 
-  # Add terminfo database of all known terminals to the system profile.
+  # terminfo для известных терминалов в system profile
   # https://github.com/NixOS/nixpkgs/blob/nixos-25.11/nixos/modules/config/terminfo.nix
   environment.enableAllTerminfo = true;
 }

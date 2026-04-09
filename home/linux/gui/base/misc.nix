@@ -4,24 +4,24 @@
 }:
 {
   home.packages = with pkgs; [
-    # GUI apps
-    # e-book viewer(.epub/.mobi/...)
-    # do not support .pdf
+    # GUI
+    # читалка (.epub/.mobi/...)
+    # .pdf не поддерживает
     foliate
 
-    # remote desktop(rdp connect)
+    # удалённый рабочий стол (RDP)
     remmina
-    freerdp # required by remmina
+    freerdp # для remmina
 
-    # my custom hardened packages
+    # свои hardened-пакеты
     nixpaks.qq
     nixpaks.telegram-desktop
     # qqmusic
     bwraps.wechat
-    # discord # update too frequently, use the web version instead
+    # discord # слишком частые обновления — web-версия
   ];
 
-  # allow fontconfig to discover fonts and configurations installed through home.packages
-  # Install fonts at system-level, not user-level
+  # fontconfig подхватывает шрифты из home.packages
+  # Сами шрифты — на уровне системы, не пользователя
   fonts.fontconfig.enable = false;
 }

@@ -8,7 +8,7 @@
 }:
 let
   envSuffix = envKey: suffix: sloth.concat' (sloth.env envKey) suffix;
-  # cursor & icon's theme should be the same as the host's one.
+  # курсор и иконки — как на хосте
   cursorTheme = pkgs.bibata-cursors;
   iconTheme = pkgs.papirus-icon-theme;
 in
@@ -16,18 +16,18 @@ in
   config = {
     dbus.policies = {
       "${config.flatpak.appId}" = "own";
-      # we add other policies in ./common.nix
+      # остальные политики в ./common.nix
     };
     # https://github.com/nixpak/nixpak/blob/master/modules/gpu.nix
-    # 1. bind readonly - /run/opengl-driver
-    # 2. bind device   - /dev/dri
+    # 1. bind ro — /run/opengl-driver
+    # 2. bind dev — /dev/dri
     gpu = {
       enable = lib.mkDefault true;
       provider = "nixos";
-      bundlePackage = pkgs.mesa.drivers; # for amd & intel
+      bundlePackage = pkgs.mesa.drivers; # AMD и Intel
     };
     # https://github.com/nixpak/nixpak/blob/master/modules/gui/fonts.nix
-    # it works not well, bind system's /etc/fonts directly instead
+    # работает криво — монтируем системный /etc/fonts
     fonts.enable = false;
     # https://github.com/nixpak/nixpak/blob/master/modules/locale.nix
     locale.enable = true;
@@ -60,18 +60,18 @@ in
         (sloth.concat' sloth.xdgConfigHome "/gtk-4.0")
         (sloth.concat' sloth.xdgConfigHome "/fontconfig")
 
-        "/etc/fonts" # for fontconfig
-        "/etc/localtime" # this is a symlink to /etc/zoneinfo/xxx
+        "/etc/fonts" # fontconfig
+        "/etc/localtime" # symlink → /etc/zoneinfo/…
         "/etc/zoneinfo"
 
-        # Fix: libEGL warning: egl: failed to create dri2 screen
+        # обход предупреждения libEGL: egl: failed to create dri2 screen
         "/etc/egl"
         "/etc/static/egl"
       ];
       bind.dev = [
-        "/dev/shm" # Shared Memory
+        "/dev/shm" # разделяемая память (shm)
 
-        # seems required when using nvidia as primary gpu
+        # нужно при primary GPU NVIDIA
         "/dev/nvidia0"
         "/dev/nvidiactl"
         "/dev/nvidia-modeset"

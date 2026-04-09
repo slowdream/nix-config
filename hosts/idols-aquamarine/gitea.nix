@@ -8,14 +8,14 @@
     stateDir = "/data/apps/gitea";
     appName = "Ryan Yin's Gitea Service";
     lfs.enable = true;
-    # Enable a timer that runs gitea dump to generate backup-files of the current gitea database and repositories.
+    # таймер `gitea dump` — бэкап БД и репозиториев
     dump = {
       enable = false;
       interval = "hourly";
       file = "gitea-dump";
       type = "tar.zst";
     };
-    # Path to a file containing the SMTP password.
+    # файл с паролем SMTP
     # mailerPasswordFile = "";
     settings = {
       server = {
@@ -26,12 +26,12 @@
         DOMAIN = "git.writefor.fun";
         ROOT_URL = "https://git.writefor.fun/";
       };
-      # one of "Trace", "Debug", "Info", "Warn", "Error", "Critical"
+      # уровень: Trace, Debug, Info, Warn, Error, Critical
       log.LEVEL = "Info";
-      # Marks session cookies as "secure" as a hint for browsers to only send them via HTTPS.
+      # Secure cookie — только по HTTPS
       session.COOKIE_SECURE = true;
-      # NOTE: The first registered user will be the administrator,
-      # so this parameter should NOT be set before the first user registers!
+      # NOTE: первый зарегистрированный пользователь = admin;
+      # не включать до регистрации первого пользователя!
       service.DISABLE_REGISTRATION = true;
       # https://docs.gitea.com/administration/config-cheat-sheet#security-security
       security = {
@@ -57,7 +57,7 @@
     };
     database = {
       type = "sqlite3";
-      # create a local database automatically.
+      # создать локальную БД автоматически
       createDatabase = true;
     };
   };
@@ -66,24 +66,20 @@
   #   enable = true;
   #   name = "default";
   #   labels = [
-  #     # provide a debian base with nodejs for actions
+  #     # debian + node для actions
   #     "debian-latest:docker://node:18-bullseye"
-  #     # fake the ubuntu name, because node provides no ubuntu builds
+  #     # метка ubuntu-latest без официального ubuntu-образа node
   #     "ubuntu-latest:docker://node:18-bullseye"
-  #     # provide native execution on the host
+  #     # нативный runner на хосте
   #     "native:host"
   #   ];
   #   gitea = "http://git.writefor.fun";
-  #   # Path to an environment file,
-  #   # containing the TOKEN environment variable,
-  #   # that holds a token to register at the configured Gitea instance.
-  #   tokenFile = "xxx"; # use agenix for secrets.
-  #   # Configuration for act_runner daemon.
-  #   # For an example configuration, see:
-  #   #  https://gitea.com/gitea/act_runner/src/branch/main/internal/pkg/config/config.example.yaml
+  #   # env-файл с TOKEN для регистрации runner
+  #   tokenFile = "xxx"; # agenix
+  #   # конфиг act_runner
+  #   # https://gitea.com/gitea/act_runner/src/branch/main/internal/pkg/config/config.example.yaml
   #   settings = {};
-  #   # List of packages, that are available to actions,
-  #   # when the runner is configured with a host execution label.
+  #   # пакеты для label native:host
   #   hostPackages = with pkgs; [
   #     bash
   #     coreutils

@@ -8,14 +8,14 @@
 
     # https://starship.rs/config/
     settings = {
-      # Get editor completions based on the config schema
+      # completions редактора по JSON schema конфига
       "$schema" = "https://starship.rs/config-schema.json";
       character = {
         success_symbol = "[➜](bold green)";
         error_symbol = "[➜](bold red)";
       };
-      # I never rely on the defaults, so this module is useless to me—disabled.
-      # I prefer adding --project, --region to very gcloud/aws command.
+      # Дефолты модулей не использую — для меня бесполезно, выключено.
+      # Предпочитаю вручную добавлять --project, --region к каждой команде gcloud/aws.
       aws.disabled = true;
       gcloud.disabled = true;
 
