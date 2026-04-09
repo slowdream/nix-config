@@ -16,7 +16,8 @@
 
   # загрузчик
   boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
+  # disko сам настраивает загрузчик, если мы укажем device в grub, будет конфликт (mirroredBoots)
+  # boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
 
   # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/top-level/linux-kernels.nix
