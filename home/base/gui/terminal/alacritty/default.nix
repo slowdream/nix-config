@@ -6,13 +6,6 @@
 #
 # Конфигурация Alacritty
 #
-# Горячие клавиши macOS:
-#   1. Новое окно: `command + N`
-#   2. Крупнее шрифт: `command + =` | `command + +`
-#   3. Мельче шрифт: `command + -` | `command + _`
-#   4. Поиск: `command + F`
-#   5. Прочее: Copy, Paste, движение курсора и т.д.
-#
 # Горячие клавиши Linux:
 #   1. Крупнее шрифт: `ctrl + shift + =` | `ctrl + shift + +`
 #   2. Мельче шрифт: `ctrl + shift + -` | `ctrl + shift + _`
@@ -31,7 +24,7 @@
         opacity = 0.93;
         startup_mode = "Maximized"; # окно на весь экран при старте
         dynamic_title = true;
-        option_as_alt = "Both"; # Option = Alt на macOS
+        option_as_alt = "Both";
         decorations = "None"; # без рамки и title bar
       };
       scrolling = {

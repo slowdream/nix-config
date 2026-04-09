@@ -20,7 +20,6 @@
 ├── outputs/
 │   ├── default.nix
 │   ├── x86_64-linux/
-│   ├── aarch64-linux/
 ├── modules/                     # NixOS modules
 ├── home/                        # Home Manager modules
 ├── hosts/                       # Host-specific config
@@ -35,7 +34,7 @@
 - Предпочитайте задачи `just` вместо ad-hoc команд, если есть эквивалентная задача.
 - Делайте минимально разумное изменение; избегайте drive-by refactors.
 - Не коммитьте секреты, сгенерированные учётные данные или private keys.
-- Сохраняйте platform guards (`[linux]`, `[macos]`) и соглашения по именованию хостов.
+- Сохраняйте platform guards (`[linux]`) и соглашения по именованию хостов.
 - Перед завершением прогоняйте форматирование и evaluation checks для затронутых частей.
 
 ## Быстрый старт (рекомендуемый workflow)

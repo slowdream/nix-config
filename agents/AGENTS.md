@@ -1,4 +1,4 @@
-# RULES - Global Agent Baseline
+# RULES — глобальный baseline для agents
 
 Этот файл задаёт кросс-проектный базовый набор правил для AI coding agents. Он фокусируется на
 безопасности, границах ответственности и переносимом поведении.
@@ -8,76 +8,72 @@
 Применяйте инструкции в таком порядке:
 
 1. Runtime system/developer instructions
-2. User task request
-3. Project-local policy (`AGENTS.md`, `CLAUDE.md`, repo docs)
-4. This global RULES
+2. Запрос пользователя (user task request)
+3. Локальная политика проекта (`AGENTS.md`, `CLAUDE.md`, repo docs)
+4. Этот глобальный RULES
 
 Если правила конфликтуют — следуйте источнику с более высоким приоритетом и кратко укажите конфликт.
 
 ## 2) Жёсткие границы безопасности (MUST NOT)
 
-- MUST NOT read/write outside the approved workspace.
-- MUST NOT perform broad operations on the entire home directory.
-- MUST NOT mutate remote Git state unless explicitly requested.
-  - Examples: `git push`, creating/updating remote PRs/Issues via `gh`.
-- MUST NOT auto-run remote-mutating commands unless explicitly requested.
-  - Examples: `kubectl apply/delete`, `helm upgrade`, `terraform apply`, remote `ssh` mutation.
-- MUST NOT use destructive/force/delete options EVEN if explicitly requested.
-  - Examples: `--force`, `rm -rf`, `git reset --hard`, `gh repo delete`, `terraform destroy`
-- MUST NOT expose or commit secrets (tokens, keys, kubeconfig credentials, passwords).
+- MUST NOT читать/писать за пределами одобренного workspace.
+- MUST NOT выполнять широкие операции по всему home directory.
+- MUST NOT менять remote Git state без явного запроса.
+  - Примеры: `git push`, создание/обновление remote PRs/Issues через `gh`.
+- MUST NOT автоматически запускать команды, мутирующие remote, без явного запроса.
+  - Примеры: `kubectl apply/delete`, `helm upgrade`, `terraform apply`, remote `ssh` mutation.
+- MUST NOT использовать destructive/force/delete опции ДАЖЕ если пользователь явно попросил.
+  - Примеры: `--force`, `rm -rf`, `git reset --hard`, `gh repo delete`, `terraform destroy`
+- MUST NOT раскрывать или коммитить secrets (tokens, keys, kubeconfig credentials, passwords).
 
 ## 3) Безопасность и работа с секретами
 
-- Never write secret literals into tracked files.
-- Use environment variables, secret managers, or placeholders.
-- Redact sensitive output in logs and summaries.
-- For infra/IaC changes, prefer plan/eval/check before apply/switch.
+- Не вписывайте literal secrets в tracked files.
+- Используйте environment variables, secret managers или placeholders.
+- Редактируйте (redact) чувствительный вывод в логах и summary.
+- Для изменений infra/IaC сначала предпочитайте plan/eval/check, а не apply/switch.
 
 ## 4) Дисциплина по scope
 
-- Keep changes strictly within requested scope.
-- Do not refactor unrelated areas unless user asks.
-- Preserve backward compatibility unless a breaking change is explicitly requested.
+- Держите изменения строго в запрошенном scope.
+- Не рефакторьте несвязанные области, если пользователь не просил.
+- Сохраняйте backward compatibility, пока явно не запрошен breaking change.
 
 ## 5) Гигиена изменений
 
-- Keep diffs minimal and reviewable.
-- Group logically related edits together.
-- Do not revert user/unrelated changes unless explicitly asked.
-- Do not claim verification you did not run.
+- Делайте diff минимальным и удобным для review.
+- Группируйте логически связанные правки.
+- Не откатывайте чужие/несвязанные изменения без явной просьбы.
+- Не утверждайте, что проверка выполнена, если вы её не запускали.
 
 ## 6) Tooling defaults
 
-- Prefer structural search tools first for code find/replace (`ast-grep`/`jq`/`yq`), then text tools
-  (`rg`, `fd`).
-- Prefer project task runners (`just`, `make`, `task`, `npm scripts`, etc.) over ad-hoc commands
-  when equivalent.
-- If a required command is not already available, use only `nix run`, `flake.nix`/`shell.nix` or
-  `uv`/`pnpm` to provide it.
-- If that is still insufficient, stop and ask the user to prepare the environment instead of using
-  any other installation method.
-- Use `gh` CLI for GitHub operations, especially code/PR/issue search and inspection.
+- Для поиска/замены в коде сначала предпочитайте structural search (`ast-grep`/`jq`/`yq`), затем текстовые инструменты (`rg`, `fd`).
+- Предпочитайте project task runners (`just`, `make`, `task`, `npm scripts` и т.д.) вместо ad-hoc команд, если есть эквивалент.
+- Если нужной команды ещё нет в окружении, доставляйте её только через `nix run`, `flake.nix`/`shell.nix` или `uv`/`pnpm`.
+- Если этого недостаточно — остановитесь и попросите пользователя подготовить окружение, не используя другие способы установки.
+- Для операций с GitHub используйте `gh` CLI, в частности поиск и просмотр кода/PR/issue.
 
 ## 7) Дефолты окружения
 
 - Primary OS: NixOS.
-- Shell: default to `nushell`, `bash` also exists.
+- Shell: по умолчанию `nushell`, также есть `bash`.
 
 ## 8) Принципы разработки скриптов
 
 Скрипты — это прерываемые задачи, которые должны быть диагностируемыми и безопасными для повторного запуска:
 
-- Split workflows into explicit stages; allow running a selected stage via flags/arguments.
-- Make reruns idempotent; persist progress after each stage and support resume.
-- Cache external data with invalidation strategy to speed retries and improve reproducibility.
-- For HTTP flows, separate transport success from business success; support retry/backoff.
-- Provide independent verification commands/checks for key outputs (counts, samples, invariants).
+- Разбивайте workflow на явные stages; разрешайте запуск выбранного stage через flags/arguments.
+- Делайте повторные запуски idempotent; сохраняйте прогресс после каждого stage и поддерживайте resume.
+- Кэшируйте внешние данные со стратегией invalidation, чтобы ускорять retry и повышать reproducibility.
+- Для HTTP отделяйте transport success от business success; поддерживайте retry/backoff.
+- Давайте независимые verification commands/checks для ключевых результатов (counts, samples, invariants).
 
 ## 9) Дефолты коммуникации
 
 - Отвечайте на языке, который сейчас использует пользователь (предпочтение: English и Chinese).
-- Code, commands, identifiers, and code comments: English.
-- Be concise, concrete, and action-oriented.
+- Code, commands, identifiers и комментарии в коде — English.
+- Будьте краткими, конкретными и ориентированными на действие.
 
 ## 10) Project overlay
 

@@ -56,10 +56,9 @@ Linux и Darwin.
 Все конфигурации в этой директории рассчитаны на работу в:
 
 - **Linux**: All distributions with Nix and Home Manager
-- **macOS**: Darwin systems with Home Manager
 - **WSL**: Windows Subsystem for Linux
 
 ## Использование
 
-Эти базовые конфигурации — фундамент для Linux и Darwin систем: они дают единообразное окружение на
+Эти базовые конфигурации — фундамент для Linux Darwin систем: они дают единообразное окружение на
 разных платформах и при этом позволяют делать platform-specific кастомизации.

@@ -48,7 +48,6 @@
 
     # перед использованием: `conda-install`
     # перед командой `conda`: `conda-shell`
-    # conda нет на macOS
     conda
   ];
 

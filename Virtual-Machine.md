@@ -1,7 +1,6 @@
 ## Как создать и управлять Virtual Machine в KubeVirt из этого flake?
 
-Возьмём `aquamarine` как пример. Сначала соберите и загрузите qcow2-образ виртуальной машины на file
-server:
+Возьмём `aquamarine` как пример. Сначала соберите и загрузите qcow2-образ виртуальной машины на fileserver:
 
 ```shell
 just upload-vm aquamarine

@@ -4,22 +4,8 @@
   <img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/palette/macchiato.png" width="400" />
 </p>
 
-<p align="center">
-	<a href="https://github.com/ryan4yin/nix-config/stargazers">
-		<img alt="Stargazers" src="https://img.shields.io/github/stars/ryan4yin/nix-config?style=for-the-badge&logo=starship&color=C9CBFF&logoColor=D9E0EE&labelColor=302D41"></a>
-    <a href="https://nixos.org/">
-        <img src="https://img.shields.io/badge/NixOS-25.11-informational.svg?style=for-the-badge&logo=nixos&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41"></a>
-    <a href="https://github.com/ryan4yin/nixos-and-flakes-book">
-        <img src="https://img.shields.io/badge/Nix%20Flakes-learning-informational.svg?style=for-the-badge&logo=nixos&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41"></a>
-  </a>
-</p>
-
-> Моя конфигурация становится всё сложнее, и **новичкам будет трудно её читать**. Если вы только
-> начинаете с NixOS и хотите понять, как я его использую, рекомендую сначала посмотреть
-> [ryan4yin/nix-config/releases](https://github.com/ryan4yin/nix-config/releases) и **переключиться на
-> более простые старые версии — например,
-> [i3-kickstarter](https://github.com/ryan4yin/nix-config/tree/i3-kickstarter). Их будет гораздо
-> легче понять**.
+> Данная конфигурация была честно украдена у [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config)
+> Огромное спасибо за его труды и долгих лет ему и его семье.
 
 Этот репозиторий содержит Nix-код для сборки моих систем:
 
@@ -71,11 +57,11 @@ Wallpapers: `https://github.com/ryan4yin/wallpapers`
 
 ## Скриншоты
 
-![desktop](./_img/2026-01-05_niri-noctalia_desktop.webp)
+[desktop](./_img/2026-01-05_niri-noctalia_desktop.webp)
 
-![overview](./_img/2026-01-04_niri-noctalia_overview.webp)
+[overview](./_img/2026-01-04_niri-noctalia_overview.webp)
 
-![nvim](./_img/2026-01-04_niri-noctalia_nvim.webp)
+[nvim](./_img/2026-01-04_niri-noctalia_nvim.webp)
 
 ## Neovim
 

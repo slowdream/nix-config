@@ -91,7 +91,6 @@ just nvim-clear
 
 - Переключение между окнами: `<Ctrl> + h/j/k/l`
 - Изменение размера окон: `<Ctrl> + Up/Down/Left/Right` (`<Ctrl-w> + -/+/</>`)
-  - Примечание: на macOS конфликтует с system shortcuts
   - Отключение: System Preferences -> Keyboard -> Shortcuts -> Mission Control
 
 ### Сплиты и buffers (Splitting and Buffers)

@@ -20,7 +20,7 @@
         nickel
 
         #-- json-подобные
-        # terraform  # на macOS через brew
+        # terraform
         terraform-ls
         jsonnet
         jsonnet-language-server

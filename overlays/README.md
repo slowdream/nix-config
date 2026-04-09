@@ -1,6 +1,6 @@
 # Overlays
 
-Overlays для NixOS и Nix-Darwin.
+Overlays для NixOS.
 
 Если вы мало знакомы с overlays, рекомендую сначала разобраться в том, что это и как их использовать,
 через [Overlays - NixOS & Flakes Book](https://nixos-and-flakes.thiscute.world/nixpkgs/overlays).

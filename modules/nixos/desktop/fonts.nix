@@ -6,7 +6,6 @@
     enableDefaultPackages = false;
     fontDir.enable = true;
 
-    # шрифты заданы в /modules/base/fonts.nix, общие для NixOS и Darwin.
     # packages = [ ... ];
 
     fontconfig = {

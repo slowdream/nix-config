@@ -1,45 +1,45 @@
 # Linux Hardening
 
-> Work in progress.
+> В разработке (work in progress).
 
-## Goal
+## Цель
 
-- **System Level**: Protect critical files from being accessed by untrusted applications.
-  1. Such as browser cookies, SSH keys, etc.
-- **Per-App Level**: Prevent untrusted applications(such as closed-source apps) from:
-  1. Accessing files they shouldn't.
-     - Such as a malicious application accessing your browser's cookies, SSH Keys, etc.
-  1. Accessing the network when they don't need to.
-  1. Accessing hardware devices they don't need.
+- **Уровень системы**: защитить критичные файлы от доступа недоверенных приложений.
+  1. Например cookies браузера, SSH keys и т.п.
+- **Уровень приложения**: не давать недоверенным приложениям (например closed-source) возможности:
+  1. Читать файлы, к которым у них не должно быть доступа.
+     - Например вредоносное приложение не должно достучаться до cookies браузера, SSH keys и т.д.
+  1. Ходить в сеть, если она им не нужна.
+  1. Обращаться к hardware devices, которые им не нужны.
 
-## Current Structure
+## Текущая структура
 
-### 1. **System Level**
+### 1. **Уровень системы**
 
-- **AppArmor** (`apparmor/`): AppArmor profiles and configuration
-- **Kernel & System Hardening** (`profiles/`): System-wide hardening profiles
+- **AppArmor** (`apparmor/`): профили и конфигурация AppArmor
+- **Kernel & system hardening** (`profiles/`): системные hardened profiles
 
-### 2. **Per-App Level**
+### 2. **Уровень приложения**
 
-- **Nixpak** (`nixpaks/`): Bubblewrap-based sandboxing for applications
-  - Firefox configuration
-  - QQ (Chinese messaging app) configuration
-  - Modular system with reusable components
-- **Firejail** (legacy): SUID-based sandboxing (not used)
-- **Bubblewrap** (`bwraps/`): Direct bubblewrap configurations
-  - WeChat sandboxing configuration
+- **Nixpak** (`nixpaks/`): sandboxing на базе Bubblewrap
+  - Конфигурация Firefox
+  - Конфигурация QQ (китайский мессенджер)
+  - Модульная система с переиспользуемыми компонентами
+- **Firejail** (legacy): sandboxing на SUID (не используется)
+- **Bubblewrap** (`bwraps/`): прямые конфигурации bubblewrap
+  - Sandboxing для WeChat
 
-## Current Implementation Status
+## Статус реализации
 
-| Component         | Status    | Notes                          |
-| ----------------- | --------- | ------------------------------ |
-| AppArmor Profiles | 🚧 WIP    | Basic structure in place       |
-| Nixpak Firefox    | ✅ Active | Firefox sandboxing via nixpak  |
-| Nixpak QQ         | ✅ Active | QQ application sandboxing      |
-| Bubblewrap WeChat | ✅ Active | WeChat specific sandboxing     |
-| System Profiles   | 🚧 WIP    | Hardened system configurations |
+| Компонент          | Статус    | Примечание                                 |
+| ------------------ | --------- | ------------------------------------------ |
+| AppArmor Profiles  | 🚧 WIP    | Базовая структура есть                     |
+| Nixpak Firefox     | ✅ Active | Firefox через nixpak                       |
+| Nixpak QQ          | ✅ Active | QQ в sandbox                               |
+| Bubblewrap WeChat  | ✅ Active | Отдельный sandbox для WeChat               |
+| System Profiles    | 🚧 WIP    | Профили hardened system                    |
 
-## Directory Structure
+## Структура каталогов
 
 ```
 hardening/
@@ -60,56 +60,50 @@ hardening/
     └── default.nix
 ```
 
-## Kernel Hardening
+## Kernel hardening
 
-- NixOS Kernel Config:
+- NixOS kernel config:
   https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/os-specific/linux/kernel/hardened/config.nix
 
-## System Hardening
+## System hardening
 
-- NixOS Profile:
+- NixOS profile:
   https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/profiles/hardened.nix
-- Apparmor: [roddhjav/apparmor.d](https://github.com/roddhjav/apparmor.d)
+- AppArmor: [roddhjav/apparmor.d](https://github.com/roddhjav/apparmor.d)
   - https://gitlab.com/apparmor/apparmor/-/wikis/Documentation
-  - AppArmor.d is a set of over 1500 AppArmor profiles whose aim is to confine most Linux based
-    applications and processes.
-  - But all the profiles of AppArmor assume a FHS filesystem, which caused all apparmor policies
-    takes no effect on NixOS.
-  - Apparmor on NixOS Roadmap:
+  - AppArmor.d — это более 1500 профилей AppArmor, цель которых — ограничить большинство Linux-приложений и процессов.
+  - Но все профили AppArmor исходят из FHS filesystem, из‑за чего политики AppArmor на NixOS фактически не срабатывают.
+  - AppArmor on NixOS roadmap:
     - https://discourse.nixos.org/t/apparmor-on-nixos-roadmap/57217
     - https://github.com/LordGrimmauld/aa-alias-manager
-- SELinux: too complex, not recommended for personal use.
+- SELinux: слишком сложен, для personal use не рекомендуется.
 
-## Application Sandboxing
+## Application sandboxing
 
 - [Bubblewrap](https://github.com/containers/bubblewrap):
-  [nixpak](https://github.com/nixpak/nixpak), more secure than firejail, but no batteries included.
-  - NixOS's FHSEnv is implemented using bubblewrap by default.
-- [Firejail](https://github.com/netblue30/firejail/tree/master/etc): A SUID security sandbox with
-  hundreds of security profiles for many common applications in the default installation.
+  [nixpak](https://github.com/nixpak/nixpak) — безопаснее, чем Firejail, но без «батареек из коробки».
+  - FHSEnv в NixOS по умолчанию реализован на Bubblewrap.
+- [Firejail](https://github.com/netblue30/firejail/tree/master/etc): SUID security sandbox с сотнями профилей для распространённых приложений в default installation.
   - https://wiki.nixos.org/wiki/Firejail
-  - Firejail needs SUID to work, which is considered a security risk -
+  - Firejail требует SUID, что считается security risk —
     [Does firejail improve the security of my system?](https://github.com/netblue30/firejail/discussions/4601)
-- [Systemd/Hardening](https://wiki.nixos.org/wiki/Systemd/Hardening): Systemd also provides some
-  sandboxing features.
+- [Systemd/Hardening](https://wiki.nixos.org/wiki/Systemd/Hardening): у systemd тоже есть sandboxing features.
 
-## NOTE
+## Примечание
 
-**Running untrusted code is never safe, kernel hardening & sandboxing cannot change this**.
+**Запуск недоверенного кода никогда не бывает безопасным; kernel hardening и sandboxing это не меняют**.
 
-If you want to run untrusted code, please use a VM & an isolated network environment, which will
-provide a much higher level of security.
+Если нужно выполнять недоверенный код, используйте VM и изолированную сеть — это даёт гораздо более высокий уровень безопасности.
 
-## References
+## Ссылки
 
 - [Harden your NixOS workstation - dataswamp](https://dataswamp.org/~solene/2022-01-13-nixos-hardened.html)
 - [Linux Insecurities - Madaidans](https://madaidans-insecurities.github.io/linux.html)
 - [Sandboxing all programs by default - NixOS Discourse](https://discourse.nixos.org/t/sandboxing-all-programs-by-default/7792)
 - [Paranoid NixOS Setup - xeiaso](https://xeiaso.net/blog/paranoid-nixos-2021-07-18/)
-- [nix-mineral](https://github.com/cynicsketch/nix-mineral): NixOS module for convenient system
-  hardening.
-- apparmor configs:
+- [nix-mineral](https://github.com/cynicsketch/nix-mineral): NixOS module для удобного system hardening.
+- Конфиги AppArmor:
   - https://github.com/zramctl/dotfiles/blob/4fe177f6984154960942bb47d5a375098ec6ed6a/modules/nixos/security/apparmor.nix#L4
   - https://git.grimmauld.de/Grimmauld/grimm-nixos-laptop/src/branch/main/hardening
-- Others:
-  - Directly via `buildFHSUserEnvBubblewrap`:
+- Прочее:
+  - Напрямую через `buildFHSUserEnvBubblewrap`:
