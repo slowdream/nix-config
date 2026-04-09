@@ -42,6 +42,10 @@ rec {
       ipv4 = "192.168.5.100";
       ipv6 = "fe80::10"; # link-local address
     };
+    vm-test = {
+      iface = "enp1s0";
+      ipv4 = "192.168.5.150";
+    };
     # akane = {
     #   # VM (macOS UTM App), static ip не используем — DHCP
     #   iface = "enp0s1";

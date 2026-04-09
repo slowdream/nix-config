@@ -44,6 +44,29 @@
             ../hosts/idols-ai/preservation.nix
           ];
         };
+
+        vm-test = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs // {
+            inherit mylib myvars;
+          };
+
+          modules = [
+            { networking.hostName = "vm-test"; }
+
+            ./configuration.nix
+
+            ../modules/base
+            ../modules/nixos/base/i18n.nix
+            ../modules/nixos/base/user-group.nix
+            ../modules/nixos/base/ssh.nix
+
+            disko.nixosModules.default
+            ../hosts/vm-test/disko-fs.nix
+            ../hosts/vm-test/hardware-configuration.nix
+            ../hosts/vm-test/preservation.nix
+          ];
+        };
       };
     };
 }
