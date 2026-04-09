@@ -25,7 +25,7 @@
 
     disk.nixos-ai = {
       type = "disk";
-      device = "/dev/vda";
+      device = "/dev/sda";
       content = {
         type = "gpt";
         partitions = {
@@ -94,7 +94,7 @@
                 # swapfile в subvol; disko добавит swapDevices
                 "@swap" = {
                   mountpoint = "/swap";
-                  swap.swapfile.size = "20G";
+                  swap.swapfile.size = "5G";
                 };
               };
             };
