@@ -11,5 +11,4 @@ nix run --experimental-features "nix-command flakes" github:nix-community/disko 
 mkdir -p /mnt/nix
 mount --bind /mnt/nix /nix
 
-nix shell --experimental-features "nix-command flakes" nixpkgs#nixos-install-tools -c \
-  nixos-install --root /mnt --flake ".#${host}" --no-root-password
+nixos-install --root /mnt --flake ".#${host}" --no-root-password
