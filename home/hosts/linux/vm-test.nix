@@ -32,4 +32,24 @@ in
   xdg.configFile."niri/windowrules.kdl" = lib.mkForce { source = niriConf + "/windowrules.kdl"; };
   xdg.configFile."niri/noctalia-shell.kdl" = lib.mkForce { source = niriConf + "/noctalia-shell.kdl"; };
   xdg.configFile."niri/niri-hardware.kdl" = lib.mkForce { source = repo + "/hosts/vm-test/niri-hardware.kdl"; };
+
+  # VirtualBox: Vulkan часто ломает запуск композитора → форсим OpenGL backend.
+  # Эти переменные поймают и systemd user unit niri.service, и запуск через .wayland-session.
+  systemd.user.services.niri.Service.Environment = lib.mkForce [
+    "WGPU_BACKEND=gl"
+    "RUST_BACKTRACE=1"
+  ];
+
+  home.file.".wayland-session" = lib.mkForce {
+    text = ''
+      #!/usr/bin/env bash
+      set -euo pipefail
+      export WGPU_BACKEND=gl
+      export RUST_BACKTRACE=1
+
+      systemctl --user is-active niri.service && systemctl --user stop niri.service || true
+      exec /run/current-system/sw/bin/niri-session
+    '';
+    executable = true;
+  };
 }
