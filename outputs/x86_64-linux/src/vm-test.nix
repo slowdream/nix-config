@@ -18,7 +18,7 @@ let
     nixos-modules =
       (map mylib.relativeToRoot [
         # общие
-        "secrets/nixos.nix"
+        # "secrets/nixos.nix" — agenix + приватный mysecrets; для vm-test не подключаем
         "modules/nixos/desktop.nix"
         # только этот хост
         "hosts/${name}"
@@ -31,9 +31,9 @@ let
         {
           modules.desktop.fonts.enable = true;
           modules.desktop.wayland.enable = true;
-          modules.secrets.desktop.enable = true;
-          modules.secrets.preservation.enable = true;
           modules.desktop.gaming.enable = true;
+          # desktop/nix.nix тянет age.secrets без agenix — отключаем include
+          nix.extraOptions = lib.mkForce "";
         }
       ];
     home-modules = map mylib.relativeToRoot [

@@ -153,10 +153,10 @@
 
     ########################  My own repositories  #########################################
 
-    # приватные secrets — приватный репозиторий; у себя замените на свой
-    # ssh: аутентификация через ssh-agent/ssh-key, shallow clone для скорости
+    # Без git-доступа к nix-secrets: локальная заглушка (только public-файлы для HM).
+    # Своё: url = "git+ssh://git@github.com/USER/nix-secrets.git?shallow=1"; flake = false;
     mysecrets = {
-      url = "git+ssh://git@github.com/ryan4yin/nix-secrets.git?shallow=1";
+      url = "path:./secrets/mysecrets-stub";
       flake = false;
     };
 
