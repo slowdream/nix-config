@@ -1,6 +1,9 @@
-{ config, ... }:
+{ config, lib, ... }:
+let
+  secrets = lib.attrByPath [ "age" "secrets" ] { } config;
+in
 {
-  nix.extraOptions = ''
-    !include ${config.age.secrets.nix-access-tokens.path}
+  nix.extraOptions = lib.mkIf (secrets ? "nix-access-tokens") ''
+    !include ${secrets."nix-access-tokens".path}
   '';
 }

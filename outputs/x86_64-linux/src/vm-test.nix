@@ -32,8 +32,6 @@ let
           modules.desktop.fonts.enable = true;
           modules.desktop.wayland.enable = true;
           modules.desktop.gaming.enable = true;
-          # desktop/nix.nix тянет age.secrets без agenix — отключаем include
-          nix.extraOptions = lib.mkForce "";
         }
       ];
     home-modules = map mylib.relativeToRoot [
