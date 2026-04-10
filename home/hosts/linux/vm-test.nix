@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   mylib,
   ...
 }:
@@ -26,9 +27,9 @@ in
   # modules.desktop.nvidia.enable = true;
 
   # Только для VM: не завязываемся на ~/nix-config (out-of-store), чтобы niri стартовал стабильно.
-  xdg.configFile."niri/config.kdl".text = niriConfigText;
-  xdg.configFile."niri/keybindings.kdl".source = niriConf + "/keybindings.kdl";
-  xdg.configFile."niri/windowrules.kdl".source = niriConf + "/windowrules.kdl";
-  xdg.configFile."niri/noctalia-shell.kdl".source = niriConf + "/noctalia-shell.kdl";
-  xdg.configFile."niri/niri-hardware.kdl".source = repo + "/hosts/vm-test/niri-hardware.kdl";
+  xdg.configFile."niri/config.kdl" = lib.mkForce { text = niriConfigText; };
+  xdg.configFile."niri/keybindings.kdl" = lib.mkForce { source = niriConf + "/keybindings.kdl"; };
+  xdg.configFile."niri/windowrules.kdl" = lib.mkForce { source = niriConf + "/windowrules.kdl"; };
+  xdg.configFile."niri/noctalia-shell.kdl" = lib.mkForce { source = niriConf + "/noctalia-shell.kdl"; };
+  xdg.configFile."niri/niri-hardware.kdl" = lib.mkForce { source = repo + "/hosts/vm-test/niri-hardware.kdl"; };
 }
