@@ -34,8 +34,8 @@ in
   xdg.configFile."niri/niri-hardware.kdl" = lib.mkForce { source = repo + "/hosts/vm-test/niri-hardware.kdl"; };
 
   # VirtualBox: Vulkan часто ломает запуск композитора → форсим OpenGL backend.
-  # Эти переменные поймают и systemd user unit niri.service, и запуск через .wayland-session.
-  systemd.user.services.niri.Service.Environment = lib.mkForce [
+  # Не использовать mkForce на Service.* — иначе затирается ExecStart из модуля niri.
+  systemd.user.services.niri.Service.Environment = [
     "WGPU_BACKEND=gl"
     "RUST_BACKTRACE=1"
   ];
