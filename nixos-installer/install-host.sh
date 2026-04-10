@@ -1,14 +1,28 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd "$(dirname "$0")"
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+
+# Если скрипт запущен из-под /mnt, то при wipe disko перемонтирует /mnt и путь исчезнет.
+# Поэтому автоматически копируем nixos-installer в /tmp и перезапускаемся оттуда.
+case "$script_dir" in
+  /mnt/*)
+    tmp_dir="/tmp/nixos-installer"
+    rm -rf "$tmp_dir"
+    mkdir -p "$tmp_dir"
+    cp -a "$script_dir"/. "$tmp_dir"/
+    exec "$tmp_dir/install-host.sh" "$@"
+    ;;
+esac
+
+cd "$script_dir"
 
 host="${1:-vm-test}"
 default_user="$(awk -F'"' '/^[[:space:]]*username[[:space:]]*=[[:space:]]*"/{print $2; exit}' ../vars/default.nix 2>/dev/null || true)"
-user="${2:-${default_user:-ryan}}"
+user="${default_user:-ryan}"
 
 nix run --experimental-features "nix-command flakes" github:nix-community/disko -- \
-  --mode destroy,format,mount "../hosts/${host}/disko-fs.nix"  --yes-wipe-all-disks
+  --mode destroy,format,mount "../hosts/${host}/disko-fs.nix" --yes-wipe-all-disks
 
 # Включаем swap, который создал disko, чтобы инсталлеру хватило памяти (RAM)
 if [ -f /mnt/swap/swapfile ]; then
