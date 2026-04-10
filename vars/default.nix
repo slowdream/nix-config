@@ -1,6 +1,6 @@
 { lib }:
 {
-  username = "ryan";
+  username = "slowdream";
   userfullname = "Ryan Yin";
   useremail = "xiaoyin_c@qq.com";
   networking = import ./networking.nix { inherit lib; };
