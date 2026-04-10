@@ -12,7 +12,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.kernelParams = [ "nomodeset" ];
+  boot.kernelParams = [ ];
 
   # загрузчик
   boot.loader.grub.enable = true;
