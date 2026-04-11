@@ -48,6 +48,12 @@ in
   networking.useNetworkd = lib.mkForce false;
   systemd.network.enable = lib.mkForce false;
 
+  systemd.user.services.niri.serviceConfig.Environment = [
+    "WLR_RENDERER=pixman"
+    "WLR_NO_HARDWARE_CURSORS=1"
+    "LIBGL_ALWAYS_SOFTWARE=1"
+  ];
+
   # stateVersion — см. man configuration.nix
   system.stateVersion = "25.11"; # комментарий выше прочитан?
 }
