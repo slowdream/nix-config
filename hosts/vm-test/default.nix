@@ -40,40 +40,13 @@ in
 
   networking = {
     inherit hostName;
-
-    # systemd-networkd вместо NM
-    networkmanager.enable = false; # nmcli/nmtui для Wi‑Fi при необходимости
-    useDHCP = false;
+    # Для виртуалки проще использовать DHCP, чтобы не угадывать IP
+    useDHCP = true;
   };
 
-  networking.useNetworkd = true;
-  systemd.network.enable = true;
-
-  systemd.network.networks."10-${iface}" = {
-    matchConfig.Name = [ iface ];
-    networkConfig = {
-      Address = [
-        ipv4WithMask
-      ] ++ (lib.optionals (ipv6 != null) [ ipv6WithMask ]);
-      DNS = nameservers;
-      # DHCP = "ipv6"; # только DHCPv6 для GUA
-      # IPv6AcceptRA = true; # SLAAC
-      # LinkLocalAddressing = "ipv6";
-    };
-    routes = [
-      {
-        Destination = "0.0.0.0/0";
-        Gateway = mainGateway;
-      }
-    ] ++ (lib.optionals (ipv6 != null) [
-      {
-        Destination = "::/0";
-        Gateway = mainGateway6;
-        GatewayOnLink = true; # шлюз на линке
-      }
-    ]);
-    linkConfig.RequiredForOnline = "routable";
-  };
+  # Отключаем systemd-networkd со статическими IP для виртуалки
+  networking.useNetworkd = lib.mkForce false;
+  systemd.network.enable = lib.mkForce false;
 
   # stateVersion — см. man configuration.nix
   system.stateVersion = "25.11"; # комментарий выше прочитан?
