@@ -40,8 +40,8 @@ in
 
   networking = {
     inherit hostName;
-    # Для виртуалки проще использовать DHCP, чтобы не угадывать IP
-    useDHCP = true;
+    # Включаем NetworkManager для автоматического поднятия сети по DHCP
+    networkmanager.enable = lib.mkForce true;
   };
 
   # Отключаем systemd-networkd со статическими IP для виртуалки
